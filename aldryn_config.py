@@ -69,9 +69,11 @@ class Form(forms.BaseForm):
             'django.contrib.messages',
             'django.contrib.admin',
             'django.contrib.staticfiles',
-            'south',
             'aldryn_django',
         ])
+        if 'sqlite3' not in settings['DATABASES']['default']['ENGINE']:
+            settings['INSTALLED_APPS'].append('south')
+
         settings['TEMPLATE_CONTEXT_PROCESSORS'].extend([
             'django.core.context_processors.request',
             'aldryn_django.context_processors.debug',
