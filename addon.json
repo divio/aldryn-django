@@ -1,3 +1,4 @@
 {
-    "package-name": "aldryn-django"
+    "package-name": "aldryn-django",
+    "installed-apps": []
 }
