@@ -92,6 +92,8 @@ class Form(forms.BaseForm):
         self.domain_settings(data, settings, env=env)
         self.server_settings(settings, env=env)
         self.logging_settings(settings, env=env)
+        # Order matters, sentry settings rely on logging being configured.
+        self.sentry_settings(settings, env=env)
         self.cache_settings(settings, env=env)
         self.storage_settings(settings, env=env)
         self.i18n_settings(data, settings, env=env)
@@ -190,6 +192,17 @@ class Form(forms.BaseForm):
                 },
             }
         }
+
+    def sentry_settings(self, settings, env):
+        sentry_dsn = env('SENTRY_DSN')
+
+        if sentry_dsn:
+            settings['INSTALLED_APPS'].append('raven.contrib.django')
+            settings['RAVEN_CONFIG'] = {'dsn': sentry_dsn}
+            settings['LOGGING']['handlers']['sentry'] = {
+                'level': 'ERROR',
+                'class': 'raven.contrib.django.raven_compat.handlers.SentryHandler',
+            }
 
     def cache_settings(self, settings, env):
         import django_cache_url
