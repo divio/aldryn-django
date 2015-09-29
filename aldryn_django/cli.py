@@ -54,12 +54,18 @@ def migrate(ctx_obj):
 
 
 @click.group()
+@click.option('--verbose', is_flag=True)
 @click.pass_context
-def main(ctx):
+def main(ctx, verbose):
     if not os.path.exists(os.path.join(BASE_DIR, 'manage.py')):
         raise click.UsageError('make sure you are in the same directory as manage.py')
+
+    if verbose:
+        os.environ['ALDRYN_ADDONS_DEBUG'] = 'True'
+
     from . import startup
     startup._setup(BASE_DIR)
+
     ctx.obj = {
         'settings': {key: getattr(django_settings, key) for key in dir(django_settings)}
     }
