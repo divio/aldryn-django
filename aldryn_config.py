@@ -4,9 +4,16 @@ import os
 import sys
 from aldryn_client import forms
 
+SYSTEM_FIELD_WARNING = 'WARNING: this field is auto-written. Please do not change it here.'
+
 
 class Form(forms.BaseForm):
-    languages = forms.CharField('Languages', required=True, initial='["en", "de"]')
+    languages = forms.CharField(
+        'Languages',
+        required=True,
+        initial='["en", "de"]',
+        help_test=SYSTEM_FIELD_WARNING,
+    )
 
     def to_settings(self, data, settings):
         import dj_database_url
