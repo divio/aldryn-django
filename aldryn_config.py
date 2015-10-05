@@ -12,7 +12,7 @@ class Form(forms.BaseForm):
         'Languages',
         required=True,
         initial='["en", "de"]',
-        help_test=SYSTEM_FIELD_WARNING,
+        help_text=SYSTEM_FIELD_WARNING,
     )
 
     def to_settings(self, data, settings):
