@@ -20,7 +20,6 @@ setup(
         'dj-redis-url',
         'django-cache-url',
         'django-appconf',
-        'django-dotenv',
         'django-getenv',
         'aldryn-client',
         'webservices',

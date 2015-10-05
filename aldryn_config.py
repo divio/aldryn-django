@@ -1,14 +1,21 @@
 # -*- coding: utf-8 -*-
 import json
+import os
 import sys
 from aldryn_client import forms
 
+SYSTEM_FIELD_WARNING = 'WARNING: this field is auto-written. Please do not change it here.'
+
 
 class Form(forms.BaseForm):
-    languages = forms.CharField('Languages', required=True, initial='["en", "de"]')
+    languages = forms.CharField(
+        'Languages',
+        required=True,
+        initial='["en", "de"]',
+        help_test=SYSTEM_FIELD_WARNING,
+    )
 
     def to_settings(self, data, settings):
-        import os
         import dj_database_url
         import warnings
         import yurl
@@ -228,6 +235,9 @@ class Form(forms.BaseForm):
         settings['LANGUAGES'] = [
             (code, settings['ALL_LANGUAGES_DICT'][code])
             for code in languages
+        ]
+        settings['LOCALE_PATHS'] = [
+            os.path.join(settings['BASE_DIR'], 'locale'),
         ]
 
     def time_settings(self, settings, env):
