@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
 import sys
-import dotenv
 from getenv import env
 import django.core.management
 
@@ -27,7 +26,3 @@ def wsgi(path):
 
 def _setup(path):
     os.environ['DJANGO_SETTINGS_MODULE'] = env('DJANGO_SETTINGS_MODULE', 'settings')
-    dotenv_path = os.path.join(path, '.env')
-    if os.path.exists(dotenv_path):
-        sys.stdout.write('reading environment variables from {0}\n'.format(dotenv_path))
-        dotenv.read_dotenv(dotenv_path)
