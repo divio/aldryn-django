@@ -25,6 +25,7 @@ setup(
         'django-getenv',
         'aldryn-client',
         'webservices',
+        'pyaml',
 
         # error reporting
         'raven',
