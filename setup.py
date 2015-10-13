@@ -12,7 +12,9 @@ setup(
     packages=find_packages(),
     install_requires=(
         'aldryn-addons',
-        'Django==1.6.11',
+        # security backport of Django from
+        # https://devpi.divio.ch/divio/django-backports/+simple/Django/
+        'Django==1.6.11.post3',
 
         # setup utils
         'dj-database-url',
