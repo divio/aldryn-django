@@ -14,7 +14,7 @@ setup(
         'aldryn-addons',
         # security backport of Django from
         # https://devpi.divio.ch/divio/django-backports/+simple/Django/
-        'Django==1.6.11.post3',
+        'Django==1.5.12',
 
         # setup utils
         'dj-database-url',
@@ -57,8 +57,10 @@ setup(
         'aldryn-sites',
 
         # not strictly needed by Django, but aldryn-cms needs it and it must
-        # be <1.9 for Django 1.6.x support
-        'django-reversion<1.9',
+        # be >1.7.0 (which is only for django 1.5.0)
+        # that gives us only 1.7.1 for Django 1.5+ support, but to be safe if
+        # critical issues would be fixed (which is none atm) specifying a range.
+        'django-reversion>=1.7.1,<1.8',
     ),
     entry_points='''
         [console_scripts]
