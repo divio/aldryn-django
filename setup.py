@@ -54,7 +54,7 @@ setup(
         'pyOpenSSL',
 
         # other setup helpers
-        'aldryn-sites',
+        'aldryn-sites>=0.5.1',
 
         # not strictly needed by Django, but aldryn-cms needs it and it must
         # be >1.7.0 (which is only for django 1.5.0)

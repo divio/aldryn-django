@@ -1,2 +1,17 @@
 /settings.json
+.DS_Store
+.DS_STORE
+*.pyc
 .idea/*
+*.swp
+*.lock
+*.log
+*.pid
+htmlcov
+build
+dist
+/*.egg-info/
+/*.egg/
+.idea
+.tox
+*.egg
