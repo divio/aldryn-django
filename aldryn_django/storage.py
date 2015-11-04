@@ -1,9 +1,19 @@
-#-*- coding: utf-8 -*-
+import os
+
+from six.moves.urllib import parse
+
 from django.conf import settings
 
 from storages.backends import s3boto
-import urlparse
-import urllib
+
+
+SCHEMES = {
+    's3': 'aldryn_django.storage.S3MediaStorage',
+    'djfs': 'fs.django_storage.DjeeseFSStorage',
+}
+
+parse.uses_netloc.append('s3')
+parse.uses_netloc.append('djfs')
 
 
 class S3MediaStorage(s3boto.S3BotoStorage):
@@ -16,6 +26,7 @@ class S3MediaStorage(s3boto.S3BotoStorage):
             secret_key=settings.AWS_MEDIA_SECRET_ACCESS_KEY,
             bucket_name=settings.AWS_MEDIA_STORAGE_BUCKET_NAME,
             location=settings.AWS_MEDIA_BUCKET_PREFIX,
+            host=settings.AWS_MEDIA_STORAGE_HOST,
             # Setting an ACL requires us to grant the user the PutObjectAcl
             # permission as well, even if it matches the default bucket ACL.
             # XXX: Ideally we would thus set it to `None`, but due to how
@@ -26,29 +37,21 @@ class S3MediaStorage(s3boto.S3BotoStorage):
         )
 
 
-urlparse.uses_netloc.append('s3')
-urlparse.uses_netloc.append('djfs')
-
-SCHEMES = {
-    's3': 'aldryn_django.storage.S3MediaStorage',
-    'djfs': 'fs.django_storage.DjeeseFSStorage',
-}
-
-
 def parse_storage_url(url):
     config = {}
-    url = urlparse.urlparse(url)
+    url = parse.urlparse(url)
 
     scheme = url.scheme.split('+', 1)
 
     config['DEFAULT_FILE_STORAGE'] = SCHEMES[scheme[0]]
 
     if scheme[0] == 's3':
+        os.environ['S3_USE_SIGV4'] = 'True'
         config.update({
-            'AWS_MEDIA_ACCESS_KEY_ID': urllib.unquote(url.username or ''),
-            'AWS_MEDIA_SECRET_ACCESS_KEY': urllib.unquote(url.password or ''),
-            # Ignore the .s3.amazonaws.com part
+            'AWS_MEDIA_ACCESS_KEY_ID': parse.unquote(url.username or ''),
+            'AWS_MEDIA_SECRET_ACCESS_KEY': parse.unquote(url.password or ''),
             'AWS_MEDIA_STORAGE_BUCKET_NAME': url.hostname.split('.', 1)[0],
+            'AWS_MEDIA_STORAGE_HOST': url.hostname.split('.', 1)[1],
             'AWS_MEDIA_BUCKET_PREFIX': url.path.lstrip('/'),
         })
     elif scheme[0] == 'djfs':
@@ -57,7 +60,7 @@ def parse_storage_url(url):
         config.update({
             'DJEESE_STORAGE_ID': url.username or '',
             'DJEESE_STORAGE_KEY': url.password or '',
-            'DJEESE_STORAGE_HOST': urlparse.urlunparse((
+            'DJEESE_STORAGE_HOST': parse.urlunparse((
                 scheme[1],
                 hostname,
                 url.path,

@@ -46,7 +46,7 @@ setup(
         'South',
 
         # storage
-        'django-storages',
+        'django-storages>=1.3',
         'boto',
         'djeese-fs',
 
