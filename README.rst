@@ -40,7 +40,7 @@ Manual Installation
 Add ``aldryn-django`` to your projects ``requirements.txt`` or pip install it.
 ::
 
-    pip install aldryn-django==1.6.11.1
+    pip install aldryn-django==1.8.6.0
 
 
 The version is made up of the Django release with an added digit for the
@@ -56,7 +56,7 @@ already have a ``ALDRYN_ADDONS`` setting. Add ``aldryn-django`` to it.::
 Create the ``addons/aldryn-django`` directory at the same level as your
 ``manage.py``. Then copy ``addon.json``, ``aldryn_config.py`` from
 the matching sourcecode into it.
-Also create a ``settings.json`` file in the same directory with the follwing
+Also create a ``settings.json`` file in the same directory with the following
 content::
 
     {
@@ -80,7 +80,7 @@ things can be done, like using a production-grade wsgi middleware to serve
 static and media files.
 
 
-put this in manage.py::
+Put this in manage.py::
 
     #!/usr/bin/env python
     import os
@@ -123,7 +123,7 @@ Production Server
 *****************
 
 Calling ``aldryn-django web`` will start an opinionated Django setup for
-production (currently uwsgi based).
+production (currently uWSGI based).
 
 
 ============

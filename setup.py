@@ -15,9 +15,7 @@ setup(
     ),
     install_requires=(
         'aldryn-addons',
-        # security backport of Django from
-        # https://devpi.divio.ch/divio/django-backports/+simple/Django/
-        'Django==1.6.11.post3',
+        'Django==1.8.6',
 
         # setup utils
         'dj-database-url',
@@ -58,14 +56,6 @@ setup(
 
         # other setup helpers
         'aldryn-sites',
-
-        # not strictly needed by Django, but aldryn-django-cms needs it and it
-        # must be <1.9 for Django 1.6.x support
-        'django-reversion<1.9',
-
-        # not strictly needed by Django, but aldryn-django-cms installs it and
-        # the official version 1.0.0 on pypi requires Django>=1.7
-        'django-formtools==1.0.0.1',
     ),
     entry_points='''
         [console_scripts]
