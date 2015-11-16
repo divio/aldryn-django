@@ -1,9 +1,8 @@
 import os
 
-from six.moves.urllib import parse
-
 from django.conf import settings
 
+from six.moves.urllib import parse
 from storages.backends import s3boto
 
 

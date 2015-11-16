@@ -1,11 +1,4 @@
-# -*- coding: utf-8 -*-
-import re
-from django.conf import settings
-from django.conf.urls import patterns, url
-
-urlpatterns = [
-
-]
+urlpatterns = []
 
 # static/media serving is not needed here anymore, since we use the wsgi app
 # for runserver as well (WSGI_APPLICATION setting).
