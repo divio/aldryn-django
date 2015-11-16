@@ -1,8 +1,8 @@
-# -*- coding: utf-8 -*-
 import os
-import sys
-from getenv import env
+
 import django.core.management
+
+from getenv import env
 
 
 def manage(path):
@@ -25,4 +25,6 @@ def wsgi(path):
 
 
 def _setup(path):
-    os.environ['DJANGO_SETTINGS_MODULE'] = env('DJANGO_SETTINGS_MODULE', 'settings')
+    os.environ['DJANGO_SETTINGS_MODULE'] = env(
+        'DJANGO_SETTINGS_MODULE', 'settings'
+    )

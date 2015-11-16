@@ -10,9 +10,6 @@ setup(
     author_email='info@divio.ch',
     url='https://github.com/aldryn/aldryn-django',
     packages=find_packages(),
-    dependency_links=(
-        "https://control-panel-live-extra-packages.s3.amazonaws.com/django-formtools/django-formtools-1.0.0.1.tar.gz#egg=django-formtools",
-    ),
     install_requires=(
         'aldryn-addons',
         'Django==1.8.6',
@@ -48,14 +45,17 @@ setup(
         'boto',
         'djeese-fs',
 
-        # securty related (insecure platform warnings)
+        # security related (insecure platform warnings)
         'cryptography',
         'ndg-httpsclient',
         'certifi',
         'pyOpenSSL',
 
-        # other setup helpers
-        'aldryn-sites',
+        # TODO: should be in (aldryn-)django-cms
+        'django-reversion',
+        
+        # TODO: aldryn-sites claims it doesn't support django>1.7
+        # 'aldryn-sites',
     ),
     entry_points='''
         [console_scripts]

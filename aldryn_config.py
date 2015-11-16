@@ -82,12 +82,12 @@ class Form(forms.BaseForm):
             settings['INSTALLED_APPS'].append('south')
 
         settings['TEMPLATE_CONTEXT_PROCESSORS'].extend([
-            'django.core.context_processors.request',
+            'django.template.context_processors.request',
             'aldryn_django.context_processors.debug',
         ])
         settings['MIDDLEWARE_CLASSES'].extend([
             'django.middleware.locale.LocaleMiddleware',
-            'aldryn_django.middleware.CurrentSiteMiddleware',
+            'django.contrib.sites.middleware.CurrentSiteMiddleware',
         ])
 
         settings['TEMPLATE_DIRS'] = env(
@@ -134,12 +134,12 @@ class Form(forms.BaseForm):
                 domain for domain in domains[settings['SITE_ID']]['redirects']
             ])
 
-
-        settings['INSTALLED_APPS'].append('aldryn_sites')
-        settings['MIDDLEWARE_CLASSES'].insert(
-            settings['MIDDLEWARE_CLASSES'].index('django.middleware.common.CommonMiddleware'),
-            'aldryn_sites.middleware.SiteMiddleware',
-        )
+        # TODO: aldryn-sites claims it doesn't support django>1.7 
+        # settings['INSTALLED_APPS'].append('aldryn_sites')
+        # settings['MIDDLEWARE_CLASSES'].insert(
+        #     settings['MIDDLEWARE_CLASSES'].index('django.middleware.common.CommonMiddleware'),
+        #     'aldryn_sites.middleware.SiteMiddleware',
+        # )
 
     def server_settings(self, settings, env):
         settings['PORT'] = env('PORT', 80)
