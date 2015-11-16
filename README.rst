@@ -2,6 +2,7 @@
 Aldryn Django
 #############
 
+.. important:: This branch is a WORK IN PROGRESS. Please do not use.
 
 |PyPI Version|
 
