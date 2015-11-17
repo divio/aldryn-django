@@ -105,10 +105,18 @@ class Form(forms.BaseForm):
             },
         ]
 
-        settings['MIDDLEWARE_CLASSES'].extend([
+        settings['MIDDLEWARE_CLASSES'] = [
+            'django.contrib.sessions.middleware.SessionMiddleware',
+            # 'django.middleware.common.CommonMiddleware',
+            'django.middleware.csrf.CsrfViewMiddleware',
+            'django.contrib.auth.middleware.AuthenticationMiddleware',
+            # 'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
+            'django.contrib.messages.middleware.MessageMiddleware',
             'django.middleware.locale.LocaleMiddleware',
-            'django.contrib.sites.middleware.CurrentSiteMiddleware',
-        ])
+            'django.middleware.common.CommonMiddleware',
+            'django.middleware.clickjacking.XFrameOptionsMiddleware',
+            # 'django.middleware.security.SecurityMiddleware',
+        ]
 
         settings['SITE_ID'] = env('SITE_ID', 1)
 
