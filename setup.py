@@ -52,9 +52,6 @@ setup(
 
         # TODO: should be in (aldryn-)django-cms
         'django-reversion',
-        
-        # TODO: aldryn-sites claims it doesn't support django>1.7
-        # 'aldryn-sites',
     ),
     entry_points='''
         [console_scripts]
