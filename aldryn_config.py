@@ -28,7 +28,6 @@ class Form(forms.BaseForm):
         settings['DATA_ROOT'] = env('DATA_ROOT', os.path.join(settings['BASE_DIR'], 'data'))
         settings['SECRET_KEY'] = env('SECRET_KEY', 'this-is-not-very-random')
         settings['DEBUG'] = boolean_ish(env('DEBUG', False))
-        settings['TEMPLATE_DEBUG'] = boolean_ish(env('TEMPLATE_DEBUG', settings['DEBUG']))
 
         settings['DATABASE_URL'] = env('DATABASE_URL')
         if settings['DATABASE_URL']:
@@ -78,22 +77,39 @@ class Form(forms.BaseForm):
             'django.contrib.staticfiles',
             'aldryn_django',
         ])
-        if 'sqlite3' not in settings['DATABASES']['default']['ENGINE']:
-            settings['INSTALLED_APPS'].append('south')
 
-        settings['TEMPLATE_CONTEXT_PROCESSORS'].extend([
-            'django.template.context_processors.request',
-            'aldryn_django.context_processors.debug',
-        ])
+        settings['TEMPLATES'] = [
+            {
+                'BACKEND': 'django.template.backends.django.DjangoTemplates',
+                'DIRS': env('TEMPLATE_DIRS', [os.path.join(settings['BASE_DIR'], 'templates')], ),
+                'OPTIONS': {
+                    'debug': boolean_ish(env('TEMPLATE_DEBUG', settings['DEBUG'])),
+                    'context_processors': [
+                        'django.contrib.auth.context_processors.auth',
+                        'django.contrib.messages.context_processors.messages',
+                        'django.core.context_processors.i18n',
+                        'django.core.context_processors.debug',
+                        'django.core.context_processors.request',
+                        'django.core.context_processors.media',
+                        'django.core.context_processors.csrf',
+                        'django.core.context_processors.tz',
+                        'django.core.context_processors.static',
+                        'aldryn_django.context_processors.debug',
+                    ],
+                    'loaders': [
+                        'django.template.loaders.filesystem.Loader',
+                        'django.template.loaders.app_directories.Loader',
+                        'django.template.loaders.eggs.Loader',
+                    ],
+                },
+            },
+        ]
+
         settings['MIDDLEWARE_CLASSES'].extend([
             'django.middleware.locale.LocaleMiddleware',
             'django.contrib.sites.middleware.CurrentSiteMiddleware',
         ])
 
-        settings['TEMPLATE_DIRS'] = env(
-            'TEMPLATE_DIRS',
-            [os.path.join(settings['BASE_DIR'], 'templates')],
-        )
         settings['SITE_ID'] = env('SITE_ID', 1)
 
         self.domain_settings(data, settings, env=env)
