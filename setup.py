@@ -38,7 +38,6 @@ setup(
         'structlog',
         'click',
         'subprocess32',
-        'South',
 
         # storage
         'django-storages-redux',
