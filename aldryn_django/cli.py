@@ -101,6 +101,7 @@ def start_uwsgi_command(settings, port=None):
         '--max-requests={}'.format(settings['DJANGO_WEB_MAX_REQUESTS']),
         '--harakiri={}'.format(settings['DJANGO_WEB_TIMEOUT']),
         # '--honour-stdin',
+        '--lazy-apps',
     ]
 
 
