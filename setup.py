@@ -52,6 +52,10 @@ setup(
 
         # TODO: should be in (aldryn-)django-cms
         'django-reversion',
+        # TODO: Remove after django-tablib would be released
+        # use internal package with django 1.8 support instead of outdated
+        # needed for aldryn-events and aldryn-forms export features.
+        'django-tablib==3.1.1.1',
     ),
     entry_points='''
         [console_scripts]
