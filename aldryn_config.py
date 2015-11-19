@@ -285,6 +285,6 @@ class Form(forms.BaseForm):
         settings.setdefault('MIGRATION_COMMANDS', [])
         mcmds = settings['MIGRATION_COMMANDS']
 
-        mcmds.append('python manage.py createcachetable django_dbcache; exit 0')
+        mcmds.append('CACHE_URL="locmem://" python manage.py createcachetable django_dbcache; exit 0')
         mcmds.append('python manage.py syncdb --noinput')
         mcmds.append('python manage.py migrate --list --noinput && python manage.py migrate --noinput && python manage.py migrate --list --noinput')
