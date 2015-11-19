@@ -31,11 +31,15 @@ class Form(forms.BaseForm):
         settings['TEMPLATE_DEBUG'] = boolean_ish(env('TEMPLATE_DEBUG', settings['DEBUG']))
 
         settings['DATABASE_URL'] = env('DATABASE_URL')
-        if settings['DATABASE_URL']:
-            pass
-        elif env('DJANGO_MODE') == 'build':
+        settings['CACHE_URL'] = env('CACHE_URL')
+        if env('DJANGO_MODE') == 'build':
+            # In build mode we don't have any connected services like db or
+            # cache available. So we need to configure those things in a way
+            # they can run without real backends.
             settings['DATABASE_URL'] = 'sqlite://:memory:'
-        else:
+            settings['CACHE_URL'] = 'locmem://'
+
+        if not settings['DATABASE_URL']:
             settings['DATABASE_URL'] = 'sqlite:///{}'.format(
                 os.path.join(settings['DATA_ROOT'], 'db.sqlite3')
             )
@@ -45,6 +49,15 @@ class Form(forms.BaseForm):
                 ),
                 RuntimeWarning,
             )
+        if not settings['CACHE_URL']:
+            settings['CACHE_URL'] = 'locmem://'
+            warnings.warn(
+                'no cache configured. Falling back to CACHE_URL={0}'.format(
+                    settings['CACHE_URL']
+                ),
+                RuntimeWarning,
+            )
+
         settings['DATABASES']['default'] = dj_database_url.parse(settings['DATABASE_URL'])
 
         settings['ROOT_URLCONF'] = env('ROOT_URLCONF', 'urls')
