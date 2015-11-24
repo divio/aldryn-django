@@ -87,6 +87,7 @@ def start_uwsgi_command(settings, port=None):
         'uwsgi',
         '--module=wsgi',
         '--http=0.0.0.0:{}'.format(port or settings.get('PORT')),
+        '--master',
         '--workers={}'.format(settings['DJANGO_WEB_WORKERS']),
         '--max-requests={}'.format(settings['DJANGO_WEB_MAX_REQUESTS']),
         '--harakiri={}'.format(settings['DJANGO_WEB_TIMEOUT']),
