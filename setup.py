@@ -66,6 +66,9 @@ setup(
         # not strictly needed by Django, but aldryn-django-cms installs it and
         # the official version 1.0.0 on pypi requires Django>=1.7
         'django-formtools==1.0.0.1',
+
+        # Force a Django 1.6 compatible version.
+        'django-simple-captcha<0.4.8',
     ),
     entry_points='''
         [console_scripts]
