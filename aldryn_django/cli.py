@@ -2,6 +2,7 @@
 from __future__ import absolute_import
 
 import os
+import subprocess
 import sys
 import yaml
 
@@ -53,9 +54,10 @@ def migrate(ctx_obj):
     click.echo('aldryn-django: running migration commands')
     for cmd in cmds:
         click.echo('    ----> {}'.format(cmd))
-        exitcode = os.system(cmd)
-        if exitcode != 0:
-            sys.exit(exitcode)
+        try:
+            subprocess.check_call(cmd, shell=True)
+        except subprocess.CalledProcessError as exc:
+            sys.exit(exc.returncode)
 
 
 @click.group()
