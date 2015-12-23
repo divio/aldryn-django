@@ -69,6 +69,7 @@ setup(
 
         # Force a Django 1.6 compatible version.
         'django-simple-captcha<0.4.8',
+        'django-mptt<0.8.0',
     ),
     entry_points='''
         [console_scripts]
