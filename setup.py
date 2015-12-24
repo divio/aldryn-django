@@ -51,7 +51,7 @@ setup(
         'pyOpenSSL',
 
         # TODO: should be in (aldryn-)django-cms
-        'django-reversion',
+        'django-reversion<1.9',
         # TODO: Remove after django-tablib would be released
         # use internal package with django 1.8 support instead of outdated
         # needed for aldryn-events and aldryn-forms export features.
