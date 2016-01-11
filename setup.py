@@ -44,11 +44,15 @@ setup(
         'boto',
         'djeese-fs',
 
-        # security related (insecure platform warnings)
+        # security: avoid python insecure platform warnings
         'cryptography',
         'ndg-httpsclient',
         'certifi',
         'pyOpenSSL',
+
+        # security
+        'django-secure',
+
         # helpers
         'aldryn-sites>=0.5.2',
 
