@@ -110,6 +110,7 @@ class Form(forms.BaseForm):
         settings['SITE_ID'] = env('SITE_ID', 1)
 
         self.domain_settings(data, settings, env=env)
+        self.security_settings(data, settings, env=env)
         self.server_settings(settings, env=env)
         self.logging_settings(settings, env=env)
         # Order matters, sentry settings rely on logging being configured.
@@ -152,6 +153,30 @@ class Form(forms.BaseForm):
         settings['MIDDLEWARE_CLASSES'].insert(
             settings['MIDDLEWARE_CLASSES'].index('django.middleware.common.CommonMiddleware'),
             'aldryn_sites.middleware.SiteMiddleware',
+        )
+
+    def security_settings(self, data, settings, env):
+        s = settings
+        s['SECURE_SSL_REDIRECT'] = env('SECURE_SSL_REDIRECT', False)
+        s['SECURE_REDIRECT_EXEMPT'] = env('SECURE_REDIRECT_EXEMPT', [])
+        s['SECURE_HSTS_SECONDS'] = env('SECURE_HSTS_SECONDS', 0)
+        s['SESSION_COOKIE_SECURE'] = env('SESSION_COOKIE_SECURE', False)
+        s['SECURE_PROXY_SSL_HEADER'] = env(
+            'SECURE_PROXY_SSL_HEADER',
+            ('HTTP_X_FORWARDED_PROTO', 'https')
+        )
+        # SESSION_COOKIE_HTTPONLY and SECURE_FRAME_DENY must be False for CMS
+        s['SESSION_COOKIE_HTTPONLY'] = env('SESSION_COOKIE_HTTPONLY', False)
+        s['SECURE_FRAME_DENY'] = env('SECURE_FRAME_DENY', False)
+
+        s['SECURE_CONTENT_TYPE_NOSNIFF'] = env('SECURE_CONTENT_TYPE_NOSNIFF', False)
+        s['SECURE_BROWSER_XSS_FILTER'] = env('SECURE_BROWSER_XSS_FILTER', False)
+
+
+        s['INSTALLED_APPS'].append('djangosecure')
+        s['MIDDLEWARE_CLASSES'].insert(
+            s['MIDDLEWARE_CLASSES'].index('aldryn_sites.middleware.SiteMiddleware') + 1,
+            'djangosecure.middleware.SecurityMiddleware'
         )
 
     def server_settings(self, settings, env):
