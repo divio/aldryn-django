@@ -172,12 +172,11 @@ class Form(forms.BaseForm):
                 domain for domain in domains[settings['SITE_ID']]['redirects']
             ])
 
-        # TODO: aldryn-sites claims it doesn't support django>1.7 
-        # settings['INSTALLED_APPS'].append('aldryn_sites')
-        # settings['MIDDLEWARE_CLASSES'].insert(
-        #     settings['MIDDLEWARE_CLASSES'].index('django.middleware.common.CommonMiddleware'),
-        #     'aldryn_sites.middleware.SiteMiddleware',
-        # )
+        settings['INSTALLED_APPS'].append('aldryn_sites')
+        settings['MIDDLEWARE_CLASSES'].insert(
+            settings['MIDDLEWARE_CLASSES'].index('django.middleware.common.CommonMiddleware'),
+            'aldryn_sites.middleware.SiteMiddleware',
+        )
 
     def server_settings(self, settings, env):
         settings['PORT'] = env('PORT', 80)

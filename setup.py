@@ -49,6 +49,8 @@ setup(
         'ndg-httpsclient',
         'certifi',
         'pyOpenSSL',
+        # helpers
+        'aldryn-sites>=0.5.2',
 
         # TODO: should be in (aldryn-)django-cms
         'django-reversion<1.9',
