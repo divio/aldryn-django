@@ -47,13 +47,16 @@ setup(
         'boto',
         'djeese-fs',
 
-        # securty related (insecure platform warnings)
+        # security: avoid python insecure platform warnings
         'cryptography',
         'ndg-httpsclient',
         'certifi',
         'pyOpenSSL',
 
-        # other setup helpers
+        # security
+        'django-secure',
+
+        # helpers
         'aldryn-sites>=0.5.1',
 
         # not strictly needed by Django, but aldryn-cms needs it and it must
