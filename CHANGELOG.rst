@@ -1,6 +1,12 @@
 CHANGELOG
 =========
 
+1.8.8.2 (2016-01-11)
+--------------------
+
+* use native Django 1.8 alternative to django-secure
+
+
 1.8.8.1 (2016-01-11)
 --------------------
 
