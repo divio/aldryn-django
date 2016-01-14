@@ -64,6 +64,8 @@ setup(
         # that gives us only 1.7.1 for Django 1.5+ support, but to be safe if
         # critical issues would be fixed (which is none atm) specifying a range.
         'django-reversion>=1.7.1,<1.8',
+
+        'django_compressor<2.0',  # required by aldryn-django-cms
     ),
     entry_points='''
         [console_scripts]
