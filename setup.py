@@ -12,7 +12,7 @@ setup(
     packages=find_packages(),
     install_requires=(
         'aldryn-addons',
-        'Django==1.8.8',
+        'Django==1.9.1',
 
         # setup utils
         'dj-database-url',
@@ -51,7 +51,10 @@ setup(
         'pyOpenSSL',
 
         # TODO: should be in (aldryn-)django-cms
-        'django-reversion<1.9',
+        # However, it doesn't know which version of Django is being installed,
+        # so it stays here.
+        'django-reversion>=1.10.0',
+
         # TODO: Remove after django-tablib would be released
         # use internal package with django 1.8 support instead of outdated
         # needed for aldryn-events and aldryn-forms export features.
