@@ -54,6 +54,7 @@ setup(
         # However, it doesn't know which version of Django is being installed,
         # so it stays here.
         'django-reversion>=1.10.0',
+        'django-treebeard>=4.0',
 
         # TODO: Remove after django-tablib would be released
         # use internal package with django 1.8 support instead of outdated
