@@ -24,6 +24,7 @@ setup(
         'aldryn-client',
         'webservices',
         'pyaml',
+        'yurl',
 
         # error reporting
         'raven',
