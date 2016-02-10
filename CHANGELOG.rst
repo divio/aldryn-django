@@ -1,15 +1,10 @@
 CHANGELOG
 =========
 
-1.8.9.2 (2016-02-10)
+1.8.9.3 (2016-02-10)
 --------------------
 
 * fix incorrect pinned boto version
-
-
-1.8.9.1 (2016-02-10)
---------------------
-
 * Django 1.8.9
 * fix pagespeed setup
 * use SITE_NAME environment variable for auto-configuration with aldryn-sites
