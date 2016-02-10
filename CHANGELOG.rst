@@ -1,6 +1,14 @@
 CHANGELOG
 =========
 
+1.8.9.1 (2016-02-10)
+--------------------
+
+* Django 1.8.9
+* fix pagespeed setup
+* use SITE_NAME environment variable for auto-configuration with aldryn-sites
+
+
 1.8.8.2 (2016-01-11)
 --------------------
 
