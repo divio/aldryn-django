@@ -42,11 +42,11 @@ setup(
 
         # storage
         'django-storages-redux',
-        # boto==2.38.1a1 is an internal release that contains
-        # https://github.com/stefanfoulis/boto/tree/2.38.1a1
+        # boto==2.38.0.1 is an internal release that contains
+        # https://github.com/stefanfoulis/boto/tree/2.38.0.1
         # a fix for boto falsly adding authentication parameters to s3 url even
         # though configured not to.
-        'boto==2.38.1a1',
+        'boto==2.38.0.1',
         'djeese-fs',
 
         # security: avoid python insecure platform warnings
