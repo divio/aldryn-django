@@ -145,6 +145,7 @@ class Form(forms.BaseForm):
         if not domains and domain:
             domains = {
                 1: {
+                    'name': env('SITE_NAME', ''),
                     'domain': domain,
                     'aliases': [d.strip() for d in domain_aliases.split(',') if d.strip()],
                     'redirects': [d.strip() for d in domain_redirects.split(',') if d.strip()]
