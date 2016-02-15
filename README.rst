@@ -4,10 +4,6 @@ Aldryn Django
 
 |PyPI Version|
 
-.. warning::
-    This Addon expects ``pip install --find-links=https://devpi.divio.ch/divio/django-backports/+simple/Django/``
-    to be used when installing.
-
 An opinionated Django setup bundled as an Aldryn Addon.
 
 This package will auto configure Django, including admin and some other basic

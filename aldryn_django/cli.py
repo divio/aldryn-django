@@ -119,6 +119,9 @@ def start_procfile_command(procfile_path):
 
 def start_with_nginx(settings):
     # TODO: test with pagespeed and static or media on other domain
+    from . import startup
+    path = os.getcwd()
+    startup.setup(path=path)
     if not all((settings['NGINX_CONF_PATH'], settings['NGINX_PROCFILE_PATH'])):
         raise click.UsageError(
             'NGINX_CONF_PATH and NGINX_PROCFILE_PATH must be configured'
@@ -132,10 +135,24 @@ def start_with_nginx(settings):
         },
         default_flow_style=False,
     )
+
+    if (
+        settings.get('PAGESPEED_ADMIN_USER') and
+        settings.get('PAGESPEED_ADMIN_PASSWORD') and
+        settings['PAGESPEED_ADMIN_HTPASSWD_PATH']
+    ):
+        with openfile(settings['PAGESPEED_ADMIN_HTPASSWD_PATH']) as f:
+            f.write('{}:{}{}\n'.format(
+                settings.get('PAGESPEED_ADMIN_USER'),
+                '{PLAIN}',
+                settings.get('PAGESPEED_ADMIN_PASSWORD'),
+            ))
+
     nginx_template = loader.get_template(
         'aldryn_django/configuration/nginx.conf')
     context = Context(dict(settings))
     nginx_conf = nginx_template.render(context)
+
     with openfile(settings['NGINX_CONF_PATH']) as f:
         f.write(nginx_conf)
     with openfile(settings['NGINX_PROCFILE_PATH']) as f:

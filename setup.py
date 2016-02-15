@@ -24,6 +24,7 @@ setup(
         'aldryn-client',
         'webservices',
         'pyaml',
+        'yurl',
 
         # error reporting
         'raven',
@@ -41,14 +42,21 @@ setup(
 
         # storage
         'django-storages-redux',
-        'boto',
+        # boto==2.38.0.1 is an internal release that contains
+        # https://github.com/stefanfoulis/boto/tree/2.38.0.1
+        # a fix for boto falsly adding authentication parameters to s3 url even
+        # though configured not to.
+        'boto==2.38.0.1',
         'djeese-fs',
 
-        # security related (insecure platform warnings)
+        # security: avoid python insecure platform warnings
         'cryptography',
         'ndg-httpsclient',
         'certifi',
         'pyOpenSSL',
+
+        # helpers
+        'aldryn-sites>=0.5.2',
 
         # TODO: should be in (aldryn-)django-cms
         # However, it doesn't know which version of Django is being installed,
