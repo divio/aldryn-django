@@ -18,7 +18,6 @@ class Form(forms.BaseForm):
     def to_settings(self, data, settings):
         import dj_database_url
         import warnings
-        import yurl
         from functools import partial
         from aldryn_addons.utils import boolean_ish, djsenv
         env = partial(djsenv, settings=settings)
@@ -64,21 +63,6 @@ class Form(forms.BaseForm):
         settings['ADDON_URLS_I18N'].append('aldryn_django.i18n_urls')
 
         settings['WSGI_APPLICATION'] = 'wsgi.application'
-
-        settings['STATIC_URL'] = env('STATIC_URL', '/static/')
-        settings['STATIC_URL_IS_ON_OTHER_DOMAIN'] = bool(yurl.URL(settings['STATIC_URL']).host)
-        settings['STATIC_ROOT'] = env(
-            'STATIC_ROOT',
-            os.path.join(settings['BASE_DIR'], 'static_collected'),
-        )
-        settings['STATICFILES_DIRS'] = env(
-            'STATICFILES_DIRS',
-            [os.path.join(settings['BASE_DIR'], 'static'),]
-        )
-
-        settings['MEDIA_URL'] = env('MEDIA_URL', '/media/')
-        settings['MEDIA_URL_IS_ON_OTHER_DOMAIN'] = bool(yurl.URL(settings['MEDIA_URL']).host)
-        settings['MEDIA_ROOT'] = env('MEDIA_ROOT', os.path.join(settings['DATA_ROOT'], 'media'))
 
         settings['INSTALLED_APPS'].extend([
             'django.contrib.auth',
@@ -135,12 +119,14 @@ class Form(forms.BaseForm):
         settings['SITE_ID'] = env('SITE_ID', 1)
 
         self.domain_settings(data, settings, env=env)
+        self.security_settings(data, settings, env=env)
         self.server_settings(settings, env=env)
         self.logging_settings(settings, env=env)
         # Order matters, sentry settings rely on logging being configured.
         self.sentry_settings(settings, env=env)
         self.cache_settings(settings, env=env)
-        self.storage_settings(settings, env=env)
+        self.storage_settings_for_media(settings, env=env)
+        self.storage_settings_for_static(settings, env=env)
         self.i18n_settings(data, settings, env=env)
         self.migration_settings(settings, env=env)
         return settings
@@ -159,6 +145,7 @@ class Form(forms.BaseForm):
         if not domains and domain:
             domains = {
                 1: {
+                    'name': env('SITE_NAME', ''),
                     'domain': domain,
                     'aliases': [d.strip() for d in domain_aliases.split(',') if d.strip()],
                     'redirects': [d.strip() for d in domain_redirects.split(',') if d.strip()]
@@ -172,22 +159,61 @@ class Form(forms.BaseForm):
                 domain for domain in domains[settings['SITE_ID']]['redirects']
             ])
 
-        # TODO: aldryn-sites claims it doesn't support django>1.7 
-        # settings['INSTALLED_APPS'].append('aldryn_sites')
-        # settings['MIDDLEWARE_CLASSES'].insert(
-        #     settings['MIDDLEWARE_CLASSES'].index('django.middleware.common.CommonMiddleware'),
-        #     'aldryn_sites.middleware.SiteMiddleware',
-        # )
+        settings['INSTALLED_APPS'].append('aldryn_sites')
+        settings['MIDDLEWARE_CLASSES'].insert(
+            settings['MIDDLEWARE_CLASSES'].index('django.middleware.common.CommonMiddleware'),
+            'aldryn_sites.middleware.SiteMiddleware',
+        )
+
+    def security_settings(self, data, settings, env):
+        s = settings
+        s['SECURE_SSL_REDIRECT'] = env('SECURE_SSL_REDIRECT', False)
+        s['SECURE_REDIRECT_EXEMPT'] = env('SECURE_REDIRECT_EXEMPT', [])
+        s['SECURE_HSTS_SECONDS'] = env('SECURE_HSTS_SECONDS', 0)
+        # SESSION_COOKIE_SECURE is handled by
+        #   django.contrib.sessions.middleware.SessionMiddleware
+        s['SESSION_COOKIE_SECURE'] = env('SESSION_COOKIE_SECURE', False)
+        s['SECURE_PROXY_SSL_HEADER'] = env(
+            'SECURE_PROXY_SSL_HEADER',
+            ('HTTP_X_FORWARDED_PROTO', 'https')
+        )
+        # SESSION_COOKIE_HTTPONLY and SECURE_FRAME_DENY must be False for CMS
+        # SESSION_COOKIE_HTTPONLY is handled by
+        #   django.contrib.sessions.middleware.SessionMiddleware
+        s['SESSION_COOKIE_HTTPONLY'] = env('SESSION_COOKIE_HTTPONLY', False)
+
+        s['SECURE_CONTENT_TYPE_NOSNIFF'] = env('SECURE_CONTENT_TYPE_NOSNIFF', False)
+        s['SECURE_BROWSER_XSS_FILTER'] = env('SECURE_BROWSER_XSS_FILTER', False)
+
+        s['MIDDLEWARE_CLASSES'].insert(
+            s['MIDDLEWARE_CLASSES'].index('aldryn_sites.middleware.SiteMiddleware') + 1,
+            'django.middleware.security.SecurityMiddleware'
+        )
 
     def server_settings(self, settings, env):
         settings['PORT'] = env('PORT', 80)
         settings['BACKEND_PORT'] = env('BACKEND_PORT', 8000)
         settings['ENABLE_NGINX'] = env('ENABLE_NGINX', False)
-        settings['ENABLE_PAGESPEED'] = env('ENABLE_PAGESPEED', False)
-        settings['ENABLE_BROWSERCACHE'] = env('ENABLE_BROWSERCACHE', False)
+        settings['ENABLE_PAGESPEED'] = env(
+            'ENABLE_PAGESPEED',
+            env('PAGESPEED', False),
+        )
+        settings['ENABLE_BROWSERCACHE'] = env(
+            'ENABLE_BROWSERCACHE',
+            env('BROWSERCACHE', False),
+        )
         settings['BROWSERCACHE_MAX_AGE'] = env('BROWSERCACHE_MAX_AGE', 300)
         settings['NGINX_CONF_PATH'] = env('NGINX_CONF_PATH')
         settings['NGINX_PROCFILE_PATH'] = env('NGINX_PROCFILE_PATH')
+        settings['PAGESPEED_ADMIN_HTPASSWD_PATH'] = env(
+            'PAGESPEED_ADMIN_HTPASSWD_PATH',
+            os.path.join(
+                os.path.dirname(settings['NGINX_CONF_PATH']),
+                'pagespeed_admin.htpasswd',
+            )
+        )
+        settings['PAGESPEED_ADMIN_USER'] = env('PAGESPEED_ADMIN_USER')
+        settings['PAGESPEED_ADMIN_PASSWORD'] = env('PAGESPEED_ADMIN_PASSWORD')
         settings['DJANGO_WEB_WORKERS'] = env('DJANGO_WEB_WORKERS', 3)
         settings['DJANGO_WEB_MAX_REQUESTS'] = env('DJANGO_WEB_MAX_REQUESTS', 500)
         settings['DJANGO_WEB_TIMEOUT'] = env('DJANGO_WEB_TIMEOUT', 120)
@@ -255,13 +281,29 @@ class Form(forms.BaseForm):
         if cache_url:
             settings['CACHES']['default'] = django_cache_url.parse(cache_url)
 
-    def storage_settings(self, settings, env):
+    def storage_settings_for_media(self, settings, env):
+        import yurl
         from aldryn_django.storage import parse_storage_url
         if env('DEFAULT_STORAGE_DSN'):
             settings['DEFAULT_STORAGE_DSN'] = env('DEFAULT_STORAGE_DSN')
-
+        settings['MEDIA_URL'] = env('MEDIA_URL', '/media/')
         if 'DEFAULT_STORAGE_DSN' in settings:
             settings.update(parse_storage_url(settings['DEFAULT_STORAGE_DSN']))
+        settings['MEDIA_URL_IS_ON_OTHER_DOMAIN'] = bool(yurl.URL(settings['MEDIA_URL']).host)
+        settings['MEDIA_ROOT'] = env('MEDIA_ROOT', os.path.join(settings['DATA_ROOT'], 'media'))
+
+    def storage_settings_for_static(self, settings, env):
+        import yurl
+        settings['STATIC_URL'] = env('STATIC_URL', '/static/')
+        settings['STATIC_URL_IS_ON_OTHER_DOMAIN'] = bool(yurl.URL(settings['STATIC_URL']).host)
+        settings['STATIC_ROOT'] = env(
+            'STATIC_ROOT',
+            os.path.join(settings['BASE_DIR'], 'static_collected'),
+        )
+        settings['STATICFILES_DIRS'] = env(
+            'STATICFILES_DIRS',
+            [os.path.join(settings['BASE_DIR'], 'static'),]
+        )
 
     def i18n_settings(self, data, settings, env):
         settings['ALL_LANGUAGES'] = list(settings['LANGUAGES'])

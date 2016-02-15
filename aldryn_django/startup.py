@@ -24,6 +24,12 @@ def wsgi(path):
     return app
 
 
+def setup(path):
+    _setup(path)
+    import django
+    django.setup()
+
+
 def _setup(path):
     os.environ['DJANGO_SETTINGS_MODULE'] = env(
         'DJANGO_SETTINGS_MODULE', 'settings'
