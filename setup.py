@@ -74,6 +74,11 @@ setup(
         # the official version 1.0.0 on pypi requires Django>=1.7
         'django-formtools==1.0.0.1',
 
+        # TODO: Remove after django-tablib would be released
+        # use internal package with django 1.8+ support instead of outdated
+        # needed for aldryn-events and aldryn-forms export features.
+        'django-tablib==3.1.1.2',
+
         # Force a Django 1.6 compatible version.
         'django-simple-captcha<0.4.8',
         'django-mptt<0.8.0',
