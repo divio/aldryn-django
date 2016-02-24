@@ -88,10 +88,28 @@ main.add_command(worker)
 main.add_command(migrate)
 
 
+def get_env():
+    # setup default uwsgi environment variables
+    env = {
+        'UWSGI_ENABLE_THREADS': '1',
+    }
+    if boolean_ish(os.environ.get('ENABLE_UWSGI_CHEAPER', 'on')):
+        env.update({
+            'UWSGI_CHEAPER': '1',
+            'UWSGI_CHEAPER_ALGO': 'busyness',
+            'UWSGI_CHEAPER_INITIAL': '1',
+            'UWSGI_CHEAPER_BUSINESS_VERBOSE': '1',
+            'UWSGI_CHEAPER_BUSINESS_BACKLOG_ALERT': '10',
+            'UWSGI_CHEAPER_OVERLOAD': '30',
+        })
+    env.update(os.environ)
+    return env
+
+
 def execute(args, script=None):
     # TODO: is cleanup needed before calling exec? (open files, ...)
     command = script or args[0]
-    os.execvp(command, args)
+    os.execvpe(command, args, get_env())
 
 
 def start_uwsgi_command(settings, port=None):
@@ -104,7 +122,6 @@ def start_uwsgi_command(settings, port=None):
         '--max-requests={}'.format(settings['DJANGO_WEB_MAX_REQUESTS']),
         '--harakiri={}'.format(settings['DJANGO_WEB_TIMEOUT']),
         # '--honour-stdin',
-        '--lazy-apps',
     ]
 
 
