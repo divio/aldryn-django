@@ -1,6 +1,12 @@
 CHANGELOG
 =========
 
+1.6.11.22 (2016-02-25)
+----------------------
+
+* switch to more reliable (no 502s) uwsgi startup mode (uwsgi cheaper)
+
+
 1.6.11.21 (2016-02-17)
 ----------------------
 
