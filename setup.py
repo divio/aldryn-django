@@ -17,7 +17,7 @@ setup(
         'aldryn-addons',
         # security backport of Django from
         # https://devpi.divio.ch/divio/django-backports/+simple/Django/
-        'Django==1.6.11.post4',
+        'Django==1.6.11.post5',
 
         # setup utils
         'dj-database-url',
