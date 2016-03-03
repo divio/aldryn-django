@@ -1,7 +1,33 @@
 CHANGELOG
 =========
 
-1.8.6.0 (2015-11-17)
+1.9.3.2 (2016-03-03)
 --------------------
 
-* Initial release
+* remove dependency to custom fork of django-tablib
+
+
+1.9.3.1 (2016-03-02)
+--------------------
+
+* Django 1.9.3 (security release)
+* uwsgi cheaper mode (prevents 502 at startup time)
+
+
+1.9.2.1 (2016-02-15)
+--------------------
+
+* Django 1.9.2
+* nginx/pagespeed settings updates
+
+
+1.9.1.4 (2016-02-12)
+--------------------
+
+* bump tablib dependency
+
+
+1.9.1.3 (2016-01-28)
+--------------------
+
+* first stable release
