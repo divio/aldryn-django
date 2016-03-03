@@ -1,6 +1,18 @@
 CHANGELOG
 =========
 
+1.8.10.2 (2016-03-03)
+---------------------
+
+* remove dependency to custom fork of django-tablib
+
+
+1.8.10.1 (2016-03-02)
+---------------------
+
+* Django 1.8.10 (security release)
+
+
 1.8.9.5 (2016-02-25)
 --------------------
 
@@ -11,6 +23,7 @@ CHANGELOG
 --------------------
 
 * use newer release of django-tablib
+
 
 1.8.9.3 (2016-02-10)
 --------------------
