@@ -9,14 +9,14 @@ SYSTEM_FIELD_WARNING = 'WARNING: this field is auto-written. Please do not chang
 
 class CachedLoader(list):
     """
-    A list subclass to be used for the template loaders option.
+    A list subclass to be used for the template loaders option
 
     This subclass exposes the same interface as a list and allows subsequent
-    code to alter the list of template loaders without knowing if it has to
-    alter the main template loaders or the cached template loader list.
+    code to alter the list of template loaders without knowing if it has been
+    wrapped by the `django.template.loaders.cached.Loader` loader.
 
-    `uncached_*` methods are available to allow cached/non-cached-aware code
-    to alter the main template loaders.
+    `uncached_*` methods are available to allow cached-loader-aware code to
+    alter the main template loaders.
     """
     loader = 'django.template.loaders.cached.Loader'
 
@@ -106,10 +106,10 @@ class Form(forms.BaseForm):
             'aldryn_django',
         ])
 
-        if not settings['DEBUG'] and not settings['ENABLE_SYNCING']:
-            loader_list_class = CachedLoader
-        else:
+        if settings['DEBUG'] or settings['ENABLE_SYNCING']:
             loader_list_class = list
+        else:
+            loader_list_class = CachedLoader
 
         settings['TEMPLATES'] = [
             {
