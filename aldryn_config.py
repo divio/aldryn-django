@@ -57,7 +57,10 @@ class Form(forms.BaseForm):
         settings['DATA_ROOT'] = env('DATA_ROOT', os.path.join(settings['BASE_DIR'], 'data'))
         settings['SECRET_KEY'] = env('SECRET_KEY', 'this-is-not-very-random')
         settings['DEBUG'] = boolean_ish(env('DEBUG', False))
-        settings['ENABLE_SYNCING'] = boolean_ish(env('ENABLE_SYNCING', settings['DEBUG']))
+        settings['ENABLE_SYNCING'] = boolean_ish(
+            env('ENABLE_SYNCING', settings['DEBUG']))
+        settings['DISABLE_TEMPLATE_CACHE'] = boolean_ish(
+            env('DISABLE_TEMPLATE_CACHE', settings['DEBUG']))
 
         settings['DATABASE_URL'] = env('DATABASE_URL')
         settings['CACHE_URL'] = env('CACHE_URL')
@@ -106,7 +109,7 @@ class Form(forms.BaseForm):
             'aldryn_django',
         ])
 
-        if settings['DEBUG'] or settings['ENABLE_SYNCING']:
+        if settings['ENABLE_SYNCING'] or settings['DISABLE_TEMPLATE_CACHE']:
             loader_list_class = list
         else:
             loader_list_class = CachedLoader
