@@ -27,6 +27,7 @@ class Form(forms.BaseForm):
         settings['DATA_ROOT'] = env('DATA_ROOT', os.path.join(settings['BASE_DIR'], 'data'))
         settings['SECRET_KEY'] = env('SECRET_KEY', 'this-is-not-very-random')
         settings['DEBUG'] = boolean_ish(env('DEBUG', False))
+        settings['ENABLE_SYNCING'] = boolean_ish(env('ENABLE_SYNCING', settings['DEBUG']))
 
         settings['DATABASE_URL'] = env('DATABASE_URL')
         settings['CACHE_URL'] = env('CACHE_URL')
