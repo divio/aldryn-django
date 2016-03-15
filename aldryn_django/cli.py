@@ -124,12 +124,17 @@ def start_uwsgi_command(settings, port=None):
         # '--honour-stdin',
     ]
 
-    if (not settings['ENABLE_SYNCING'] and
-            not settings['STATIC_URL_IS_ON_OTHER_DOMAIN']):
-        cmd.append('--static-map={}={}'.format(
-            settings['STATIC_URL'],
-            settings['STATIC_ROOT'],
-        ))
+    if not settings['ENABLE_SYNCING']:
+        if not settings['STATIC_URL_IS_ON_OTHER_DOMAIN']:
+            cmd.append('--static-map={}={}'.format(
+                settings['STATIC_URL'],
+                settings['STATIC_ROOT'],
+            ))
+        if not settings['MEDIA_URL_IS_ON_OTHER_DOMAIN']:
+            cmd.append('--static-map={}={}'.format(
+                settings['MEDIA_URL'],
+                settings['MEDIA_ROOT'],
+            ))
 
     return cmd
 
