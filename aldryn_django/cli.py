@@ -113,7 +113,7 @@ def execute(args, script=None):
 
 
 def start_uwsgi_command(settings, port=None):
-    return [
+    cmd = [
         'uwsgi',
         '--module=wsgi',
         '--http=0.0.0.0:{}'.format(port or settings.get('PORT')),
@@ -123,6 +123,15 @@ def start_uwsgi_command(settings, port=None):
         '--harakiri={}'.format(settings['DJANGO_WEB_TIMEOUT']),
         # '--honour-stdin',
     ]
+
+    if (not settings['ENABLE_SYNCING'] and
+            not settings['STATIC_URL_IS_ON_OTHER_DOMAIN']):
+        cmd.append('--static-map={}={}'.format(
+            settings['STATIC_URL'],
+            settings['STATIC_ROOT'],
+        ))
+
+    return cmd
 
 
 def start_procfile_command(procfile_path):
