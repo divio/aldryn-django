@@ -7,6 +7,36 @@ from aldryn_client import forms
 SYSTEM_FIELD_WARNING = 'WARNING: this field is auto-written. Please do not change it here.'
 
 
+class CachedLoader(list):
+    """
+    A list subclass to be used for the template loaders option.
+
+    This subclass exposes the same interface as a list and allows subsequent
+    code to alter the list of template loaders without knowing if it has to
+    alter the main template loaders or the cached template loader list.
+
+    `uncached_*` methods are available to allow cached/non-cached-aware code
+    to alter the main template loaders.
+    """
+    loader = 'django.template.loaders.cached.Loader'
+
+    def __init__(self, loaders):
+        self._cached_loaders = list(loaders)
+        super(CachedLoader, self).__init__([
+            (self.loader, self._cached_loaders),
+        ])
+
+        methods = ('append', 'extend', 'insert', 'remove',
+                   'pop', 'index', 'count')
+        for method in methods:
+            self.overwrite_method(method)
+
+    def overwrite_method(self, method):
+        uncached_method = 'uncached_{}'.format(method)
+        setattr(self, uncached_method, getattr(self, method))
+        setattr(self, method, getattr(self._cached_loaders, method))
+
+
 class Form(forms.BaseForm):
     languages = forms.CharField(
         'Languages',
@@ -76,6 +106,11 @@ class Form(forms.BaseForm):
             'aldryn_django',
         ])
 
+        if not settings['DEBUG'] and not settings['ENABLE_SYNCING']:
+            loader_list_class = CachedLoader
+        else:
+            loader_list_class = list
+
         settings['TEMPLATES'] = [
             {
                 'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -94,11 +129,11 @@ class Form(forms.BaseForm):
                         'django.core.context_processors.static',
                         'aldryn_django.context_processors.debug',
                     ],
-                    'loaders': [
+                    'loaders': loader_list_class([
                         'django.template.loaders.filesystem.Loader',
                         'django.template.loaders.app_directories.Loader',
                         'django.template.loaders.eggs.Loader',
-                    ],
+                    ]),
                 },
             },
         ]
