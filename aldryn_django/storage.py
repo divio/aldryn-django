@@ -49,7 +49,7 @@ def parse_storage_url(url):
     if scheme[0] == 's3':
         os.environ['S3_USE_SIGV4'] = 'True'
 
-        media_domain = parse.parse_qs(url.query).get('domain', None)
+        media_domain = parse.parse_qs(url.query).get('domain', [None])[0]
 
         config.update({
             'AWS_MEDIA_ACCESS_KEY_ID': parse.unquote(url.username or ''),
