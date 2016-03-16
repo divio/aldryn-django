@@ -15,6 +15,16 @@ CHANGELOG
 * add an aldryn_collectstatic command which also gzip-compresses static files
 
 
+1.8.10.3 (2016-03-15)
+---------------------
+
+* enable cached template loader (can be explicitly disabled by setting the
+  ``DISABLE_TEMPLATE_CACHE`` env variable to true)
+* serve static files using uwsgi --static-map (is automatically disabled when
+  syncing is enabled using ``ENABLE_SYNCING``)
+* switch to ManifestStaticFilesStorage for ``STATICFILES_STORAGE``
+
+
 1.8.10.2 (2016-03-03)
 ---------------------
 
