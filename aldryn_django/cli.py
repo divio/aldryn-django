@@ -121,20 +121,56 @@ def start_uwsgi_command(settings, port=None):
         '--workers={}'.format(settings['DJANGO_WEB_WORKERS']),
         '--max-requests={}'.format(settings['DJANGO_WEB_MAX_REQUESTS']),
         '--harakiri={}'.format(settings['DJANGO_WEB_TIMEOUT']),
-        # '--honour-stdin',
     ]
+
+    serve_static = False
 
     if not settings['ENABLE_SYNCING']:
         if not settings['STATIC_URL_IS_ON_OTHER_DOMAIN']:
-            cmd.append('--static-map={}={}'.format(
-                settings['STATIC_URL'],
-                settings['STATIC_ROOT'],
-            ))
+            serve_static = True
+            cmd.extend([
+                '--static-map={}={}'.format(
+                    settings['STATIC_URL'],
+                    settings['STATIC_ROOT'],
+                ),
+                # Set far-future expiration headers for django-compressor
+                # generated files
+                '--static-expires={} 31536000'.format(
+                    os.path.join(
+                        settings['STATIC_ROOT'],
+                        settings.get('COMPRESS_OUTPUT_DIR', 'CACHE'),
+                        '.*',
+                    )
+                ),
+                # Set far-future expiration headers for static files with
+                # hashed filenames
+                '--static-expires={} 31536000'.format(
+                    os.path.join(
+                        settings['STATIC_ROOT'],
+                        r'.*\.[0-9a-f]{10,16}\.[a-z]+',
+                    )
+                ),
+            ])
+
         if not settings['MEDIA_URL_IS_ON_OTHER_DOMAIN']:
+            serve_static = True
             cmd.append('--static-map={}={}'.format(
                 settings['MEDIA_URL'],
                 settings['MEDIA_ROOT'],
             ))
+
+        if serve_static:
+            cmd.extend([
+                # Start 2 offloading threads for each worker
+                '--offload-threads=2',
+                # Cache resolved paths for up to 1 day (limited to 5k entries
+                # of max 1kB size each)
+                '--static-cache-paths=86400',
+                '--static-cache-paths-name=staticpaths',
+                '--cache2=name=staticpaths,items=5000,blocksize=1k,purge_lru,ignore_full',
+                # Serve .gz files if that version is available
+                '--static-gzip-all',
+            ])
 
     return cmd
 

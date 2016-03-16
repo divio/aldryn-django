@@ -6,6 +6,11 @@ CHANGELOG
 
 * remove ManifestStaticFilesStorage setting (this setting can easily be
   overridden in the project settings file)
+* tune uwsgi static files serving:
+   * set far-future expiration for hashed filenames
+   * use offloading threads to serve static files
+   * cache resolved static file paths for even better performance
+   * serve gzipped versions when available
 1.8.10.2 (2016-03-03)
 ---------------------
 
