@@ -11,6 +11,7 @@ CHANGELOG
    * use offloading threads to serve static files
    * cache resolved static file paths for even better performance
    * serve gzipped versions when available
+* optionally read the media domain from the storage DSN
 * add an aldryn_collectstatic command which also gzip-compresses static files
 
 
