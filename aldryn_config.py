@@ -343,7 +343,6 @@ class Form(forms.BaseForm):
             'STATICFILES_DIRS',
             [os.path.join(settings['BASE_DIR'], 'static')]
         )
-        settings['STATICFILES_STORAGE'] = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
 
     def i18n_settings(self, data, settings, env):
         settings['ALL_LANGUAGES'] = list(settings['LANGUAGES'])
