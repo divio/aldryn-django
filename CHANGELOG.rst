@@ -11,6 +11,9 @@ CHANGELOG
    * use offloading threads to serve static files
    * cache resolved static file paths for even better performance
    * serve gzipped versions when available
+* add an aldryn_collectstatic command which also gzip-compresses static files
+
+
 1.8.10.2 (2016-03-03)
 ---------------------
 
