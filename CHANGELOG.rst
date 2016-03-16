@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+1.8.10.4 (2016-03-16)
+---------------------
+
+* remove ManifestStaticFilesStorage setting (this setting can easily be
+  overridden in the project settings file)
 1.8.10.2 (2016-03-03)
 ---------------------
 
