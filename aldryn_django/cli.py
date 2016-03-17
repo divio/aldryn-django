@@ -121,6 +121,7 @@ def start_uwsgi_command(settings, port=None):
         '--workers={}'.format(settings['DJANGO_WEB_WORKERS']),
         '--max-requests={}'.format(settings['DJANGO_WEB_MAX_REQUESTS']),
         '--harakiri={}'.format(settings['DJANGO_WEB_TIMEOUT']),
+        '--lazy-apps',
     ]
 
     serve_static = False
