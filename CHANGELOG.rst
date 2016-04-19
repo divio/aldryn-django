@@ -1,8 +1,8 @@
 CHANGELOG
 =========
 
-next
-----
+1.6.11.25 (2016-04-19)
+----------------------
 
 * tune uwsgi static files serving:
    * set far-future expiration for hashed filenames
