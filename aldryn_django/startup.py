@@ -17,10 +17,11 @@ def wsgi(path):
     from django.conf import settings
     from dj_static import Cling, MediaCling
     app = get_wsgi_application()
-    if not settings.STATIC_URL_IS_ON_OTHER_DOMAIN:
-        app = Cling(app)
-    if not settings.MEDIA_URL_IS_ON_OTHER_DOMAIN:
-        app = MediaCling(app)
+    if settings.ENABLE_SYNCING:
+        if not settings.STATIC_URL_IS_ON_OTHER_DOMAIN:
+            app = Cling(app)
+        if not settings.MEDIA_URL_IS_ON_OTHER_DOMAIN:
+            app = MediaCling(app)
     return app
 
 

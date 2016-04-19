@@ -7,6 +7,36 @@ from aldryn_client import forms
 SYSTEM_FIELD_WARNING = 'WARNING: this field is auto-written. Please do not change it here.'
 
 
+class CachedLoader(list):
+    """
+    A list subclass to be used for the template loaders option
+
+    This subclass exposes the same interface as a list and allows subsequent
+    code to alter the list of template loaders without knowing if it has been
+    wrapped by the `django.template.loaders.cached.Loader` loader.
+
+    `uncached_*` methods are available to allow cached-loader-aware code to
+    alter the main template loaders.
+    """
+    loader = 'django.template.loaders.cached.Loader'
+
+    def __init__(self, loaders):
+        self._cached_loaders = list(loaders)
+        super(CachedLoader, self).__init__([
+            (self.loader, self._cached_loaders),
+        ])
+
+        methods = ('append', 'extend', 'insert', 'remove',
+                   'pop', 'index', 'count')
+        for method in methods:
+            self.overwrite_method(method)
+
+    def overwrite_method(self, method):
+        uncached_method = 'uncached_{}'.format(method)
+        setattr(self, uncached_method, getattr(self, method))
+        setattr(self, method, getattr(self._cached_loaders, method))
+
+
 class Form(forms.BaseForm):
     languages = forms.CharField(
         'Languages',
@@ -29,6 +59,10 @@ class Form(forms.BaseForm):
         settings['SECRET_KEY'] = env('SECRET_KEY', 'this-is-not-very-random')
         settings['DEBUG'] = boolean_ish(env('DEBUG', False))
         settings['TEMPLATE_DEBUG'] = boolean_ish(env('TEMPLATE_DEBUG', settings['DEBUG']))
+        settings['ENABLE_SYNCING'] = boolean_ish(
+            env('ENABLE_SYNCING', settings['DEBUG']))
+        settings['DISABLE_TEMPLATE_CACHE'] = boolean_ish(
+            env('DISABLE_TEMPLATE_CACHE', settings['DEBUG']))
 
         settings['DATABASE_URL'] = env('DATABASE_URL')
         settings['CACHE_URL'] = env('CACHE_URL')
@@ -74,7 +108,7 @@ class Form(forms.BaseForm):
         )
         settings['STATICFILES_DIRS'] = env(
             'STATICFILES_DIRS',
-            [os.path.join(settings['BASE_DIR'], 'static'),]
+            [os.path.join(settings['BASE_DIR'], 'static')]
         )
 
         settings['MEDIA_URL'] = env('MEDIA_URL', '/media/')
@@ -107,6 +141,16 @@ class Form(forms.BaseForm):
             'TEMPLATE_DIRS',
             [os.path.join(settings['BASE_DIR'], 'templates')],
         )
+        if settings['ENABLE_SYNCING'] or settings['DISABLE_TEMPLATE_CACHE']:
+            loader_list_class = list
+        else:
+            loader_list_class = CachedLoader
+        settings['TEMPLATE_LOADERS'] = loader_list_class([
+            'django.template.loaders.filesystem.Loader',
+            'django.template.loaders.app_directories.Loader',
+            'django.template.loaders.eggs.Loader',
+        ])
+
         settings['SITE_ID'] = env('SITE_ID', 1)
 
         self.domain_settings(data, settings, env=env)
@@ -116,7 +160,8 @@ class Form(forms.BaseForm):
         # Order matters, sentry settings rely on logging being configured.
         self.sentry_settings(settings, env=env)
         self.cache_settings(settings, env=env)
-        self.storage_settings(settings, env=env)
+        self.storage_settings_for_media(settings, env=env)
+        self.storage_settings_for_static(settings, env=env)
         self.i18n_settings(data, settings, env=env)
         self.migration_settings(settings, env=env)
         return settings
@@ -255,13 +300,33 @@ class Form(forms.BaseForm):
         if cache_url:
             settings['CACHES']['default'] = django_cache_url.parse(cache_url)
 
-    def storage_settings(self, settings, env):
+    def storage_settings_for_media(self, settings, env):
+        import yurl
         from aldryn_django.storage import parse_storage_url
         if env('DEFAULT_STORAGE_DSN'):
             settings['DEFAULT_STORAGE_DSN'] = env('DEFAULT_STORAGE_DSN')
-
+        settings['MEDIA_URL'] = env('MEDIA_URL', '/media/')
         if 'DEFAULT_STORAGE_DSN' in settings:
             settings.update(parse_storage_url(settings['DEFAULT_STORAGE_DSN']))
+        settings['MEDIA_URL_IS_ON_OTHER_DOMAIN'] = bool(
+            yurl.URL(settings['MEDIA_URL']).host)
+        settings['MEDIA_ROOT'] = env('MEDIA_ROOT',
+                                     os.path.join(settings['DATA_ROOT'],
+                                                  'media'))
+
+    def storage_settings_for_static(self, settings, env):
+        import yurl
+        settings['STATIC_URL'] = env('STATIC_URL', '/static/')
+        settings['STATIC_URL_IS_ON_OTHER_DOMAIN'] = bool(
+            yurl.URL(settings['STATIC_URL']).host)
+        settings['STATIC_ROOT'] = env(
+            'STATIC_ROOT',
+            os.path.join(settings['BASE_DIR'], 'static_collected'),
+        )
+        settings['STATICFILES_DIRS'] = env(
+            'STATICFILES_DIRS',
+            [os.path.join(settings['BASE_DIR'], 'static')]
+        )
 
     def i18n_settings(self, data, settings, env):
         settings['ALL_LANGUAGES'] = list(settings['LANGUAGES'])
