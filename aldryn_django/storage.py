@@ -3,6 +3,7 @@ import os
 from six.moves.urllib import parse
 
 from django.conf import settings
+import yurl
 
 from storages.backends import s3boto
 
@@ -27,6 +28,7 @@ class S3MediaStorage(s3boto.S3BotoStorage):
             bucket_name=settings.AWS_MEDIA_STORAGE_BUCKET_NAME,
             location=settings.AWS_MEDIA_BUCKET_PREFIX,
             host=settings.AWS_MEDIA_STORAGE_HOST,
+            custom_domain=settings.AWS_MEDIA_DOMAIN,
             # Setting an ACL requires us to grant the user the PutObjectAcl
             # permission as well, even if it matches the default bucket ACL.
             # XXX: Ideally we would thus set it to `None`, but due to how
@@ -47,13 +49,29 @@ def parse_storage_url(url):
 
     if scheme[0] == 's3':
         os.environ['S3_USE_SIGV4'] = 'True'
+
+        media_domain = parse.parse_qs(url.query).get('domain', [None])[0]
+
         config.update({
             'AWS_MEDIA_ACCESS_KEY_ID': parse.unquote(url.username or ''),
             'AWS_MEDIA_SECRET_ACCESS_KEY': parse.unquote(url.password or ''),
             'AWS_MEDIA_STORAGE_BUCKET_NAME': url.hostname.split('.', 1)[0],
             'AWS_MEDIA_STORAGE_HOST': url.hostname.split('.', 1)[1],
             'AWS_MEDIA_BUCKET_PREFIX': url.path.lstrip('/'),
+            'AWS_MEDIA_DOMAIN': media_domain,
         })
+
+        if not media_domain:
+            media_domain = '.'.join([
+                config['AWS_MEDIA_STORAGE_BUCKET_NAME'],
+                config['AWS_MEDIA_STORAGE_HOST'],
+            ])
+        media_url = yurl.URL(
+            scheme='https',
+            host=media_domain,
+            path=config['AWS_MEDIA_BUCKET_PREFIX'],
+        )
+        config['MEDIA_URL'] = media_url.as_string()
     elif scheme[0] == 'djfs':
         hostname = ('{}:{}'.format(url.hostname, url.port)
                     if url.port else url.hostname)

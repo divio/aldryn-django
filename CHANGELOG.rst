@@ -1,11 +1,28 @@
 CHANGELOG
 =========
 
+next
+----
+
+* tune uwsgi static files serving:
+   * set far-future expiration for hashed filenames
+   * use offloading threads to serve static files
+   * cache resolved static file paths for even better performance
+   * serve gzipped versions when available
+* optionally read the media domain from the storage DSN
+* add an aldryn_collectstatic command which also gzip-compresses static files
+* enable cached template loader (can be explicitly disabled by setting the
+  ``DISABLE_TEMPLATE_CACHE`` env variable to true)
+* serve static files using uwsgi --static-map (is automatically disabled when
+  syncing is enabled using ``ENABLE_SYNCING``)
+* switch to ManifestStaticFilesStorage for ``STATICFILES_STORAGE``
+* remove dependency to custom fork of django-tablib
+
+
 1.6.11.22 (2016-02-25)
 ----------------------
 
 * switch to more reliable (no 502s) uwsgi startup mode (uwsgi cheaper)
-
 
 1.6.11.21 (2016-02-17)
 ----------------------
