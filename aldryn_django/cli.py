@@ -3,6 +3,7 @@ from __future__ import absolute_import
 import click
 import os
 import sys
+from pipes import quote
 from django.template import loader, Context
 from django.conf import settings as django_settings
 from aldryn_addons.utils import openfile, boolean_ish, senv
@@ -176,15 +177,15 @@ def start_with_nginx(settings):
     # TODO: test with pagespeed and static or media on other domain
     if not all([settings['NGINX_CONF_PATH'], settings['NGINX_PROCFILE_PATH']]):
         raise click.UsageError('NGINX_CONF_PATH and NGINX_PROCFILE_PATH must be configured')
+
     commands = {
         'nginx': 'nginx',
-        'django': ' '.join(
-            start_uwsgi_command(settings, port=settings['BACKEND_PORT'])
-        )
+        'django': ' '.join(quote(c) for c in start_uwsgi_command(
+            settings, port=settings['BACKEND_PORT']))
     }
 
     procfile = '\n'.join(
-        '{} {}'.format(name, command)
+        '{}: {}'.format(name, command)
         for name, command in commands.items()
     )
     nginx_template = loader.get_template('aldryn_django/configuration/nginx.conf')

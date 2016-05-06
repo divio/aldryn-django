@@ -1,6 +1,12 @@
 CHANGELOG
 =========
 
+1.6.11.26 (2016-05-06)
+----------------------
+
+* correctly startup uwsgi with many command line options
+
+
 1.6.11.25 (2016-04-19)
 ----------------------
 
@@ -24,10 +30,12 @@ CHANGELOG
 
 * switch to more reliable (no 502s) uwsgi startup mode (uwsgi cheaper)
 
+
 1.6.11.21 (2016-02-17)
 ----------------------
 
 * install django-tablib so 1.6.x behaves the same as aldryn-django 1.8.x and 1.9.x
+
 
 1.6.11.20 (2016-01-21)
 ----------------------
