@@ -23,7 +23,6 @@ setup(
         'django-getenv',
         'aldryn-client',
         'webservices',
-        'pyaml',
         'yurl',
 
         # error reporting

@@ -4,7 +4,6 @@ from __future__ import absolute_import
 import os
 import subprocess
 import sys
-import yaml
 
 from django.conf import settings as django_settings
 from django.template import loader, Context
@@ -143,14 +142,17 @@ def start_with_nginx(settings):
         raise click.UsageError(
             'NGINX_CONF_PATH and NGINX_PROCFILE_PATH must be configured'
         )
-    procfile = yaml.safe_dump(
-        {
-            'nginx': 'nginx',
-            'django': ' '.join(
-                start_uwsgi_command(settings, port=settings['BACKEND_PORT'])
-            )
-        },
-        default_flow_style=False,
+
+    commands = {
+        'nginx': 'nginx',
+        'django': ' '.join(
+            start_uwsgi_command(settings, port=settings['BACKEND_PORT'])
+        )
+    }
+
+    procfile = '\n'.join(
+        '{} {}'.format(name, command)
+        for name, command in commands.items()
     )
 
     if (
