@@ -4,6 +4,7 @@ from __future__ import absolute_import
 import os
 import subprocess
 import sys
+from pipes import quote
 
 from django.conf import settings as django_settings
 from django.template import loader, Context
@@ -196,13 +197,12 @@ def start_with_nginx(settings):
 
     commands = {
         'nginx': 'nginx',
-        'django': ' '.join(
-            start_uwsgi_command(settings, port=settings['BACKEND_PORT'])
-        )
+        'django': ' '.join(quote(c) for c in start_uwsgi_command(
+            settings, port=settings['BACKEND_PORT']))
     }
 
     procfile = '\n'.join(
-        '{} {}'.format(name, command)
+        '{}: {}'.format(name, command)
         for name, command in commands.items()
     )
 
