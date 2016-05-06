@@ -1,6 +1,12 @@
 CHANGELOG
 =========
 
+1.9.3.3 (2016-05-06)
+--------------------
+
+* correctly startup uwsgi with many command line options
+
+
 1.9.3.2 (2016-03-03)
 --------------------
 
