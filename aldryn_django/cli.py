@@ -2,7 +2,7 @@
 from __future__ import absolute_import
 
 import os
-import subprocess
+import six
 import sys
 from pipes import quote
 
@@ -12,6 +12,12 @@ from django.template import loader, Context
 import click
 
 from aldryn_addons.utils import openfile, boolean_ish
+
+if six.PY2:
+    # backport of python3 subprocess with timeout support
+    import subprocess32 as subprocess
+else:
+    import subprocess
 
 
 # add the current directory to pythonpath. So the project files can be read.
