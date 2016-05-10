@@ -1,6 +1,17 @@
 # -*- coding: utf-8 -*-
+import sys
 from setuptools import setup, find_packages
 from aldryn_django import __version__
+
+
+if sys.version_info[0] == 2:
+    # on python2 the backport of subprocess32 is needed
+    extra_dependencies = (
+        'subprocess32',
+    )
+else:
+    extra_dependencies = ()
+
 
 setup(
     name="aldryn-django",
@@ -37,7 +48,6 @@ setup(
         'psycopg2',
         'structlog',
         'click',
-        'subprocess32',
 
         # storage
         'django-storages-redux',
@@ -61,7 +71,7 @@ setup(
         'django-reversion<1.9',
 
         'easy-thumbnails==2.2.1.1',
-    ),
+    ) + extra_dependencies,
     entry_points='''
         [console_scripts]
         aldryn-django=aldryn_django.cli:main
