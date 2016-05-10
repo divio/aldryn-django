@@ -1,6 +1,13 @@
 CHANGELOG
 =========
 
+1.9.6.0 (2016-05-10)
+--------------------
+
+* upgrade Django to 1.9.6
+* initial stab at python3 compatibility
+
+
 1.9.3.3 (2016-05-06)
 --------------------
 
