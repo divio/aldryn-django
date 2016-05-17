@@ -88,4 +88,9 @@ def parse_storage_url(url):
             )),
         })
 
+    if config.get('MEDIA_URL') and not config['MEDIA_URL'].endswith('/'):
+        # Django (or something else?) silently sets MEDIA_URL to an empty
+        # string if it does not end with a '/'
+        config['MEDIA_URL'] = '{}/'.format(config['MEDIA_URL'])
+
     return config
