@@ -1,6 +1,14 @@
 CHANGELOG
 =========
 
+1.8.11.1 (2016-05-30)
+---------------------
+
+* redirect to admin on root url by default (to give first time site visitors a
+  better experience)
+* bump to django 1.8.11
+
+
 1.8.10.7 (2016-05-06)
 ---------------------
 
