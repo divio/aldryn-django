@@ -1,6 +1,13 @@
 CHANGELOG
 =========
 
+1.9.6.1 (2016-05-30)
+--------------------
+
+* redirect to admin on root url by default (to give first time site visitors a
+  better experience)
+
+
 1.9.6.0 (2016-05-10)
 --------------------
 
