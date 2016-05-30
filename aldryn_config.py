@@ -118,6 +118,8 @@ class Form(forms.BaseForm):
 
         settings['SITE_ID'] = env('SITE_ID', 1)
 
+        settings['ADDON_URLS_I18N_LAST'] = 'aldryn_django.urls_redirect'
+
         self.domain_settings(data, settings, env=env)
         self.security_settings(data, settings, env=env)
         self.server_settings(settings, env=env)
