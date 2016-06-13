@@ -9,5 +9,5 @@ class Command(BaseCommand):
         if not hasattr(default_storage, 'update_headers'):
             raise CommandError('The default media files storage does not '
                                'support updating headers')
-        updated, all_files = default_storage.update_headers()
+        all_files, updated = default_storage.update_headers()
         self.stdout.write('{}/{} files updated'.format(updated, all_files))
