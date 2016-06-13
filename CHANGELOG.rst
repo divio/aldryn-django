@@ -1,15 +1,16 @@
 CHANGELOG
 =========
 
-1.9.6.3 (TBA)
--------------
+1.9.6.3 (2016-06-13)
+--------------------
 
 * allow to set custom headers for file uploaded to S3 based on the MEDIA_HEADERS
   setting.
+* pin django-reversion to < 2.0.0 as we don't officially support it yet.
 
 
 1.9.6.2 (2016-06-10)
----------------------
+--------------------
 
 * disable pagespeed for all admin pages
 
