@@ -293,6 +293,7 @@ class Form(forms.BaseForm):
             settings.update(parse_storage_url(settings['DEFAULT_STORAGE_DSN']))
         settings['MEDIA_URL_IS_ON_OTHER_DOMAIN'] = bool(yurl.URL(settings['MEDIA_URL']).host)
         settings['MEDIA_ROOT'] = env('MEDIA_ROOT', os.path.join(settings['DATA_ROOT'], 'media'))
+        settings['MEDIA_HEADERS'] = []
 
     def storage_settings_for_static(self, settings, env):
         import yurl
