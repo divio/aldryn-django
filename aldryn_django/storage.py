@@ -49,9 +49,39 @@ class S3MediaStorage(s3boto.S3BotoStorage):
         return headers
 
     def _save_content(self, key, content, headers):
-        path = self._decode_name(key.key)[len(self.location):].lstrip('/')
-        headers = self._headers_for_path(path, headers)
+        headers = self._headers_for_path(self._key_path(key), headers)
         return super(S3MediaStorage, self)._save_content(key, content, headers)
+
+    def _key_path(self, key):
+        return self._decode_name(key.key)[len(self.location):].lstrip('/')
+
+    def update_headers(self):
+        files, updated = 0, 0
+
+        dirlist = self.bucket.list(self._encode_name(self.location))
+        for key in dirlist:
+            path = self._key_path(key)
+            key = self.bucket.get_key(key.name)
+
+            old_headers = {
+                k.lower(): v
+                for k, v in key._get_remote_metadata().items()
+            }
+
+            new_headers = self.headers.copy()
+            if 'content-type' in old_headers:
+                new_headers['content-type'] = old_headers['content-type']
+            new_headers = self._headers_for_path(path, new_headers)
+            new_headers = {k.lower(): v for k, v in new_headers.items()}
+
+            files += 1
+
+            if new_headers != old_headers:
+                key.copy(self.bucket.name, key,
+                         metadata=new_headers, preserve_acl=True)
+                updated += 1
+
+        return files, updated
 
 
 def parse_storage_url(url):
