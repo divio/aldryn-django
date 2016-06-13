@@ -37,6 +37,20 @@ class S3MediaStorage(s3boto.S3BotoStorage):
             default_acl='public-read',
             querystring_auth=False,
         )
+        # MEDIA_HEADERS is a list of tuples containing a regular expression
+        # to match against a path, and a dictionary of HTTP headers to be
+        # returned with the resource identified by the path when it is
+        # requested.
+        # The headers are applied in the order they where declared, with
+        # later values overriding the former ones.
+        # E.g.:
+        #
+        #    MEDIA_HEADERS = [
+        #        (r'media/cache/.*', {
+        #            'Cache-Control': 'max-age={}'.format(3600 * 24 * 365),
+        #        })
+        #    ]
+        #
         media_headers = getattr(settings, 'MEDIA_HEADERS', [])
         self.media_headers = [
             (re.compile(r), headers) for r, headers in media_headers
