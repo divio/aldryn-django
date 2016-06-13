@@ -1,6 +1,13 @@
 CHANGELOG
 =========
 
+1.8.11.3 (TBA)
+--------------
+
+* allow to set custom headers for file uploaded to S3 based on the MEDIA_HEADERS
+  setting.
+
+
 1.8.11.2 (2016-06-10)
 ---------------------
 
