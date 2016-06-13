@@ -1,4 +1,5 @@
 import os
+import re
 
 from django.conf import settings
 
@@ -36,6 +37,21 @@ class S3MediaStorage(s3boto.S3BotoStorage):
             default_acl='public-read',
             querystring_auth=False,
         )
+        media_headers = getattr(settings, 'MEDIA_HEADERS', [])
+        self.media_headers = [
+            (re.compile(r), headers) for r, headers in media_headers
+        ]
+
+    def _headers_for_path(self, path, headers):
+        for pattern, headers_override in self.media_headers:
+            if pattern.match(path) is not None:
+                headers.update(headers_override)
+        return headers
+
+    def _save_content(self, key, content, headers):
+        path = self._decode_name(key.key)[len(self.location):].lstrip('/')
+        headers = self._headers_for_path(path, headers)
+        return super(S3MediaStorage, self)._save_content(key, content, headers)
 
 
 def parse_storage_url(url):
