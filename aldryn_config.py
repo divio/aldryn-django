@@ -343,7 +343,7 @@ class Form(forms.BaseForm):
         )
         settings['STATICFILES_DIRS'] = env(
             'STATICFILES_DIRS',
-            [os.path.join(settings['BASE_DIR'], 'static'),]
+            [os.path.join(settings['BASE_DIR'], 'static')]
         )
 
     def i18n_settings(self, data, settings, env):
