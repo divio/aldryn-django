@@ -70,7 +70,7 @@ setup(
         # TODO: should be in (aldryn-)django-cms
         # However, it doesn't know which version of Django is being installed,
         # so it stays here.
-        'django-reversion>=1.10.0',
+        'django-reversion>=1.10.0,<2.0.0',
         'django-treebeard>=4.0',
 
         'easy-thumbnails==2.2.1.1',
