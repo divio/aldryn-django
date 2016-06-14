@@ -342,6 +342,21 @@ class Form(forms.BaseForm):
             'STATIC_ROOT',
             os.path.join(settings['BASE_DIR'], 'static_collected'),
         )
+        settings['STATIC_HEADERS'] = [
+            # Set far-future expiration headers for static files with hashed
+            # filenames.
+            (r'.*\.[0-9a-f]{10,16}\.[a-z]+', {
+                'Cache-Control': 'public, max-age={}'.format(3600 * 24 * 365),
+            }),
+            # Set default expiration headers for all remaining static files.
+            # *Has to be last* as processing stops at the first matching
+            # pattern it finds.
+            ('.*', {
+                'Cache-Control': 'public, max-age={}'.format(
+                    settings['STATICFILES_DEFAULT_MAX_AGE'],
+                ),
+            }),
+        ]
         settings['STATICFILES_DIRS'] = env(
             'STATICFILES_DIRS',
             [os.path.join(settings['BASE_DIR'], 'static')]
