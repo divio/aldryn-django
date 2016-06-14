@@ -28,6 +28,7 @@ class S3MediaStorage(s3boto.S3BotoStorage):
             bucket_name=settings.AWS_MEDIA_STORAGE_BUCKET_NAME,
             location=settings.AWS_MEDIA_BUCKET_PREFIX,
             host=settings.AWS_MEDIA_STORAGE_HOST,
+            custom_domain=settings.AWS_MEDIA_DOMAIN,
             # Setting an ACL requires us to grant the user the PutObjectAcl
             # permission as well, even if it matches the default bucket ACL.
             # XXX: Ideally we would thus set it to `None`, but due to how
@@ -36,6 +37,20 @@ class S3MediaStorage(s3boto.S3BotoStorage):
             default_acl='public-read',
             querystring_auth=False,
         )
+        # MEDIA_HEADERS is a list of tuples containing a regular expression
+        # to match against a path, and a dictionary of HTTP headers to be
+        # returned with the resource identified by the path when it is
+        # requested.
+        # The headers are applied in the order they where declared, with
+        # later values overriding the former ones.
+        # E.g.:
+        #
+        #    MEDIA_HEADERS = [
+        #        (r'media/cache/.*', {
+        #            'Cache-Control': 'max-age={}'.format(3600 * 24 * 365),
+        #        })
+        #    ]
+        #
         media_headers = getattr(settings, 'MEDIA_HEADERS', [])
         self.media_headers = [
             (re.compile(r), headers) for r, headers in media_headers
@@ -48,9 +63,39 @@ class S3MediaStorage(s3boto.S3BotoStorage):
         return headers
 
     def _save_content(self, key, content, headers):
-        path = self._decode_name(key.key)[len(self.location):].lstrip('/')
-        headers = self._headers_for_path(path, headers)
+        headers = self._headers_for_path(self._key_path(key), headers)
         return super(S3MediaStorage, self)._save_content(key, content, headers)
+
+    def _key_path(self, key):
+        return self._decode_name(key.key)[len(self.location):].lstrip('/')
+
+    def update_headers(self):
+        files, updated = 0, 0
+
+        dirlist = self.bucket.list(self._encode_name(self.location))
+        for key in dirlist:
+            path = self._key_path(key)
+            key = self.bucket.get_key(key.name)
+
+            old_headers = {
+                k.lower(): v
+                for k, v in key._get_remote_metadata().items()
+            }
+
+            new_headers = self.headers.copy()
+            if 'content-type' in old_headers:
+                new_headers['content-type'] = old_headers['content-type']
+            new_headers = self._headers_for_path(path, new_headers)
+            new_headers = {k.lower(): v for k, v in new_headers.items()}
+
+            files += 1
+
+            if new_headers != old_headers:
+                key.copy(self.bucket.name, key,
+                         metadata=new_headers, preserve_acl=True)
+                updated += 1
+
+        return files, updated
 
 
 def parse_storage_url(url):
@@ -63,19 +108,26 @@ def parse_storage_url(url):
 
     if scheme[0] == 's3':
         os.environ['S3_USE_SIGV4'] = 'True'
+
+        media_domain = parse.parse_qs(url.query).get('domain', [None])[0]
+
         config.update({
             'AWS_MEDIA_ACCESS_KEY_ID': parse.unquote(url.username or ''),
             'AWS_MEDIA_SECRET_ACCESS_KEY': parse.unquote(url.password or ''),
             'AWS_MEDIA_STORAGE_BUCKET_NAME': url.hostname.split('.', 1)[0],
             'AWS_MEDIA_STORAGE_HOST': url.hostname.split('.', 1)[1],
             'AWS_MEDIA_BUCKET_PREFIX': url.path.lstrip('/'),
+            'AWS_MEDIA_DOMAIN': media_domain,
         })
-        media_url = yurl.URL(
-            scheme='https',
-            host='.'.join([
+
+        if not media_domain:
+            media_domain = '.'.join([
                 config['AWS_MEDIA_STORAGE_BUCKET_NAME'],
                 config['AWS_MEDIA_STORAGE_HOST'],
-            ]),
+            ])
+        media_url = yurl.URL(
+            scheme='https',
+            host=media_domain,
             path=config['AWS_MEDIA_BUCKET_PREFIX'],
         )
         config['MEDIA_URL'] = media_url.as_string()

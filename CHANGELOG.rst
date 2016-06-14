@@ -1,6 +1,17 @@
 CHANGELOG
 =========
 
+1.9.6.4 (2016-06-13)
+--------------------
+
+* add a management command to update the headers for existing media files stored
+  on S3.
+* re-renable lazy-apps
+* optionally read the media domain from the storage DSN
+* tune staticfiles serving from uwsgi
+* use cached template loaders
+
+
 1.9.6.3 (2016-06-13)
 --------------------
 
