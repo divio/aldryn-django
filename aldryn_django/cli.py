@@ -32,8 +32,8 @@ def web(ctx_obj):
     launch the webserver of choice (uwsgi)
     """
     if any(boolean_ish(ctx_obj['settings'][key]) for key in
-           ('ENABLE_NGINX', 'ENABLE_PAGESPEED', 'ENABLE_BROWSERCACHE')):
-        # uwsgi behind nginx. possibly with pagespeed/browsercache
+           ('ENABLE_NGINX', 'ENABLE_PAGESPEED')):
+        # uwsgi behind nginx. possibly with pagespeed
         start_with_nginx(ctx_obj['settings'])
     else:
         # pure uwsgi
@@ -147,7 +147,7 @@ def start_uwsgi_command(settings, port=None):
                         settings['STATIC_ROOT'],
                         settings.get('COMPRESS_OUTPUT_DIR', 'CACHE'),
                         '.*',
-                    )
+                    ),
                 ),
                 # Set far-future expiration headers for static files with
                 # hashed filenames
