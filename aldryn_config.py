@@ -239,11 +239,12 @@ class Form(forms.BaseForm):
             'ENABLE_PAGESPEED',
             env('PAGESPEED', False),
         )
-        settings['ENABLE_BROWSERCACHE'] = env(
-            'ENABLE_BROWSERCACHE',
-            env('BROWSERCACHE', False),
-        )
         settings['BROWSERCACHE_MAX_AGE'] = env('BROWSERCACHE_MAX_AGE', 300)
+        settings['STATICFILES_DEFAULT_MAX_AGE'] = env(
+            'STATICFILES_DEFAULT_MAX_AGE',
+            # Keep BROWSERCACHE_MAX_AGE for backwards compatibility
+            env('BROWSERCACHE_MAX_AGE', 300),
+        )
         settings['NGINX_CONF_PATH'] = env('NGINX_CONF_PATH')
         settings['NGINX_PROCFILE_PATH'] = env('NGINX_PROCFILE_PATH')
         settings['PAGESPEED_ADMIN_HTPASSWD_PATH'] = env(
