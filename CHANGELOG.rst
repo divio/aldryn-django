@@ -1,6 +1,13 @@
 CHANGELOG
 =========
 
+1.8.11.4 (2016-06-14)
+---------------------
+
+* do not use nginx for caching and support declarative headers for both media and
+  static files serving.
+
+
 1.8.11.3 (2016-06-13)
 ---------------------
 
