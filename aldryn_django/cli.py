@@ -32,8 +32,8 @@ def web(ctx_obj):
     launch the webserver of choice (uwsgi)
     """
     if any(boolean_ish(ctx_obj['settings'][key]) for key in
-           ('ENABLE_NGINX', 'ENABLE_PAGESPEED', 'ENABLE_BROWSERCACHE')):
-        # uwsgi behind nginx. possibly with pagespeed/browsercache
+           ('ENABLE_NGINX', 'ENABLE_PAGESPEED')):
+        # uwsgi behind nginx. possibly with pagespeed
         start_with_nginx(ctx_obj['settings'])
     else:
         # pure uwsgi
@@ -118,6 +118,22 @@ def execute(args, script=None):
     os.execvpe(command, args, get_env())
 
 
+def get_static_serving_args(base_url, root, header_patterns):
+    args = [
+        '--static-map={}={}'.format(base_url, root),
+    ]
+
+    for pattern, headers in header_patterns:
+        pattern = '^/{}'.format(os.path.join(root, pattern).lstrip('/'))
+        for k, v in headers.items():
+            args.append(
+                '--route={} addheader:{}: {}'.format(pattern, k, v),
+                '--route={} last:',
+            )
+
+    return args
+
+
 def start_uwsgi_command(settings, port=None):
     cmd = [
         'uwsgi',
@@ -135,46 +151,31 @@ def start_uwsgi_command(settings, port=None):
     if not settings['ENABLE_SYNCING']:
         if not settings['STATIC_URL_IS_ON_OTHER_DOMAIN']:
             serve_static = True
-            cmd.extend([
-                '--static-map={}={}'.format(
-                    settings['STATIC_URL'],
-                    settings['STATIC_ROOT'],
-                ),
-                # Set far-future expiration headers for django-compressor
-                # generated files
-                '--static-expires={} 31536000'.format(
-                    os.path.join(
-                        settings['STATIC_ROOT'],
-                        settings.get('COMPRESS_OUTPUT_DIR', 'CACHE'),
-                        '.*',
-                    )
-                ),
-                # Set far-future expiration headers for static files with
-                # hashed filenames
-                '--static-expires={} 31536000'.format(
-                    os.path.join(
-                        settings['STATIC_ROOT'],
-                        r'.*\.[0-9a-f]{10,16}\.[a-z]+',
-                    )
-                ),
-            ])
+            cmd.extend(get_static_serving_args(
+                settings['STATIC_URL'],
+                settings['STATIC_ROOT'],
+                settings['STATIC_HEADERS'],
+            ))
 
         if not settings['MEDIA_URL_IS_ON_OTHER_DOMAIN']:
             serve_static = True
-            cmd.append('--static-map={}={}'.format(
+            cmd.extend(get_static_serving_args(
                 settings['MEDIA_URL'],
                 settings['MEDIA_ROOT'],
+                settings['MEDIA_HEADERS'],
             ))
 
         if serve_static:
             cmd.extend([
                 # Start 2 offloading threads for each worker
                 '--offload-threads=2',
+
                 # Cache resolved paths for up to 1 day (limited to 5k entries
                 # of max 1kB size each)
                 '--static-cache-paths=86400',
                 '--static-cache-paths-name=staticpaths',
                 '--cache2=name=staticpaths,items=5000,blocksize=1k,purge_lru,ignore_full',
+
                 # Serve .gz files if that version is available
                 '--static-gzip-all',
             ])
