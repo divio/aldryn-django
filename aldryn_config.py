@@ -238,7 +238,6 @@ class Form(forms.BaseForm):
             'ENABLE_PAGESPEED',
             env('PAGESPEED', False),
         )
-        settings['BROWSERCACHE_MAX_AGE'] = env('BROWSERCACHE_MAX_AGE', 300)
         settings['STATICFILES_DEFAULT_MAX_AGE'] = env(
             'STATICFILES_DEFAULT_MAX_AGE',
             # Keep BROWSERCACHE_MAX_AGE for backwards compatibility
