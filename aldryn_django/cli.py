@@ -126,10 +126,10 @@ def get_static_serving_args(base_url, root, header_patterns):
     for pattern, headers in header_patterns:
         pattern = '^/{}'.format(os.path.join(root, pattern).lstrip('/'))
         for k, v in headers.items():
-            args.append(
+            args.extend([
                 '--route={} addheader:{}: {}'.format(pattern, k, v),
                 '--route={} last:',
-            )
+            ])
 
     return args
 
