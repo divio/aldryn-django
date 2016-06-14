@@ -71,7 +71,7 @@ class S3MediaStorage(s3boto.S3BotoStorage):
         return self._decode_name(key.key)[len(self.location):].lstrip('/')
 
     def update_headers(self):
-        files, updated = 0, 0
+        updated, total = 0, 0
 
         dirlist = self.bucket.list(self._encode_name(self.location))
         for key in dirlist:
@@ -89,14 +89,14 @@ class S3MediaStorage(s3boto.S3BotoStorage):
             new_headers = self._headers_for_path(path, new_headers)
             new_headers = {k.lower(): v for k, v in new_headers.items()}
 
-            files += 1
+            total += 1
 
             if new_headers != old_headers:
                 key.copy(self.bucket.name, key,
                          metadata=new_headers, preserve_acl=True)
                 updated += 1
 
-        return files, updated
+        return updated, total
 
 
 def parse_storage_url(url):
