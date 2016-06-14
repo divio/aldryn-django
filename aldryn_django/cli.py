@@ -155,7 +155,17 @@ def start_uwsgi_command(settings, port=None):
                     os.path.join(
                         settings['STATIC_ROOT'],
                         r'.*\.[0-9a-f]{10,16}\.[a-z]+',
-                    )
+                    ),
+                ),
+                # Set default expiration headers for all remaining static
+                # files. *Has to be last* as uWSGI stops at the first matching
+                # pattern it finds.
+                '--static-expires={} {}'.format(
+                    os.path.join(
+                        settings['STATIC_ROOT'],
+                        '.*',
+                    ),
+                    settings('STATICFILES_DEFAULT_MAX_AGE'),
                 ),
             ])
 
