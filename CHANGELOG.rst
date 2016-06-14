@@ -1,7 +1,7 @@
 CHANGELOG
 =========
 
-1.9.6.4 (2016-06-13)
+1.9.6.4 (2016-06-14)
 --------------------
 
 * add a management command to update the headers for existing media files stored
@@ -10,6 +10,7 @@ CHANGELOG
 * optionally read the media domain from the storage DSN
 * tune staticfiles serving from uwsgi
 * use cached template loaders
+* do not use nginx to add browser caching
 
 
 1.9.6.3 (2016-06-13)
