@@ -238,11 +238,11 @@ class Form(forms.BaseForm):
             'ENABLE_PAGESPEED',
             env('PAGESPEED', False),
         )
-        settings['ENABLE_BROWSERCACHE'] = env(
-            'ENABLE_BROWSERCACHE',
-            env('BROWSERCACHE', False),
+        settings['STATICFILES_DEFAULT_MAX_AGE'] = env(
+            'STATICFILES_DEFAULT_MAX_AGE',
+            # Keep BROWSERCACHE_MAX_AGE for backwards compatibility
+            env('BROWSERCACHE_MAX_AGE', 300),
         )
-        settings['BROWSERCACHE_MAX_AGE'] = env('BROWSERCACHE_MAX_AGE', 300)
         settings['NGINX_CONF_PATH'] = env('NGINX_CONF_PATH')
         settings['NGINX_PROCFILE_PATH'] = env('NGINX_PROCFILE_PATH')
         settings['PAGESPEED_ADMIN_HTPASSWD_PATH'] = env(
@@ -341,6 +341,21 @@ class Form(forms.BaseForm):
             'STATIC_ROOT',
             os.path.join(settings['BASE_DIR'], 'static_collected'),
         )
+        settings['STATIC_HEADERS'] = [
+            # Set far-future expiration headers for static files with hashed
+            # filenames.
+            (r'.*\.[0-9a-f]{10,16}\.[a-z]+', {
+                'Cache-Control': 'public, max-age={}'.format(3600 * 24 * 365),
+            }),
+            # Set default expiration headers for all remaining static files.
+            # *Has to be last* as processing stops at the first matching
+            # pattern it finds.
+            ('.*', {
+                'Cache-Control': 'public, max-age={}'.format(
+                    settings['STATICFILES_DEFAULT_MAX_AGE'],
+                ),
+            }),
+        ]
         settings['STATICFILES_DIRS'] = env(
             'STATICFILES_DIRS',
             [os.path.join(settings['BASE_DIR'], 'static')]
@@ -366,8 +381,14 @@ class Form(forms.BaseForm):
             settings['TIME_ZONE'] = env('TIME_ZONE')
 
     def migration_settings(self, settings, env):
+        from aldryn_django import storage
+
         settings.setdefault('MIGRATION_COMMANDS', [])
         mcmds = settings['MIGRATION_COMMANDS']
 
         mcmds.append('CACHE_URL="locmem://" python manage.py createcachetable django_dbcache; exit 0')
-        mcmds.append('python manage.py migrate --list --noinput && python manage.py migrate --noinput && python manage.py migrate --list --noinput')
+        mcmds.append('python manage.py migrate --list --noinput && python manage.py migrate --noinput')
+
+        if not env('DISABLE_S3_MEDIA_HEADERS_UPDATE'):
+            if settings['DEFAULT_FILE_STORAGE'] == storage.SCHEMES['s3']:
+                mcmds.append('python manage.py aldryn_update_s3_media_headers')
