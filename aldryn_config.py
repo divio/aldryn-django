@@ -335,6 +335,7 @@ class Form(forms.BaseForm):
 
     def storage_settings_for_static(self, settings, env):
         import yurl
+        settings['STATICFILES_STORAGE'] = 'aldryn_static.GzippedStaticFilesStorage'
         settings['STATIC_URL'] = env('STATIC_URL', '/static/')
         settings['STATIC_URL_IS_ON_OTHER_DOMAIN'] = bool(yurl.URL(settings['STATIC_URL']).host)
         settings['STATIC_ROOT'] = env(
