@@ -1,10 +1,14 @@
 import os
 import gzip
 import shutil
+import warnings
 
 from django.core.management.base import BaseCommand
 from django.core.management import call_command
 from django.conf import settings
+from django.contrib.staticfiles.storage import staticfiles_storage
+
+from aldryn_django.storage import GzippedStaticFilesMixin
 
 
 def iterfiles(root):
@@ -25,12 +29,24 @@ class Command(BaseCommand):
     ])
 
     def handle(self, *args, **options):
+        warnings.warn((
+            'aldryn_collectstatic is deprecated, please use a staticfiles\n'
+            'storage backend supporting file gzipping, such as\n'
+            'aldryn_django.storage.GzippedStaticFilesStorage, and just call\n'
+            'the collectstatic management command instead.'
+        ), DeprecationWarning)
+
         # Defer static collection to Django
         call_command(
             'collectstatic',
             interactive=False,
             stdout=self.stdout,
         )
+
+        if isinstance(staticfiles_storage, GzippedStaticFilesMixin):
+            # No need to run gzipping twice if the currently configured storage
+            # backend already does it
+            return
 
         # Gzip all files as appropriate
         for path_in in iterfiles(settings.STATIC_ROOT):
