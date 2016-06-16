@@ -227,8 +227,23 @@ class Form(forms.BaseForm):
 
         s['MIDDLEWARE_CLASSES'].insert(
             s['MIDDLEWARE_CLASSES'].index('aldryn_sites.middleware.SiteMiddleware') + 1,
-            'django.middleware.security.SecurityMiddleware'
+            'django.middleware.security.SecurityMiddleware',
         )
+
+        # Add the debreach middlewares to counter CRIME/BREACH attacks.
+        # We always add it even if the GzipMiddleware is not enabled because
+        # we cannot assume that every upstream proxy implements a
+        # countermeasure itself.
+        if 'django.middleware.gzip.GzipMiddleware' in s['MIDDLEWARE_CLASSES']:
+            index = s['MIDDLEWARE_CLASSES'].index('django.middleware.gzip.GzipMiddleware') + 1
+        else:
+            index = 0
+        s['MIDDLEWARE_CLASSES'].insert(index, 'debreach.middleware.RandomCommentMiddleware')
+        if 'django.middleware.csrf.CSRFMiddleware' in s['MIDDLEWARE_CLASSES']:
+            s['MIDDLEWARE_CLASSES'].insert(
+                s['MIDDLEWARE_CLASSES'].index('django.middleware.csrf.CSRFMiddleware'),
+                'debreach.middleware.CSRFCryptMiddleware',
+            )
 
     def server_settings(self, settings, env):
         settings['PORT'] = env('PORT', 80)
