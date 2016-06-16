@@ -181,30 +181,40 @@ class Form(forms.BaseForm):
         # will take a full config dict from ALDRYN_SITES_DOMAINS if available,
         # otherwise fall back to constructing the dict from DOMAIN,
         # DOMAIN_ALIASES and DOMAIN_REDIRECTS
-        domains = env('ALDRYN_SITES_DOMAINS', {})
         domain = env('DOMAIN')
         if domain:
             settings['DOMAIN'] = domain
-        domain_aliases = env('DOMAIN_ALIASES', '')
-        domain_redirects = env('DOMAIN_REDIRECTS', '')
+
+        domains = env('ALDRYN_SITES_DOMAINS', {})
         if not domains and domain:
+            domain_aliases = [
+                d.strip()
+                for d in env('DOMAIN_ALIASES', '').split(',')
+                if d.strip()
+            ]
+            domain_redirects = [
+                d.strip()
+                for d in env('DOMAIN_REDIRECTS', '').split(',')
+                if d.strip()
+            ]
             domains = {
                 1: {
                     'name': env('SITE_NAME', ''),
                     'domain': domain,
-                    'aliases': [d.strip() for d in domain_aliases.split(',') if d.strip()],
-                    'redirects': [d.strip() for d in domain_redirects.split(',') if d.strip()]
-                }
+                    'aliases': domain_aliases,
+                    'redirects': domain_redirects,
+                },
             }
         settings['ALDRYN_SITES_DOMAINS'] = domains
-        if domains and settings['SITE_ID'] in domains:
-            settings['ALLOWED_HOSTS'].extend([
-                domain for domain in domains[settings['SITE_ID']]['aliases']
-            ] + [
-                domain for domain in domains[settings['SITE_ID']]['redirects']
-            ])
+
+        # TODO: Already done by aldryn sites, is it needed here?
+        site_domains = domains.get(settings['SITE_ID'])
+        if site_domains:
+            settings['ALLOWED_HOSTS'].extend(site_domains['aliases'])
+            settings['ALLOWED_HOSTS'].extend(site_domains['redirects'])
 
         settings['INSTALLED_APPS'].append('aldryn_sites')
+
         settings['MIDDLEWARE_CLASSES'].insert(
             settings['MIDDLEWARE_CLASSES'].index('django.middleware.common.CommonMiddleware'),
             'aldryn_sites.middleware.SiteMiddleware',
