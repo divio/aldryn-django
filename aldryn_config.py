@@ -359,7 +359,10 @@ class Form(forms.BaseForm):
         settings['MEDIA_URL'] = env('MEDIA_URL', '/media/')
         if 'DEFAULT_STORAGE_DSN' in settings:
             settings.update(parse_storage_url(settings['DEFAULT_STORAGE_DSN']))
-        settings['MEDIA_URL_IS_ON_OTHER_DOMAIN'] = bool(yurl.URL(settings['MEDIA_URL']).host)
+        media_host = yurl.URL(settings['MEDIA_URL']).host
+        settings['MEDIA_URL_IS_ON_OTHER_DOMAIN'] = (
+            media_host and media_host not in settings['ALLOWED_HOSTS']
+        )
         settings['MEDIA_ROOT'] = env('MEDIA_ROOT', os.path.join(settings['DATA_ROOT'], 'media'))
         settings['MEDIA_HEADERS'] = []
 
@@ -368,7 +371,10 @@ class Form(forms.BaseForm):
         if not env('DISABLE_GZIP'):
             settings['STATICFILES_STORAGE'] = 'aldryn_static.GzippedStaticFilesStorage'
         settings['STATIC_URL'] = env('STATIC_URL', '/static/')
-        settings['STATIC_URL_IS_ON_OTHER_DOMAIN'] = bool(yurl.URL(settings['STATIC_URL']).host)
+        static_host = yurl.URL(settings['STATIC_URL']).host
+        settings['STATIC_URL_IS_ON_OTHER_DOMAIN'] = (
+            static_host and static_host not in settings['ALLOWED_HOSTS']
+        )
         settings['STATIC_ROOT'] = env(
             'STATIC_ROOT',
             os.path.join(settings['BASE_DIR'], 'static_collected'),
