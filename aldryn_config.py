@@ -207,9 +207,12 @@ class Form(forms.BaseForm):
             }
         settings['ALDRYN_SITES_DOMAINS'] = domains
 
-        # TODO: Already done by aldryn sites, is it needed here?
+        # This is ensured again by aldryn-sites, but we already do it here
+        # as we need the full list of domains later when configuring
+        # media/static serving, before aldryn-sites had a chance to run.
         site_domains = domains.get(settings['SITE_ID'])
         if site_domains:
+            settings['ALLOWED_HOSTS'].append(site_domains['name'])
             settings['ALLOWED_HOSTS'].extend(site_domains['aliases'])
             settings['ALLOWED_HOSTS'].extend(site_domains['redirects'])
 
