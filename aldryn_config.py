@@ -155,6 +155,10 @@ class Form(forms.BaseForm):
             # 'django.middleware.security.SecurityMiddleware',
         ]
 
+        if not env('DISABLE_GZIP'):
+            settings['MIDDLEWARE_CLASSES'].insert(
+                0, 'django.middleware.gzip.GzipMiddleware')
+
         settings['SITE_ID'] = env('SITE_ID', 1)
 
         settings['ADDON_URLS_I18N_LAST'] = 'aldryn_django.urls_redirect'
@@ -351,7 +355,8 @@ class Form(forms.BaseForm):
 
     def storage_settings_for_static(self, settings, env):
         import yurl
-        settings['STATICFILES_STORAGE'] = 'aldryn_static.GzippedStaticFilesStorage'
+        if not env('DISABLE_GZIP'):
+            settings['STATICFILES_STORAGE'] = 'aldryn_static.GzippedStaticFilesStorage'
         settings['STATIC_URL'] = env('STATIC_URL', '/static/')
         settings['STATIC_URL_IS_ON_OTHER_DOMAIN'] = bool(yurl.URL(settings['STATIC_URL']).host)
         settings['STATIC_ROOT'] = env(
