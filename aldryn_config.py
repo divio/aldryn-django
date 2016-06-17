@@ -154,6 +154,10 @@ class Form(forms.BaseForm):
             # 'django.middleware.security.SecurityMiddleware',
         ]
 
+        if not env('DISABLE_GZIP'):
+            settings['MIDDLEWARE_CLASSES'].insert(
+                0, 'django.middleware.gzip.GZipMiddleware')
+
         settings['SITE_ID'] = env('SITE_ID', 1)
 
         settings['ADDON_URLS_I18N_LAST'] = 'aldryn_django.urls_redirect'
@@ -176,30 +180,43 @@ class Form(forms.BaseForm):
         # will take a full config dict from ALDRYN_SITES_DOMAINS if available,
         # otherwise fall back to constructing the dict from DOMAIN,
         # DOMAIN_ALIASES and DOMAIN_REDIRECTS
-        domains = env('ALDRYN_SITES_DOMAINS', {})
         domain = env('DOMAIN')
         if domain:
             settings['DOMAIN'] = domain
-        domain_aliases = env('DOMAIN_ALIASES', '')
-        domain_redirects = env('DOMAIN_REDIRECTS', '')
+
+        domains = env('ALDRYN_SITES_DOMAINS', {})
         if not domains and domain:
+            domain_aliases = [
+                d.strip()
+                for d in env('DOMAIN_ALIASES', '').split(',')
+                if d.strip()
+            ]
+            domain_redirects = [
+                d.strip()
+                for d in env('DOMAIN_REDIRECTS', '').split(',')
+                if d.strip()
+            ]
             domains = {
                 1: {
                     'name': env('SITE_NAME', ''),
                     'domain': domain,
-                    'aliases': [d.strip() for d in domain_aliases.split(',') if d.strip()],
-                    'redirects': [d.strip() for d in domain_redirects.split(',') if d.strip()]
-                }
+                    'aliases': domain_aliases,
+                    'redirects': domain_redirects,
+                },
             }
         settings['ALDRYN_SITES_DOMAINS'] = domains
-        if domains and settings['SITE_ID'] in domains:
-            settings['ALLOWED_HOSTS'].extend([
-                domain for domain in domains[settings['SITE_ID']]['aliases']
-            ] + [
-                domain for domain in domains[settings['SITE_ID']]['redirects']
-            ])
+
+        # This is ensured again by aldryn-sites, but we already do it here
+        # as we need the full list of domains later when configuring
+        # media/static serving, before aldryn-sites had a chance to run.
+        site_domains = domains.get(settings['SITE_ID'])
+        if site_domains:
+            settings['ALLOWED_HOSTS'].append(site_domains['domain'])
+            settings['ALLOWED_HOSTS'].extend(site_domains['aliases'])
+            settings['ALLOWED_HOSTS'].extend(site_domains['redirects'])
 
         settings['INSTALLED_APPS'].append('aldryn_sites')
+
         settings['MIDDLEWARE_CLASSES'].insert(
             settings['MIDDLEWARE_CLASSES'].index('django.middleware.common.CommonMiddleware'),
             'aldryn_sites.middleware.SiteMiddleware',
@@ -227,8 +244,23 @@ class Form(forms.BaseForm):
 
         s['MIDDLEWARE_CLASSES'].insert(
             s['MIDDLEWARE_CLASSES'].index('aldryn_sites.middleware.SiteMiddleware') + 1,
-            'django.middleware.security.SecurityMiddleware'
+            'django.middleware.security.SecurityMiddleware',
         )
+
+        # Add the debreach middlewares to counter CRIME/BREACH attacks.
+        # We always add it even if the GzipMiddleware is not enabled because
+        # we cannot assume that every upstream proxy implements a
+        # countermeasure itself.
+        if 'django.middleware.gzip.GZipMiddleware' in s['MIDDLEWARE_CLASSES']:
+            index = s['MIDDLEWARE_CLASSES'].index('django.middleware.gzip.GZipMiddleware') + 1
+        else:
+            index = 0
+        s['MIDDLEWARE_CLASSES'].insert(index, 'debreach.middleware.RandomCommentMiddleware')
+        if 'django.middleware.csrf.CsrfViewMiddleware' in s['MIDDLEWARE_CLASSES']:
+            s['MIDDLEWARE_CLASSES'].insert(
+                s['MIDDLEWARE_CLASSES'].index('django.middleware.csrf.CsrfViewMiddleware'),
+                'debreach.middleware.CSRFCryptMiddleware',
+            )
 
     def server_settings(self, settings, env):
         settings['PORT'] = env('PORT', 80)
@@ -329,27 +361,45 @@ class Form(forms.BaseForm):
         settings['MEDIA_URL'] = env('MEDIA_URL', '/media/')
         if 'DEFAULT_STORAGE_DSN' in settings:
             settings.update(parse_storage_url(settings['DEFAULT_STORAGE_DSN']))
-        settings['MEDIA_URL_IS_ON_OTHER_DOMAIN'] = bool(yurl.URL(settings['MEDIA_URL']).host)
+        media_host = yurl.URL(settings['MEDIA_URL']).host
+        settings['MEDIA_URL_IS_ON_OTHER_DOMAIN'] = (
+            media_host and media_host not in settings['ALLOWED_HOSTS']
+        )
         settings['MEDIA_ROOT'] = env('MEDIA_ROOT', os.path.join(settings['DATA_ROOT'], 'media'))
         settings['MEDIA_HEADERS'] = []
 
     def storage_settings_for_static(self, settings, env):
         import yurl
+        if not env('DISABLE_GZIP'):
+            settings['STATICFILES_STORAGE'] = 'aldryn_django.storage.GzippedStaticFilesStorage'
         settings['STATIC_URL'] = env('STATIC_URL', '/static/')
-        settings['STATIC_URL_IS_ON_OTHER_DOMAIN'] = bool(yurl.URL(settings['STATIC_URL']).host)
+        static_host = yurl.URL(settings['STATIC_URL']).host
+        settings['STATIC_URL_IS_ON_OTHER_DOMAIN'] = (
+            static_host and static_host not in settings['ALLOWED_HOSTS']
+        )
         settings['STATIC_ROOT'] = env(
             'STATIC_ROOT',
             os.path.join(settings['BASE_DIR'], 'static_collected'),
         )
         settings['STATIC_HEADERS'] = [
             # Set far-future expiration headers for static files with hashed
-            # filenames.
+            # filenames. Also set cors headers to * for fonts.
+            (r'.*\.[0-9a-f]{10,16}\.(eot|ttf|otf|woff)', {
+                'Access-Control-Allow-Origin': '*',
+                'Cache-Control': 'public, max-age={}'.format(3600 * 24 * 365),
+            }),
             (r'.*\.[0-9a-f]{10,16}\.[a-z]+', {
                 'Cache-Control': 'public, max-age={}'.format(3600 * 24 * 365),
             }),
             # Set default expiration headers for all remaining static files.
             # *Has to be last* as processing stops at the first matching
-            # pattern it finds.
+            # pattern it finds.  Also set cors headers to * for fonts.
+            (r'.*\.(eot|ttf|otf|woff)', {
+                'Access-Control-Allow-Origin': '*',
+                'Cache-Control': 'public, max-age={}'.format(
+                    settings['STATICFILES_DEFAULT_MAX_AGE'],
+                ),
+            }),
             ('.*', {
                 'Cache-Control': 'public, max-age={}'.format(
                     settings['STATICFILES_DEFAULT_MAX_AGE'],

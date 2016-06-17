@@ -63,6 +63,8 @@ setup(
         'ndg-httpsclient',
         'certifi',
         'pyOpenSSL',
+        # required until https://code.djangoproject.com/ticket/20869 lands
+        'django-debreach',
 
         # helpers
         'aldryn-sites>=0.5.2',
