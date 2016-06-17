@@ -1,6 +1,13 @@
 CHANGELOG
 =========
 
+1.9.6.7 (2016-06-17)
+--------------------
+
+* support gzipping responses (including BREACH/CRIME prevention)
+* support serving static files with an alternate domain
+
+
 1.9.6.4 (2016-06-14)
 --------------------
 
