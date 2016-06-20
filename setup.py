@@ -74,6 +74,14 @@ setup(
         # the official version 1.0.0 on pypi requires Django>=1.7
         'django-formtools==1.0.0.1',
 
+        # Should be in (aldryn-)django-cms however, it doesn't know which
+        # version of Django is being installed, so these stay here.
+        # These packages require djangocms-attributes-field which requires
+        # Django 1.8+.
+        'djangocms-link<1.8.0',
+        'cmsplugin-filer<1.1.0',
+        'aldryn-bootstrap3<1.1.0',
+
         # Force a Django 1.6 compatible version.
         'django-simple-captcha<0.4.8',
         'django-mptt<0.8.0',
