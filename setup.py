@@ -80,7 +80,7 @@ setup(
         # Django 1.8+.
         'djangocms-link<1.8.0',
         'cmsplugin-filer<1.1.0',
-        'aldryn-bootstrap3<1.1.0',
+        # 'aldryn-bootstrap3<1.1.0',
 
         # Force a Django 1.6 compatible version.
         'django-simple-captcha<0.4.8',
