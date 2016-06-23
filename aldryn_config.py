@@ -368,7 +368,15 @@ class Form(forms.BaseForm):
         settings['MEDIA_ROOT'] = env('MEDIA_ROOT', os.path.join(settings['DATA_ROOT'], 'media'))
         settings['MEDIA_HEADERS'] = []
 
-    def storage_settings_for_static(self, settings, env):
+        cmds = {}
+        if os.path.exists('/usr/bin/pngout'):
+            cmds['png'] = '/usr/bin/pngout {filename} {filename}.png -s0 -y && mv {filename}.png {filename}'
+        if os.path.exists('/usr/bin/jpegoptim'):
+            cmds['jpeg'] = '/usr/bin/jpegoptim --max=90 --overwrite --strip-all --all-progressive {filename}'
+        if os.path.exists('/usr/bin/gifsicle'):
+            cmds['gif'] = '/usr/bin/gifsicle --batch --optimize=2 {filename}'
+        settings['THUMBNAIL_OPTIMIZE_COMMAND'] = cmds
+
         import yurl
         if not env('DISABLE_GZIP'):
             settings['STATICFILES_STORAGE'] = 'aldryn_django.storage.GzippedStaticFilesStorage'
