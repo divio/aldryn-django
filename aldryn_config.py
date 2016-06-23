@@ -166,7 +166,7 @@ class Form(forms.BaseForm):
 
         if not env('DISABLE_GZIP'):
             settings['MIDDLEWARE_CLASSES'].insert(
-                0, 'django.middleware.gzip.GzipMiddleware')
+                0, 'django.middleware.gzip.GZipMiddleware')
 
         settings['SITE_ID'] = env('SITE_ID', 1)
 
@@ -221,7 +221,7 @@ class Form(forms.BaseForm):
         # media/static serving, before aldryn-sites had a chance to run.
         site_domains = domains.get(settings['SITE_ID'])
         if site_domains:
-            settings['ALLOWED_HOSTS'].append(site_domains['name'])
+            settings['ALLOWED_HOSTS'].append(site_domains['domain'])
             settings['ALLOWED_HOSTS'].extend(site_domains['aliases'])
             settings['ALLOWED_HOSTS'].extend(site_domains['redirects'])
 
@@ -258,17 +258,17 @@ class Form(forms.BaseForm):
         )
 
         # Add the debreach middlewares to counter CRIME/BREACH attacks.
-        # We always add it even if the GzipMiddleware is not enabled because
+        # We always add it even if the GZipMiddleware is not enabled because
         # we cannot assume that every upstream proxy implements a
         # countermeasure itself.
-        if 'django.middleware.gzip.GzipMiddleware' in s['MIDDLEWARE_CLASSES']:
-            index = s['MIDDLEWARE_CLASSES'].index('django.middleware.gzip.GzipMiddleware') + 1
+        if 'django.middleware.gzip.GZipMiddleware' in s['MIDDLEWARE_CLASSES']:
+            index = s['MIDDLEWARE_CLASSES'].index('django.middleware.gzip.GZipMiddleware') + 1
         else:
             index = 0
         s['MIDDLEWARE_CLASSES'].insert(index, 'debreach.middleware.RandomCommentMiddleware')
-        if 'django.middleware.csrf.CSRFMiddleware' in s['MIDDLEWARE_CLASSES']:
+        if 'django.middleware.csrf.CsrfViewMiddleware' in s['MIDDLEWARE_CLASSES']:
             s['MIDDLEWARE_CLASSES'].insert(
-                s['MIDDLEWARE_CLASSES'].index('django.middleware.csrf.CSRFMiddleware'),
+                s['MIDDLEWARE_CLASSES'].index('django.middleware.csrf.CsrfViewMiddleware'),
                 'debreach.middleware.CSRFCryptMiddleware',
             )
 
@@ -414,13 +414,23 @@ class Form(forms.BaseForm):
         )
         settings['STATIC_HEADERS'] = [
             # Set far-future expiration headers for static files with hashed
-            # filenames.
+            # filenames. Also set cors headers to * for fonts.
+            (r'.*\.[0-9a-f]{10,16}\.(eot|ttf|otf|woff)', {
+                'Access-Control-Allow-Origin': '*',
+                'Cache-Control': 'public, max-age={}'.format(3600 * 24 * 365),
+            }),
             (r'.*\.[0-9a-f]{10,16}\.[a-z]+', {
                 'Cache-Control': 'public, max-age={}'.format(3600 * 24 * 365),
             }),
             # Set default expiration headers for all remaining static files.
             # *Has to be last* as processing stops at the first matching
-            # pattern it finds.
+            # pattern it finds. Also set cors headers to * for fonts.
+            (r'.*\.(eot|ttf|otf|woff)', {
+                'Access-Control-Allow-Origin': '*',
+                'Cache-Control': 'public, max-age={}'.format(
+                    settings['STATICFILES_DEFAULT_MAX_AGE'],
+                ),
+            }),
             ('.*', {
                 'Cache-Control': 'public, max-age={}'.format(
                     settings['STATICFILES_DEFAULT_MAX_AGE'],

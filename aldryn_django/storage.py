@@ -200,8 +200,13 @@ class GzippedStaticFilesMixin(object):
             yield os.path.join(path, file)
 
     def post_process(self, paths, dry_run=False, **options):
-        post_processed = (super(GzippedStaticFilesMixin, self)
-                          .post_process(paths, dry_run=dry_run, **options))
+        superclass = super(GzippedStaticFilesMixin, self)
+        if hasattr(superclass, 'post_process'):
+            post_processed = (
+                superclass.post_process(paths, dry_run=dry_run, **options)
+            )
+        else:
+            post_processed = []
 
         for processed in post_processed:
             yield processed
