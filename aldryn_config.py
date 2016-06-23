@@ -44,6 +44,15 @@ class Form(forms.BaseForm):
         initial='["en", "de"]',
         help_text=SYSTEM_FIELD_WARNING,
     )
+    use_manifeststaticfilesstorage = forms.CheckboxField(
+        'Hash static file names',
+        required=False,
+        initial=False,
+        help_text=(
+            'Use ManifestStaticFilesStorage to manage static files. Can cause '
+            'deployment and/or 500 errors if a referenced file is missing.'
+        )
+    )
 
     def to_settings(self, data, settings):
         import dj_database_url
@@ -170,7 +179,7 @@ class Form(forms.BaseForm):
         self.sentry_settings(settings, env=env)
         self.cache_settings(settings, env=env)
         self.storage_settings_for_media(settings, env=env)
-        self.storage_settings_for_static(settings, env=env)
+        self.storage_settings_for_static(data, settings, env=env)
         self.i18n_settings(data, settings, env=env)
         self.migration_settings(settings, env=env)
         return settings
@@ -377,9 +386,23 @@ class Form(forms.BaseForm):
             cmds['gif'] = '/usr/bin/gifsicle --batch --optimize=2 {filename}'
         settings['THUMBNAIL_OPTIMIZE_COMMAND'] = cmds
 
+    def storage_settings_for_static(self, data, settings, env):
         import yurl
-        if not env('DISABLE_GZIP'):
-            settings['STATICFILES_STORAGE'] = 'aldryn_django.storage.GzippedStaticFilesStorage'
+
+        use_gzip = not env('DISABLE_GZIP')
+        use_manifest = data['use_manifeststaticfilesstorage']
+        if use_gzip:
+            if use_manifest:
+                storage = 'aldryn_django.storage.ManifestGzippedStaticFilesStorage'
+            else:
+                storage = 'aldryn_django.storage.GzippedStaticFilesStorage'
+        else:
+            if use_manifest:
+                storage = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
+            else:
+                storage = 'django.contrib.staticfiles.storage.StaticFilesStorage'
+        settings['STATICFILES_STORAGE'] = storage
+
         settings['STATIC_URL'] = env('STATIC_URL', '/static/')
         static_host = yurl.URL(settings['STATIC_URL']).host
         settings['STATIC_URL_IS_ON_OTHER_DOMAIN'] = (
