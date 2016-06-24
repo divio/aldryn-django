@@ -1,6 +1,20 @@
 CHANGELOG
 =========
 
+1.9.6.9 (2016-06-24)
+--------------------
+
+* support bucket names containing dots
+
+
+1.9.6.8 (2016-06-23)
+--------------------
+
+* upgrade boto
+* add an addon setting to enable manifest static files storage
+* add utilities to optimize images
+
+
 1.9.6.7 (2016-06-17)
 --------------------
 
