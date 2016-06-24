@@ -11,6 +11,8 @@ from django.template import loader, Context
 
 import click
 
+import yurl
+
 from aldryn_addons.utils import openfile, boolean_ish
 
 if six.PY2:
@@ -119,17 +121,20 @@ def execute(args, script=None):
 
 
 def get_static_serving_args(base_url, root, header_patterns):
+    base_path = yurl.URL(base_url).path.lstrip('/')
+
     args = [
-        '--static-map={}={}'.format(base_url, root),
+        '--static-map=/{}={}'.format(base_path, root),
+        '--route={} addheader:Vary: Accept-Encoding'.format(
+            os.path.join('^', base_path, '.*'),
+        ),
     ]
 
     for pattern, headers in header_patterns:
-        pattern = '^/{}'.format(os.path.join(root, pattern).lstrip('/'))
+        pattern = os.path.join('^', base_path, pattern)
         for k, v in headers.items():
-            args.append(
-                '--route={} addheader:{}: {}'.format(pattern, k, v),
-                '--route={} last:',
-            )
+            args.append('--route={} addheader:{}: {}'.format(pattern, k, v))
+        args.append('--route={} last:'.format(pattern, k, v))
 
     return args
 

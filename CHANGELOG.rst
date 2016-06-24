@@ -1,6 +1,29 @@
 CHANGELOG
 =========
 
+1.8.11.7 (2016-06-24)
+---------------------
+
+* support bucket names containing dots
+
+
+1.8.11.6 (2016-06-23)
+---------------------
+
+* upgrade boto
+* add an addon setting to enable manifest static files storage
+* add utilities to optimize images
+* support gzipping responses (including BREACH/CRIME prevention)
+* support serving static files with an alternate domain
+* optionally read the media domain from the storage DSN
+
+
+1.8.11.5 (2016-06-14)
+---------------------
+
+* bugfix release
+
+
 1.8.11.4 (2016-06-14)
 ---------------------
 
