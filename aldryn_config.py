@@ -257,7 +257,7 @@ class Form(forms.BaseForm):
         )
 
         # Add the debreach middlewares to counter CRIME/BREACH attacks.
-        # We always add it even if the GzipMiddleware is not enabled because
+        # We always add it even if the GZipMiddleware is not enabled because
         # we cannot assume that every upstream proxy implements a
         # countermeasure itself.
         if 'django.middleware.gzip.GZipMiddleware' in s['MIDDLEWARE_CLASSES']:
@@ -424,7 +424,7 @@ class Form(forms.BaseForm):
             }),
             # Set default expiration headers for all remaining static files.
             # *Has to be last* as processing stops at the first matching
-            # pattern it finds.  Also set cors headers to * for fonts.
+            # pattern it finds. Also set cors headers to * for fonts.
             (r'.*\.(eot|ttf|otf|woff)', {
                 'Access-Control-Allow-Origin': '*',
                 'Cache-Control': 'public, max-age={}'.format(
