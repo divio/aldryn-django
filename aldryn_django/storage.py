@@ -184,7 +184,7 @@ def parse_storage_url(url):
     return config
 
 
-class GzippedStaticFilesMixin(object):
+class GZippedStaticFilesMixin(object):
     """
     Static files storage mixin to create a gzipped version of each static
     file, so that web servers (e.g. uWSGI) can take advantage of it and
@@ -216,7 +216,7 @@ class GzippedStaticFilesMixin(object):
             yield os.path.join(path, file)
 
     def post_process(self, paths, dry_run=False, **options):
-        superclass = super(GzippedStaticFilesMixin, self)
+        superclass = super(GZippedStaticFilesMixin, self)
         if hasattr(superclass, 'post_process'):
             post_processed = (
                 superclass.post_process(paths, dry_run=dry_run, **options)
@@ -238,11 +238,11 @@ class GzippedStaticFilesMixin(object):
                 self.gzip_path(path)
 
 
-class GzippedStaticFilesStorage(GzippedStaticFilesMixin,
+class GZippedStaticFilesStorage(GZippedStaticFilesMixin,
                                 StaticFilesStorage):
     pass
 
 
-class ManifestGzippedStaticFilesStorage(GzippedStaticFilesMixin,
+class ManifestGZippedStaticFilesStorage(GZippedStaticFilesMixin,
                                         ManifestStaticFilesStorage):
     pass

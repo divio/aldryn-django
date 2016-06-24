@@ -393,9 +393,9 @@ class Form(forms.BaseForm):
         use_manifest = data['use_manifeststaticfilesstorage']
         if use_gzip:
             if use_manifest:
-                storage = 'aldryn_django.storage.ManifestGzippedStaticFilesStorage'
+                storage = 'aldryn_django.storage.ManifestGZippedStaticFilesStorage'
             else:
-                storage = 'aldryn_django.storage.GzippedStaticFilesStorage'
+                storage = 'aldryn_django.storage.GZippedStaticFilesStorage'
         else:
             if use_manifest:
                 storage = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
