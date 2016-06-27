@@ -78,7 +78,7 @@ setup(
         # version of Django is being installed, so these stay here.
         # These packages require djangocms-attributes-field which requires
         # Django 1.8+.
-        'djangocms-link<1.8.0',
+        'djangocms-link<1.7.2',
         'cmsplugin-filer<1.1.0',
         # 'aldryn-bootstrap3<1.1.0',
 
