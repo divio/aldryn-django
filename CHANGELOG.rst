@@ -1,6 +1,12 @@
 CHANGELOG
 =========
 
+1.8.11.8 (2016-06-27)
+---------------------
+
+* allow static files storage settings to be set for test/live independently
+
+
 1.8.11.7 (2016-06-24)
 ---------------------
 
