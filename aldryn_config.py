@@ -44,18 +44,8 @@ class Form(forms.BaseForm):
         initial='["en", "de"]',
         help_text=SYSTEM_FIELD_WARNING,
     )
-    use_manifeststaticfilesstorage_test = forms.CheckboxField(
-        'Hash static file names (test)',
-        required=False,
-        initial=False,
-        help_text=(
-            'Use ManifestStaticFilesStorage to manage static files. Can cause '
-            'deployment and/or 500 errors if a referenced file is missing and '
-            'break DevSync when using the Aldryn Desktop App.'
-        )
-    )
-    use_manifeststaticfilesstorage_live = forms.CheckboxField(
-        'Hash static file names (live)',
+    use_manifeststaticfilesstorage = forms.CheckboxField(
+        'Hash static file names',
         required=False,
         initial=False,
         help_text=(
@@ -400,11 +390,7 @@ class Form(forms.BaseForm):
         import yurl
 
         use_gzip = not env('DISABLE_GZIP')
-
-        if env('STAGE') == 'live':
-            use_manifest = data['use_manifeststaticfilesstorage_live']
-        else:
-            use_manifest = data['use_manifeststaticfilesstorage_test']
+        use_manifest = data['use_manifeststaticfilesstorage']
         if use_gzip:
             if use_manifest:
                 storage = 'aldryn_django.storage.ManifestGZippedStaticFilesStorage'
