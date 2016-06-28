@@ -1,6 +1,12 @@
 CHANGELOG
 =========
 
+1.9.7.4 (2016-06-28)
+---------------------
+
+* hotfix for the static images optimization command
+
+
 1.9.7.3 (2016-06-28)
 ---------------------
 
