@@ -384,7 +384,7 @@ class Form(forms.BaseForm):
 
         cmds = {}
         if os.path.exists('/usr/bin/pngout'):
-            cmds['png'] = '/usr/bin/pngout {filename} {filename}.png -s0 -y && mv {filename}.png {filename}'
+            cmds['png'] = '/usr/bin/pngout {filename} {filename}.png -s0 -y -force && mv {filename}.png {filename}'
         if os.path.exists('/usr/bin/jpegoptim'):
             cmds['jpeg'] = '/usr/bin/jpegoptim --max=90 --overwrite --strip-all --all-progressive {filename}'
         if os.path.exists('/usr/bin/gifsicle'):
