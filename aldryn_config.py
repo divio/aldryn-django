@@ -49,8 +49,12 @@ class Form(forms.BaseForm):
         required=False,
         initial=False,
         help_text=(
-            'Use ManifestStaticFilesStorage to manage static files. Can cause '
-            'deployment and/or 500 errors if a referenced file is missing.'
+            'Use ManifestStaticFilesStorage to manage static files and set '
+            'far-expiry headers. Enabling this option disables autosync for '
+            'static files, and can cause deployment and/or 500 errors if a '
+            'referenced file is missing. Please ensure that your Test server '
+            'works with this option enabled before deploying it to the live '
+            'site.'
         )
     )
 
