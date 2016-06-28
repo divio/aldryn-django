@@ -1,6 +1,19 @@
 CHANGELOG
 =========
 
+1.8.13.1 (2016-06-28)
+---------------------
+
+* revert the changes introduced in 1.8.11.8 and provide a better help text
+  for static file names hashing
+
+
+1.8.13.0 (2016-06-27)
+---------------------
+
+* upgrade django to 1.8.13
+
+
 1.8.11.8 (2016-06-27)
 ---------------------
 
