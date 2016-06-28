@@ -1,6 +1,25 @@
 CHANGELOG
 =========
 
+1.9.7.3 (2016-06-28)
+---------------------
+
+* hotfix for the static images optimization command
+
+
+1.9.7.2 (2016-06-28)
+--------------------
+
+* revert the changes introduced in 1.9.7.2 and provide a better help text
+  for static file names hashing
+
+
+1.9.7.1 (2016-06-27)
+--------------------
+
+* allow static files storage settings to be set for test/live independently
+
+
 1.9.7.0 (2016-06-27)
 --------------------
 

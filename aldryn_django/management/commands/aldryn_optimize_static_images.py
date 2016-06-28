@@ -48,6 +48,7 @@ class Command(BaseCommand):
                     self.optimize(
                         storage,
                         path,
+                        image_type,
                         optimize_commands[image_type],
                     )
 
