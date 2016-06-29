@@ -112,8 +112,12 @@ class S3MediaStorage(s3boto.S3BotoStorage):
             total += 1
 
             if new_headers != old_headers:
-                key.copy(self.bucket.name, key,
-                         metadata=new_headers, preserve_acl=True)
+                key.copy(
+                    self.bucket.name, key,
+                    metadata=new_headers,
+                    preserve_acl=True,
+                    validate_dst_bucket=False,
+                )
                 updated += 1
 
         return updated, total
