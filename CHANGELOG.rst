@@ -1,14 +1,21 @@
 CHANGELOG
 =========
 
+1.9.7.5 (2016-06-29)
+--------------------
+
+* fix a bug in the headers update command for old S3 storage buckets
+* optimize performance for overall S3 headers update
+
+
 1.9.7.4 (2016-06-28)
----------------------
+--------------------
 
 * hotfix for the static images optimization command
 
 
 1.9.7.3 (2016-06-28)
----------------------
+--------------------
 
 * hotfix for the static images optimization command
 
