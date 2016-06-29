@@ -264,10 +264,12 @@ class Form(forms.BaseForm):
         # We always add it even if the GZipMiddleware is not enabled because
         # we cannot assume that every upstream proxy implements a
         # countermeasure itself.
+        s['RANDOM_COMMENT_EXCLUDED_VIEWS'] = set([])
         if 'django.middleware.gzip.GZipMiddleware' in s['MIDDLEWARE_CLASSES']:
             index = s['MIDDLEWARE_CLASSES'].index('django.middleware.gzip.GZipMiddleware') + 1
         else:
             index = 0
+        s['MIDDLEWARE_CLASSES'].insert(index, 'aldryn_django.middleware.RandomCommentExclusionMiddleware')
         s['MIDDLEWARE_CLASSES'].insert(index, 'debreach.middleware.RandomCommentMiddleware')
         if 'django.middleware.csrf.CsrfViewMiddleware' in s['MIDDLEWARE_CLASSES']:
             s['MIDDLEWARE_CLASSES'].insert(

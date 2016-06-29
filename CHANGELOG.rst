@@ -1,6 +1,13 @@
 CHANGELOG
 =========
 
+1.9.7.6 (2016-06-29)
+--------------------
+
+* add a middleware to allow disabling random comments for specific
+  configured views
+
+
 1.9.7.5 (2016-06-29)
 --------------------
 
