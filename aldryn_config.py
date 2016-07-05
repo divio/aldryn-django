@@ -57,6 +57,18 @@ class Form(forms.BaseForm):
             'site.'
         )
     )
+    enable_gis = forms.CheckboxField(
+        'Enable django.contrib.gis',
+        required=False,
+        initial=False,
+        help_text=(
+            'Enable Geodjango (django.contrib.gis) related functionality.\n'
+            'WARNING: Requires postgis (contact support to enable it for your '
+            'project). For local development change "postgres:9.4" to '
+            '"mdillon/postgis:9.4" in docker-compose.yml and run '
+            '"aldryn project up" to re-create the db container.'
+        )
+    )
 
     def to_settings(self, data, settings):
         import dj_database_url
@@ -187,6 +199,9 @@ class Form(forms.BaseForm):
         self.storage_settings_for_static(data, settings, env=env)
         self.i18n_settings(data, settings, env=env)
         self.migration_settings(settings, env=env)
+        settings['ALDRYN_DJANGO_ENABLE_GIS'] = data['enable_gis']
+        if settings['ALDRYN_DJANGO_ENABLE_GIS']:
+            self.gis_settings(settings, env=env)
         return settings
 
     def domain_settings(self, data, settings, env):
@@ -480,3 +495,7 @@ class Form(forms.BaseForm):
         if not env('DISABLE_S3_MEDIA_HEADERS_UPDATE'):
             if settings['DEFAULT_FILE_STORAGE'] == storage.SCHEMES['s3']:
                 mcmds.append('python manage.py aldryn_update_s3_media_headers')
+
+    def gis_settings(self, settings, env):
+        settings['DATABASES']['default']['ENGINE'] = 'django.contrib.gis.db.backends.postgis'
+        settings['INSTALLED_APPS'].append('django.contrib.gis')
