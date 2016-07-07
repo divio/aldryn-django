@@ -206,7 +206,7 @@ class GZippedStaticFilesMixin(object):
     def gzip_path(self, path):
         gz_path = path + '.gz'
         with self.open(path) as f_in:
-            with self.open(gz_path, 'w') as f_out:
+            with self.open(gz_path, 'wb') as f_out:
                 with gzip.GzipFile(fileobj=f_out) as gz_out:
                     shutil.copyfileobj(f_in, gz_out)
         return gz_path
