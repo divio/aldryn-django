@@ -321,6 +321,9 @@ class Form(forms.BaseForm):
         settings['DJANGO_WEB_MAX_REQUESTS'] = env('DJANGO_WEB_MAX_REQUESTS', 500)
         settings['DJANGO_WEB_TIMEOUT'] = env('DJANGO_WEB_TIMEOUT', 120)
 
+        # https://docs.djangoproject.com/en/1.8/ref/settings/#use-x-forwarded-host
+        settings['USE_X_FORWARDED_HOST'] = env('USE_X_FORWARDED_HOST', False)
+
     def logging_settings(self, settings, env):
         settings['LOGGING'] = {
             'version': 1,

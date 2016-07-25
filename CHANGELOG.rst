@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+next
+----
+
+* env var for X-Forwarded-Host header support
+
 1.8.14.0 (2016-07-19)
 ---------------------
 
