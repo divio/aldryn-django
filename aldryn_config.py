@@ -501,8 +501,7 @@ class Form(forms.BaseForm):
         mcmds = settings['MIGRATION_COMMANDS']
 
         mcmds.append('CACHE_URL="locmem://" python manage.py createcachetable django_dbcache; exit 0')
-        mcmds.append('python manage.py syncdb --noinput')
-        mcmds.append('python manage.py migrate --list --noinput && python manage.py migrate --noinput')
+        mcmds.append('python manage.py migrate --noinput')
 
         if not env('DISABLE_S3_MEDIA_HEADERS_UPDATE'):
             if settings['DEFAULT_FILE_STORAGE'] == storage.SCHEMES['s3']:
