@@ -197,6 +197,7 @@ class Form(forms.BaseForm):
         self.cache_settings(settings, env=env)
         self.storage_settings_for_media(settings, env=env)
         self.storage_settings_for_static(data, settings, env=env)
+        self.email_settings(data, settings, env=env)
         self.i18n_settings(data, settings, env=env)
         self.migration_settings(settings, env=env)
         settings['ALDRYN_DJANGO_ENABLE_GIS'] = data['enable_gis']
@@ -465,6 +466,14 @@ class Form(forms.BaseForm):
             'STATICFILES_DIRS',
             [os.path.join(settings['BASE_DIR'], 'static')]
         )
+
+    def email_settings(self, data, settings, env):
+        import dj_email_url
+        email_url = env('EMAIL_URL', '')
+        if not email_url:
+            return
+        settings['EMAIL_URL'] = email_url
+        settings.update(dj_email_url.parse(email_url))
 
     def i18n_settings(self, data, settings, env):
         settings['ALL_LANGUAGES'] = list(settings['LANGUAGES'])
