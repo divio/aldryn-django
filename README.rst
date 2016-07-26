@@ -105,9 +105,8 @@ Migrations
 
 To run migrations, call the command ``aldryn-django migrate``. This will run
 a series of commands for the migration stage of a project.
-``aldryn-django`` will run ``python manage.py syncdb`` and
-``python manage.py migrate`` (and on Django>=1.7 just
-``python manage.py migrate``). But any Addon can add stuff to this migration
+``aldryn-django`` will run
+``python manage.py migrate``. But any Addon can add stuff to this migration
 step by appending commands to the ``MIGRATION_COMMANDS`` setting. For example
 ``aldryn-cms`` (django-cms as an Addon) will run
 ``python manage.py cms fix-tree`` at the migration stage.

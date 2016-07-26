@@ -1,6 +1,13 @@
 CHANGELOG
 =========
 
+next
+----
+
+* env var for X-Forwarded-Host header support
+* support for EMAIL_URL environment variable
+
+
 1.8.14.0 (2016-07-19)
 ---------------------
 

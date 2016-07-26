@@ -197,6 +197,7 @@ class Form(forms.BaseForm):
         self.cache_settings(settings, env=env)
         self.storage_settings_for_media(settings, env=env)
         self.storage_settings_for_static(data, settings, env=env)
+        self.email_settings(data, settings, env=env)
         self.i18n_settings(data, settings, env=env)
         self.migration_settings(settings, env=env)
         settings['ALDRYN_DJANGO_ENABLE_GIS'] = data['enable_gis']
@@ -320,6 +321,9 @@ class Form(forms.BaseForm):
         settings['DJANGO_WEB_WORKERS'] = env('DJANGO_WEB_WORKERS', 3)
         settings['DJANGO_WEB_MAX_REQUESTS'] = env('DJANGO_WEB_MAX_REQUESTS', 500)
         settings['DJANGO_WEB_TIMEOUT'] = env('DJANGO_WEB_TIMEOUT', 120)
+
+        # https://docs.djangoproject.com/en/1.8/ref/settings/#use-x-forwarded-host
+        settings['USE_X_FORWARDED_HOST'] = env('USE_X_FORWARDED_HOST', False)
 
     def logging_settings(self, settings, env):
         settings['LOGGING'] = {
@@ -463,6 +467,14 @@ class Form(forms.BaseForm):
             [os.path.join(settings['BASE_DIR'], 'static')]
         )
 
+    def email_settings(self, data, settings, env):
+        import dj_email_url
+        email_url = env('EMAIL_URL', '')
+        if not email_url:
+            return
+        settings['EMAIL_URL'] = email_url
+        settings.update(dj_email_url.parse(email_url))
+
     def i18n_settings(self, data, settings, env):
         settings['ALL_LANGUAGES'] = list(settings['LANGUAGES'])
         settings['ALL_LANGUAGES_DICT'] = dict(settings['ALL_LANGUAGES'])
@@ -489,8 +501,7 @@ class Form(forms.BaseForm):
         mcmds = settings['MIGRATION_COMMANDS']
 
         mcmds.append('CACHE_URL="locmem://" python manage.py createcachetable django_dbcache; exit 0')
-        mcmds.append('python manage.py syncdb --noinput')
-        mcmds.append('python manage.py migrate --list --noinput && python manage.py migrate --noinput')
+        mcmds.append('python manage.py migrate --noinput')
 
         if not env('DISABLE_S3_MEDIA_HEADERS_UPDATE'):
             if settings['DEFAULT_FILE_STORAGE'] == storage.SCHEMES['s3']:
