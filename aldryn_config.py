@@ -82,6 +82,7 @@ class Form(forms.BaseForm):
     )
 
     def to_settings(self, data, settings):
+        import django_cache_url
         import dj_database_url
         import warnings
         from functools import partial
@@ -117,6 +118,8 @@ class Form(forms.BaseForm):
                 ),
                 RuntimeWarning,
             )
+        settings['DATABASES']['default'] = dj_database_url.parse(settings['DATABASE_URL'])
+
         if not settings['CACHE_URL']:
             settings['CACHE_URL'] = 'locmem://'
             warnings.warn(
@@ -125,8 +128,7 @@ class Form(forms.BaseForm):
                 ),
                 RuntimeWarning,
             )
-
-        settings['DATABASES']['default'] = dj_database_url.parse(settings['DATABASE_URL'])
+        settings['CACHES']['default'] = django_cache_url.parse(settings['CACHE_URL'])
 
         settings['ROOT_URLCONF'] = env('ROOT_URLCONF', 'urls')
         settings['ADDON_URLS'].append('aldryn_django.urls')
@@ -205,7 +207,6 @@ class Form(forms.BaseForm):
         self.logging_settings(settings, env=env)
         # Order matters, sentry settings rely on logging being configured.
         self.sentry_settings(settings, env=env)
-        self.cache_settings(settings, env=env)
         self.storage_settings_for_media(settings, env=env)
         self.storage_settings_for_static(data, settings, env=env)
         self.email_settings(data, settings, env=env)
@@ -397,12 +398,6 @@ class Form(forms.BaseForm):
                 'level': 'ERROR',
                 'class': 'raven.contrib.django.raven_compat.handlers.SentryHandler',
             }
-
-    def cache_settings(self, settings, env):
-        import django_cache_url
-        cache_url = env('CACHE_URL')
-        if cache_url:
-            settings['CACHES']['default'] = django_cache_url.parse(cache_url)
 
     def storage_settings_for_media(self, settings, env):
         import yurl
