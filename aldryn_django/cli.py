@@ -44,16 +44,6 @@ def web(ctx_obj):
 
 @click.command()
 @click.pass_obj
-def worker(ctx_obj):
-    """
-    coming soon: launch the background worker
-    """
-    # TODO: celery worker startup, once available
-    pass
-
-
-@click.command()
-@click.pass_obj
 def migrate(ctx_obj):
     """
     run any migrations needed at deploy time. most notably database migrations.
@@ -92,7 +82,6 @@ def main(ctx, verbose):
 
 
 main.add_command(web)
-main.add_command(worker)
 main.add_command(migrate)
 
 

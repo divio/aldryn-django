@@ -1,11 +1,13 @@
 CHANGELOG
 =========
 
-1.9.8.0 (2016-08-05)
+1.9.8.1 (2016-08-05)
 ---------------------
 
 * Do not redirect https requests to http when `SECURE_SSL_REDIRECT`
   is not explicitly set to `False`.
+* Environment var for `X-Forwarded-Host` header support.
+* Support for `EMAIL_URL` environment variable.
 
 
 1.9.8.0 (2016-07-19)
