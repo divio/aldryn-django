@@ -63,7 +63,7 @@ setup(
         'django-debreach',
 
         # helpers
-        'aldryn-sites>=0.5.2',
+        'aldryn-sites>=0.5.4',
 
         # TODO: should be in (aldryn-)django-cms
         'django-reversion<1.9',
