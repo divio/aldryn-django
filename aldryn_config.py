@@ -254,7 +254,7 @@ class Form(forms.BaseForm):
 
     def security_settings(self, data, settings, env):
         s = settings
-        s['SECURE_SSL_REDIRECT'] = env('SECURE_SSL_REDIRECT', False)
+        s['SECURE_SSL_REDIRECT'] = env('SECURE_SSL_REDIRECT', None)
         s['SECURE_REDIRECT_EXEMPT'] = env('SECURE_REDIRECT_EXEMPT', [])
         s['SECURE_HSTS_SECONDS'] = env('SECURE_HSTS_SECONDS', 0)
         # SESSION_COOKIE_SECURE is handled by

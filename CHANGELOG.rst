@@ -1,6 +1,14 @@
 CHANGELOG
 =========
 
+
+1.8.14.2 (2016-08-05)
+---------------------
+
+* Do not redirect https requests to http when `SECURE_SSL_REDIRECT`
+  is not explicitly set to `False`.
+
+
 1.8.14.1 (2016-07-26)
 ---------------------
 
