@@ -1,6 +1,13 @@
 CHANGELOG
 =========
 
+
+1.9.10.0 (2016-09-26)
+---------------------
+
+* Upgrade Django to 1.9.10
+
+
 1.9.8.2 (2016-08-10)
 --------------------
 
@@ -8,7 +15,7 @@ CHANGELOG
 
 
 1.9.8.1 (2016-08-05)
----------------------
+--------------------
 
 * Do not redirect https requests to http when `SECURE_SSL_REDIRECT`
   is not explicitly set to `False`.
