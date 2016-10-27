@@ -9,6 +9,7 @@ from django.contrib.staticfiles.storage import (
     ManifestStaticFilesStorage,
 )
 from django.core.files.storage import FileSystemStorage
+from django.core.exceptions import ImproperlyConfigured
 
 from boto.s3.connection import (
     SubdomainCallingFormat,
@@ -132,12 +133,20 @@ def parse_storage_url(url):
     config['DEFAULT_FILE_STORAGE'] = SCHEMES[scheme[0]]
 
     if scheme[0] == 's3':
-        os.environ['S3_USE_SIGV4'] = 'True'
-
-        media_domain = parse.parse_qs(url.query).get('domain', [None])[0]
+        query = parse.parse_qs(url.query)
+        media_domain = query.get('domain', [None])[0]
+        signature_ver = query.get('auth', ['s3v4'])[0]
         endpoint = url.hostname.rsplit('.', 3)
         bucket_name = endpoint[0]
         storage_host = '.'.join(endpoint[1:])
+
+        if signature_ver == 's3v4':
+            os.environ['S3_USE_SIGV4'] = 'True'
+        elif signature_ver == 's3':
+            os.environ['S3_USE_SIGV4'] = ''
+        else:
+            raise ImproperlyConfigured('Unknown signature version: {}'
+                                       .format(signature_ver))
 
         config.update({
             'AWS_MEDIA_ACCESS_KEY_ID': parse.unquote(url.username or ''),
