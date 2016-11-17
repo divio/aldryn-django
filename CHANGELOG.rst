@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+1.8.16.2 (2016-11-17)
+---------------------
+
+* Support setting SERVER_EMAIL and DEFAULT_FROM_EMAIL from env vars
+
 
 1.8.16.1 (2016-11-11)
 ---------------------
