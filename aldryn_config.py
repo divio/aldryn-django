@@ -469,12 +469,19 @@ class Form(forms.BaseForm):
 
     def email_settings(self, data, settings, env):
         import dj_email_url
+
         email_url = env('EMAIL_URL', '')
         if email_url:
             settings['EMAIL_URL'] = email_url
             settings.update(dj_email_url.parse(email_url))
-        settings['DEFAULT_FROM_EMAIL'] = env('DEFAULT_FROM_EMAIL')
-        settings['SERVER_EMAIL'] = env('SERVER_EMAIL')
+
+        from_email = env('DEFAULT_FROM_EMAIL', '')
+        if from_email:
+            settings['DEFAULT_FROM_EMAIL'] = from_email
+
+        server_email = env('SERVER_EMAIL', '')
+        if server_email:
+            settings['SERVER_EMAIL'] = server_email
 
     def i18n_settings(self, data, settings, env):
         settings['ALL_LANGUAGES'] = list(settings['LANGUAGES'])
