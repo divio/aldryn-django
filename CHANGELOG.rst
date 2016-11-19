@@ -1,7 +1,13 @@
 CHANGELOG
 =========
 
-1.9.11.1 (2016-11-27)
+1.9.11.2 (2016-11-19)
+---------------------
+
+* Enable Range request support in uWSGI
+
+
+1.9.11.1 (2016-11-18)
 ---------------------
 
 * Support setting SERVER_EMAIL and DEFAULT_FROM_EMAIL from env vars
