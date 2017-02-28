@@ -23,7 +23,7 @@ setup(
     packages=find_packages(),
     install_requires=(
         'aldryn-addons',
-        'Django==1.9.11',
+        'Django==1.10.5',
 
         # setup utils
         'dj-database-url',
@@ -59,17 +59,9 @@ setup(
         'ndg-httpsclient',
         'certifi',
         'pyOpenSSL',
-        # required until https://code.djangoproject.com/ticket/20869 lands
-        'django-debreach',
 
         # helpers
-        'aldryn-sites>=0.5.4',
-
-        # TODO: should be in (aldryn-)django-cms
-        # However, it doesn't know which version of Django is being installed,
-        # so it stays here.
-        'django-reversion>=1.10.0,<2.0.0',
-        'django-treebeard>=4.0',
+        'aldryn-sites>=0.5.6',
 
         'easy-thumbnails==2.2.1.1',
     ) + extra_dependencies,
