@@ -2,10 +2,11 @@ CHANGELOG
 =========
 
 
-1.10.6.0 (2017-03-21)
+1.10.6.1 (2017-03-21)
 ---------------------
 
 * Upgrade Django to 1.10.6
+* Fix DISABLE_S3_MEDIA_HEADERS_UPDATE env var parsing
 
 
 1.10.5.0 (2017-02-28)
