@@ -1,6 +1,13 @@
 CHANGELOG
 =========
 
+1.8.17.0 (2017-03-21)
+---------------------
+
+* Upgrade Django to 1.8.17
+* Remove pinned dependency to internal easy-thumbnails release 
+
+
 1.8.16.3 (2016-11-19)
 ---------------------
 

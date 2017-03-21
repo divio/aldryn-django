@@ -23,7 +23,7 @@ setup(
     packages=find_packages(),
     install_requires=(
         'aldryn-addons',
-        'Django==1.8.16',
+        'Django==1.8.17',
 
         # setup utils
         'dj-database-url',
@@ -67,8 +67,6 @@ setup(
 
         # TODO: should be in (aldryn-)django-cms
         'django-reversion<1.9',
-
-        'easy-thumbnails==2.2.1.1',
     ) + extra_dependencies,
     entry_points='''
         [console_scripts]
