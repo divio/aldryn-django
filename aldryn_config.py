@@ -486,6 +486,7 @@ class Form(forms.BaseForm):
 
     def migration_settings(self, settings, env):
         from aldryn_django import storage
+        from aldryn_addons.utils import boolean_ish
 
         settings.setdefault('MIGRATION_COMMANDS', [])
         mcmds = settings['MIGRATION_COMMANDS']
@@ -493,7 +494,7 @@ class Form(forms.BaseForm):
         mcmds.append('CACHE_URL="locmem://" python manage.py createcachetable django_dbcache; exit 0')
         mcmds.append('python manage.py migrate --noinput')
 
-        if not env('DISABLE_S3_MEDIA_HEADERS_UPDATE'):
+        if not boolean_ish(env('DISABLE_S3_MEDIA_HEADERS_UPDATE')):
             if settings['DEFAULT_FILE_STORAGE'] == storage.SCHEMES['s3']:
                 mcmds.append('python manage.py aldryn_update_s3_media_headers')
 
