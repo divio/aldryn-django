@@ -504,6 +504,7 @@ class Form(forms.BaseForm):
 
     def migration_settings(self, settings, env):
         from aldryn_django import storage
+        from aldryn_addons.utils import boolean_ish
 
         settings.setdefault('MIGRATION_COMMANDS', [])
         mcmds = settings['MIGRATION_COMMANDS']
