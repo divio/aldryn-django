@@ -486,14 +486,32 @@ class Form(forms.BaseForm):
     def i18n_settings(self, data, settings, env):
         settings['ALL_LANGUAGES'] = list(settings['LANGUAGES'])
         settings['ALL_LANGUAGES_DICT'] = dict(settings['ALL_LANGUAGES'])
-        languages = json.loads(data['languages'])
-        settings['LANGUAGE_CODE'] = languages[0]
         settings['USE_L10N'] = True
         settings['USE_I18N'] = True
-        settings['LANGUAGES'] = [
-            (code, settings['ALL_LANGUAGES_DICT'][code])
-            for code in languages
-        ]
+
+        def language_codes_to_tuple(codes):
+            return [
+                (code, settings['ALL_LANGUAGES_DICT'][code])
+                for code in codes
+            ]
+        langs_from_env = env('LANGUAGES', None)
+        lang_codes_from_env = env('LANGUAGE_CODES', None)
+        langs_from_form = json.loads(data['languages'])
+
+        if langs_from_env:
+            settings['LANGUAGES'] = langs_from_env
+        elif lang_codes_from_env:
+            settings['LANGUAGES'] = language_codes_to_tuple(lang_codes_from_env)
+        else:
+            settings['LANGUAGES'] = language_codes_to_tuple(langs_from_form)
+
+        lang_code_from_env = env('LANGUAGE_CODE', None)
+        if lang_code_from_env:
+            settings['LANGUAGE_CODE'] = lang_code_from_env
+        else:
+            settings['LANGUAGE_CODE'] = settings['LANGUAGES'][0][0]
+
+
         settings['LOCALE_PATHS'] = [
             os.path.join(settings['BASE_DIR'], 'locale'),
         ]
