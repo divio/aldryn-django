@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.conf.urls.i18n import i18n_patterns as django_i18n_patterns
 
 
@@ -8,4 +9,6 @@ def i18n_patterns(*args):
     change anything in the projects root urls.py when new versions of Django
     are released.
     """
-    return django_i18n_patterns('', *args)
+    if getattr(settings, 'PREFIX_DEFAULT_LANGUAGE', True):
+        return django_i18n_patterns('', *args)
+    return list(args)
