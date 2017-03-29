@@ -1,6 +1,14 @@
 CHANGELOG
 =========
 
+
+1.8.17.2 (unreleased)
+---------------------
+
+* Added a new setting that allows users to disable the language prefix on urls
+  for the default language.
+
+
 1.8.17.1 (2017-03-21)
 ---------------------
 
