@@ -2,7 +2,7 @@ CHANGELOG
 =========
 
 
-1.8.17.2 (unreleased)
+1.8.17.2 (2017-03-29)
 ---------------------
 
 * Added a new setting that allows users to disable the language prefix on urls
