@@ -69,10 +69,10 @@ class Form(forms.BaseForm):
             '"aldryn project up" to re-create the db container.'
         )
     )
-    prefix_default_language = forms.CheckboxField(
+    disable_default_language_prefix = forms.CheckboxField(
         'Remove URL language prefix for default language',
         required=False,
-        initial=True,
+        initial=False,
         help_text=(
             'For example, http://example.com/ rather than '
             'http://example.com/en/ if en (English) is the default language.'
@@ -488,7 +488,7 @@ class Form(forms.BaseForm):
         settings['LOCALE_PATHS'] = [
             os.path.join(settings['BASE_DIR'], 'locale'),
         ]
-        settings['PREFIX_DEFAULT_LANGUAGE'] = data['prefix_default_language']
+        settings['PREFIX_DEFAULT_LANGUAGE'] = not data['disable_default_language_prefix']
 
         if not settings['PREFIX_DEFAULT_LANGUAGE']:
             settings['MIDDLEWARE_CLASSES'].insert(
