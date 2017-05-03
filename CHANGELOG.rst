@@ -8,7 +8,6 @@ CHANGELOG
   see https://www.djangoproject.com/weblog/2017/apr/04/security-releases/
   for details
 
-
 1.9.12.3 (2017-03-29)
 ---------------------
 
