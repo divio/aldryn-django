@@ -2,6 +2,12 @@ CHANGELOG
 =========
 
 
+1.8.18.2 (2017-05-16)
+---------------------
+
+* Allow users to configure aldryn sites redirect type via env variable
+
+
 1.8.18.1 (2017-04-05)
 ---------------------
 
