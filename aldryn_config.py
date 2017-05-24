@@ -500,7 +500,12 @@ class Form(forms.BaseForm):
             settings['SERVER_EMAIL'] = server_email
 
     def i18n_settings(self, data, settings, env):
-        settings['ALL_LANGUAGES'] = list(settings['LANGUAGES'])
+        from django.utils.translation import ugettext_lazy
+
+        settings['ALL_LANGUAGES'] = [
+            (code, ugettext_lazy(name))
+            for code, name in settings['LANGUAGES']
+        ]
         settings['ALL_LANGUAGES_DICT'] = dict(settings['ALL_LANGUAGES'])
         languages = [
             (code, settings['ALL_LANGUAGES_DICT'][code])
