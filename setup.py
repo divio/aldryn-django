@@ -50,7 +50,7 @@ setup(
         'click',
 
         # storage
-        'django-storages-redux',
+        'django-storages',
         'boto>=2.40.0',
         'djeese-fs',
 
