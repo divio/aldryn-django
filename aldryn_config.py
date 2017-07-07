@@ -82,6 +82,7 @@ class Form(forms.BaseForm):
     )
 
     def to_settings(self, data, settings):
+        import django_cache_url
         import dj_database_url
         import warnings
         from functools import partial
@@ -117,6 +118,8 @@ class Form(forms.BaseForm):
                 ),
                 RuntimeWarning,
             )
+        settings['DATABASES']['default'] = dj_database_url.parse(settings['DATABASE_URL'])
+
         if not settings['CACHE_URL']:
             settings['CACHE_URL'] = 'locmem://'
             warnings.warn(
@@ -125,8 +128,7 @@ class Form(forms.BaseForm):
                 ),
                 RuntimeWarning,
             )
-
-        settings['DATABASES']['default'] = dj_database_url.parse(settings['DATABASE_URL'])
+        settings['CACHES']['default'] = django_cache_url.parse(settings['CACHE_URL'])
 
         settings['ROOT_URLCONF'] = env('ROOT_URLCONF', 'urls')
         settings['ADDON_URLS'].append('aldryn_django.urls')
@@ -205,7 +207,6 @@ class Form(forms.BaseForm):
         self.logging_settings(settings, env=env)
         # Order matters, sentry settings rely on logging being configured.
         self.sentry_settings(settings, env=env)
-        self.cache_settings(settings, env=env)
         self.storage_settings_for_media(settings, env=env)
         self.storage_settings_for_static(data, settings, env=env)
         self.email_settings(data, settings, env=env)
@@ -398,12 +399,6 @@ class Form(forms.BaseForm):
                 'class': 'raven.contrib.django.raven_compat.handlers.SentryHandler',
             }
 
-    def cache_settings(self, settings, env):
-        import django_cache_url
-        cache_url = env('CACHE_URL')
-        if cache_url:
-            settings['CACHES']['default'] = django_cache_url.parse(cache_url)
-
     def storage_settings_for_media(self, settings, env):
         import yurl
         from aldryn_django.storage import parse_storage_url
@@ -502,19 +497,37 @@ class Form(forms.BaseForm):
     def i18n_settings(self, data, settings, env):
         settings['ALL_LANGUAGES'] = list(settings['LANGUAGES'])
         settings['ALL_LANGUAGES_DICT'] = dict(settings['ALL_LANGUAGES'])
-        languages = [
-            (code, settings['ALL_LANGUAGES_DICT'][code])
-            for code in json.loads(data['languages'])
-        ]
-        settings['LANGUAGE_CODE'] = languages[0][0]
+
         settings['USE_L10N'] = True
         settings['USE_I18N'] = True
-        settings['LANGUAGES'] = languages
+
+        def language_codes_to_tuple(codes):
+            return [
+                (code, settings['ALL_LANGUAGES_DICT'][code])
+                for code in codes
+            ]
+        langs_from_env = env('LANGUAGES', None)
+        lang_codes_from_env = env('LANGUAGE_CODES', None)
+        langs_from_form = json.loads(data['languages'])
+
+        if langs_from_env:
+            settings['LANGUAGES'] = langs_from_env
+        elif lang_codes_from_env:
+            settings['LANGUAGES'] = language_codes_to_tuple(lang_codes_from_env)
+        else:
+            settings['LANGUAGES'] = language_codes_to_tuple(langs_from_form)
+
+        lang_code_from_env = env('LANGUAGE_CODE', None)
+        if lang_code_from_env:
+            settings['LANGUAGE_CODE'] = lang_code_from_env
+        else:
+            settings['LANGUAGE_CODE'] = settings['LANGUAGES'][0][0]
+
         settings['LOCALE_PATHS'] = [
             os.path.join(settings['BASE_DIR'], 'locale'),
         ]
 
-        if len(languages) <= 1:
+        if len(settings['LANGUAGES']) <= 1:
             settings['PREFIX_DEFAULT_LANGUAGE'] = not data['disable_default_language_prefix']
         else:
             # this is not supported for django versions < 1.10
