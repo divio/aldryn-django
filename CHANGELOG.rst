@@ -2,6 +2,14 @@ CHANGELOG
 =========
 
 
+1.8.18.4 (2017-07-07)
+---------------------
+
+* Configure Languages from environment variables
+* Use django-storages instead of django-storages-redux
+* Minor Bugfixes
+
+
 1.8.18.3 (2017-05-25)
 ---------------------
 
