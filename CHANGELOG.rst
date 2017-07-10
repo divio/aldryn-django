@@ -1,6 +1,13 @@
 CHANGELOG
 =========
 
+1.9.3.2 (2017-07-10)
+--------------------
+
+* Configure languages from environment variables
+* Use django-storages instead of django-storages-redux
+* Minor bugfixes
+
 1.9.13.1 (2017-04-05)
 ---------------------
 
