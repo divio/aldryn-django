@@ -1,18 +1,19 @@
 CHANGELOG
 =========
 
-1.9.13.1 (2017-07-07)
----------------------
+1.9.3.2 (2017-07-10)
+--------------------
 
-* Configure Languages from environment variables
+* Configure languages from environment variables
 * Use django-storages instead of django-storages-redux
-* Minor bug fixes
+* Minor bugfixes
 
-1.9.13.0 (2017-05-03)
+1.9.13.1 (2017-04-05)
 ---------------------
 
-* Upgrade Django to 1.9.13
-
+* Upgrade Django to 1.9.13 (fixes CVE-2017-7233 and CVE-2017-7234)
+  see https://www.djangoproject.com/weblog/2017/apr/04/security-releases/
+  for details
 
 1.9.12.3 (2017-03-29)
 ---------------------
