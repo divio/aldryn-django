@@ -89,6 +89,7 @@ def get_env():
     # setup default uwsgi environment variables
     env = {
         'UWSGI_ENABLE_THREADS': '1',
+        'UWSGI_HONOUR_RANGE': '1',
     }
     if boolean_ish(os.environ.get('ENABLE_UWSGI_CHEAPER', 'on')):
         env.update({
@@ -138,7 +139,6 @@ def start_uwsgi_command(settings, port=None):
         '--max-requests={}'.format(settings['DJANGO_WEB_MAX_REQUESTS']),
         '--harakiri={}'.format(settings['DJANGO_WEB_TIMEOUT']),
         '--lazy-apps',
-        '--honour-range',
     ]
 
     serve_static = False
