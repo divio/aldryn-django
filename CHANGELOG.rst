@@ -1,7 +1,13 @@
 CHANGELOG
 =========
 
-1.9.3.2 (2017-07-10)
+1.9.13.3 (2017-07-21)
+---------------------
+
+* Allow uwgsi flag 'honour range' to be environment variable configurable
+
+
+1.9.13.2 (2017-07-10)
 --------------------
 
 * Configure languages from environment variables
