@@ -2,8 +2,6 @@
 Aldryn Django
 #############
 
-|PyPI Version|
-
 An opinionated Django setup bundled as an Aldryn Addon.
 
 This package will auto configure Django, including admin and some other basic
@@ -132,6 +130,3 @@ review our guidelines for `Aldryn addons`_.
 .. _pull requests: https://github.com/aldryn/aldryn-django/pulls
 .. _Aldryn addons: http://docs.aldryn.com/en/latest/reference/addons/index.html
 .. _aldryn-django: https://github.com/aldryn/aldryn-django
-
-.. |PyPI Version| image:: http://img.shields.io/pypi/v/aldryn-django.svg
-   :target: https://pypi.python.org/pypi/aldryn-django
