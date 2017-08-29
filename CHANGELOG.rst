@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+1.11.3.3 (2017-08-29)
+---------------------
+
+* Updated Django to 1.11.3 (previous versions of Aldryn Django 1.11.3.x were installing 1.11.1).
+
 1.11.3.3 (2017-07-21)
 ---------------------
 
