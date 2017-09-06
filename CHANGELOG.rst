@@ -2,6 +2,14 @@ CHANGELOG
 =========
 
 
+1.10.8.1 (2017-09-06)
+---------------------
+
+* Upgrade Django to 1.10.8 (fixes CVE-2017-12794)
+  see https://www.djangoproject.com/weblog/2017/sep/05/security-releases/
+  for details
+
+
 1.10.7.1 (2017-04-05)
 ---------------------
 
