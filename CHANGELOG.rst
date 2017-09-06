@@ -1,15 +1,26 @@
 CHANGELOG
 =========
 
+
+1.11.5.1 (2017-09-06)
+---------------------
+
+* Upgrade Django to 1.11.5 (fixes CVE-2017-12794)
+  see https://www.djangoproject.com/weblog/2017/sep/05/security-releases/
+  for details
+
+
 1.11.3.3 (2017-08-29)
 ---------------------
 
 * Updated Django to 1.11.3 (previous versions of Aldryn Django 1.11.3.x were installing 1.11.1).
 
+
 1.11.3.3 (2017-07-21)
 ---------------------
 
 * Allow uwgsi flag 'honour range' to be environment variable configurable
+
 
 1.11.3.2 (2017-07-10)
 ---------------------
@@ -17,6 +28,7 @@ CHANGELOG
 * Configure Languages from environment variables
 * Use django-storages instead of django-storages-redux
 * Minor Bugfixes
+
 
 1.11.3.1 (2017-07-10)
 ---------------------
