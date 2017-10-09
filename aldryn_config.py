@@ -78,6 +78,14 @@ class Form(forms.BaseForm):
             'http://example.com/en/ if en (English) is the default language.'
         )
     )
+    session_timeout = forms.NumberField(
+        'Timeout for users session, in seconds.',
+        required=False,
+        initial='%s' % (60 * 60 * 24 * 7 * 2),
+        help_text=(
+            'By default it\'s two weeks (django default).'
+        ),
+    )
 
     def to_settings(self, data, settings):
         import django_cache_url
@@ -273,6 +281,8 @@ class Form(forms.BaseForm):
             'SECURE_PROXY_SSL_HEADER',
             ('HTTP_X_FORWARDED_PROTO', 'https')
         )
+        s['SESSION_COOKIE_AGE'] = env('SESSION_COOKIE_AGE', data.get('session_timeout') or 60 * 60 * 24 * 7 * 2)
+
         # SESSION_COOKIE_HTTPONLY and SECURE_FRAME_DENY must be False for CMS
         # SESSION_COOKIE_HTTPONLY is handled by
         #   django.contrib.sessions.middleware.SessionMiddleware
