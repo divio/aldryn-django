@@ -83,7 +83,7 @@ class Form(forms.BaseForm):
     session_timeout = forms.NumberField(
         'Timeout for users session, in seconds.',
         required=False,
-        initial='%s' % (60 * 60 * 24 * 7 * 2),
+        initial=(60 * 60 * 24 * 7 * 2),
         help_text=(
             'By default it\'s two weeks (django default).'
         ),
