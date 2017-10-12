@@ -46,7 +46,7 @@ setup(
         'South',
 
         # storage
-        'django-storages-redux',
+        'django-storages<=1.5.0',
         # boto==2.38.0.1 is an internal release that contains
         # https://github.com/stefanfoulis/boto/tree/2.38.0.1
         # a fix for boto falsly adding authentication parameters to s3 url even
