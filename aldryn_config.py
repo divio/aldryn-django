@@ -85,7 +85,7 @@ class Form(forms.BaseForm):
         required=False,
         initial=(60 * 60 * 24 * 7 * 2),
         help_text=(
-            'By default it\'s two weeks (django default).'
+            'By default it\'s two weeks (Django default).'
         ),
     )
 
