@@ -1,6 +1,12 @@
 CHANGELOG
 =========
 
+1.9.13.4 (2017-10-10)
+---------------------
+
+* Added new setting "session_timeout" to set SESSION_COOKIE_AGE.
+
+
 1.9.13.3 (2017-07-21)
 ---------------------
 
