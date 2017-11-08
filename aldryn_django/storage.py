@@ -8,31 +8,40 @@ from django.contrib.staticfiles.storage import (
     StaticFilesStorage,
     ManifestStaticFilesStorage,
 )
-from django.core.files.storage import FileSystemStorage
-from django.core.exceptions import ImproperlyConfigured
+from django.core.files.storage import FileSystemStorage, get_storage_class
+from aldryn_addons.exceptions import ImproperlyConfigured
 
 from boto.s3.connection import (
     SubdomainCallingFormat,
     OrdinaryCallingFormat,
 )
+from django.utils.functional import LazyObject
 
 from six.moves.urllib import parse
 from storages.backends import s3boto
 import yurl
 
 
+# We have to keep SCHEMES around for now because the django-filer Addon relies
+# on it.
 SCHEMES = {
     's3': 'aldryn_django.storage.S3MediaStorage',
-    'djfs': 'fs.django_storage.DjeeseFSStorage',
 }
 
 parse.uses_netloc.append('s3')
-parse.uses_netloc.append('djfs')
 
 
 class S3MediaStorage(s3boto.S3BotoStorage):
+    prefix = 'DEFAULT'
+
     def __init__(self):
-        bucket_name = settings.AWS_MEDIA_STORAGE_BUCKET_NAME
+        def add_prefix(name):
+            return '{}_{}'.format(self.prefix, name)
+
+        def setting(name):
+            return getattr(settings, add_prefix(name))
+
+        bucket_name = setting('AWS_STORAGE_BUCKET_NAME')
 
         if '.' in bucket_name:
             calling_format = OrdinaryCallingFormat()
@@ -43,21 +52,22 @@ class S3MediaStorage(s3boto.S3BotoStorage):
         # create a subclass because django tries to recreate a new object by
         # calling the __init__ of the returned object (with no arguments).
         super(S3MediaStorage, self).__init__(
-            access_key=settings.AWS_MEDIA_ACCESS_KEY_ID,
-            secret_key=settings.AWS_MEDIA_SECRET_ACCESS_KEY,
+            access_key=setting('AWS_ACCESS_KEY_ID'),
+            secret_key=setting('AWS_SECRET_ACCESS_KEY'),
             bucket_name=bucket_name,
-            location=settings.AWS_MEDIA_BUCKET_PREFIX,
-            host=settings.AWS_MEDIA_STORAGE_HOST,
-            custom_domain=settings.AWS_MEDIA_DOMAIN,
+            location=setting('AWS_BUCKET_PREFIX'),
+            host=setting('AWS_STORAGE_HOST'),
+            custom_domain=setting('AWS_DOMAIN'),
             calling_format=calling_format,
             # Setting an ACL requires us to grant the user the PutObjectAcl
             # permission as well, even if it matches the default bucket ACL.
             # XXX: Ideally we would thus set it to `None`, but due to how
             # easy_thumbnails works internally, that causes thumbnail
             # generation to fail...
-            default_acl='public-read',
+            default_acl=setting('AWS_DEFAULT_ACL'),
             querystring_auth=False,
         )
+
         # MEDIA_HEADERS is a list of tuples containing a regular expression
         # to match against a path, and a dictionary of HTTP headers to be
         # returned with the resource identified by the path when it is
@@ -72,7 +82,10 @@ class S3MediaStorage(s3boto.S3BotoStorage):
         #        })
         #    ]
         #
-        media_headers = getattr(settings, 'MEDIA_HEADERS', [])
+        if hasattr(settings, add_prefix('MEDIA_HEADERS')):
+            media_headers = setting('MEDIA_HEADERS')
+        else:
+            media_headers = getattr(settings, 'MEDIA_HEADERS', [])
         self.media_headers = [
             (re.compile(r), headers) for r, headers in media_headers
         ]
@@ -124,13 +137,24 @@ class S3MediaStorage(s3boto.S3BotoStorage):
         return updated, total
 
 
-def parse_storage_url(url):
+class PrivateS3MediaStorage(S3MediaStorage):
+    prefix = 'PRIVATE'
+
+
+def parse_storage_url(url, prefix='DEFAULT', storage='aldryn_django.storage.S3MediaStorage'):
+    if prefix == 'DEFAULT':
+        # Evil hack so that other Addons that still use SCHEMES get correct
+        # info (django-filer)
+        global SCHEMES
+        SCHEMES['s3'] = storage
+
+    def add_prefix(name):
+        return '{}_{}'.format(prefix, name)
     config = {}
     url = parse.urlparse(url)
 
     scheme = url.scheme.split('+', 1)
-
-    config['DEFAULT_FILE_STORAGE'] = SCHEMES[scheme[0]]
+    config[add_prefix('FILE_STORAGE')] = storage
 
     if scheme[0] == 's3':
         query = parse.parse_qs(url.query)
@@ -148,52 +172,36 @@ def parse_storage_url(url):
             raise ImproperlyConfigured('Unknown signature version: {}'
                                        .format(signature_ver))
 
+        if prefix == 'PRIVATE':
+            default_acl_value = 'private'
+        else:
+            default_acl_value = 'public-read'
+        default_acl = query.get('default-acl', [default_acl_value])[0] or None
+
         config.update({
-            'AWS_MEDIA_ACCESS_KEY_ID': parse.unquote(url.username or ''),
-            'AWS_MEDIA_SECRET_ACCESS_KEY': parse.unquote(url.password or ''),
-            'AWS_MEDIA_STORAGE_BUCKET_NAME': bucket_name,
-            'AWS_MEDIA_STORAGE_HOST': storage_host,
-            'AWS_MEDIA_BUCKET_PREFIX': url.path.lstrip('/'),
-            'AWS_MEDIA_DOMAIN': media_domain,
+            add_prefix('AWS_ACCESS_KEY_ID'): parse.unquote(url.username or ''),
+            add_prefix('AWS_SECRET_ACCESS_KEY'): parse.unquote(url.password or ''),
+            add_prefix('AWS_STORAGE_BUCKET_NAME'): bucket_name,
+            add_prefix('AWS_STORAGE_HOST'): storage_host,
+            add_prefix('AWS_BUCKET_PREFIX'): url.path.lstrip('/') or '',
+            add_prefix('AWS_DOMAIN'): media_domain,
+            add_prefix('AWS_DEFAULT_ACL'): default_acl,
         })
 
-        if not media_domain:
-            media_domain = '.'.join([
-                config['AWS_MEDIA_STORAGE_BUCKET_NAME'],
-                config['AWS_MEDIA_STORAGE_HOST'],
-            ])
-        media_url = yurl.URL(
-            scheme='https',
-            host=media_domain,
-            path=config['AWS_MEDIA_BUCKET_PREFIX'],
-        )
-        config['MEDIA_URL'] = media_url.as_string()
-    elif scheme[0] == 'djfs':
-        hostname = ('{}:{}'.format(url.hostname, url.port)
-                    if url.port else url.hostname)
-        config.update({
-            'DJEESE_STORAGE_ID': url.username or '',
-            'DJEESE_STORAGE_KEY': url.password or '',
-            'DJEESE_STORAGE_HOST': parse.urlunparse((
-                scheme[1],
-                hostname,
-                url.path,
-                url.params,
-                url.query,
-                url.fragment,
-            )),
-        })
-        media_url = yurl.URL(
-            scheme=scheme[1],
-            host=url.hostname,
-            path=url.path,
-            port=url.port or '',
-        )
-        config['MEDIA_URL'] = media_url.as_string()
-    if config['MEDIA_URL'] and not config['MEDIA_URL'].endswith('/'):
-        # Django (or something else?) silently sets MEDIA_URL to an empty
-        # string if it does not end with a '/'
-        config['MEDIA_URL'] = '{}/'.format(config['MEDIA_URL'])
+        if prefix == 'DEFAULT':
+            if not media_domain:
+                media_domain = '.'.join([
+                    bucket_name,
+                    storage_host,
+                ])
+            media_url = yurl.URL(
+                scheme='https',
+                host=media_domain,
+                path=config[add_prefix('AWS_BUCKET_PREFIX')],
+            )
+            config['MEDIA_URL'] = media_url.as_string()
+    else:
+        raise ImproperlyConfigured('{} is an unknown scheme'.format(scheme[0]))
     return config
 
 
@@ -259,3 +267,11 @@ class GZippedStaticFilesStorage(GZippedStaticFilesMixin,
 class ManifestGZippedStaticFilesStorage(GZippedStaticFilesMixin,
                                         ManifestStaticFilesStorage):
     pass
+
+
+class PrivateStorage(LazyObject):
+    def _setup(self):
+        self._wrapped = get_storage_class(settings.PRIVATE_FILE_STORAGE)()
+
+
+private_storage = PrivateStorage()

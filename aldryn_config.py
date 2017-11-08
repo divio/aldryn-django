@@ -216,6 +216,7 @@ class Form(forms.BaseForm):
         # Order matters, sentry settings rely on logging being configured.
         self.sentry_settings(settings, env=env)
         self.storage_settings_for_media(settings, env=env)
+        self.storage_settings_for_private_media(settings, env=env)
         self.storage_settings_for_static(data, settings, env=env)
         self.email_settings(data, settings, env=env)
         self.i18n_settings(data, settings, env=env)
@@ -414,9 +415,20 @@ class Form(forms.BaseForm):
         from aldryn_django.storage import parse_storage_url
         if env('DEFAULT_STORAGE_DSN'):
             settings['DEFAULT_STORAGE_DSN'] = env('DEFAULT_STORAGE_DSN')
+            settings['DEFAULT_STORAGE'] = env('DEFAULT_STORAGE')
         settings['MEDIA_URL'] = env('MEDIA_URL', '/media/')
         if 'DEFAULT_STORAGE_DSN' in settings:
-            settings.update(parse_storage_url(settings['DEFAULT_STORAGE_DSN']))
+            settings.update(
+                parse_storage_url(
+                    settings['DEFAULT_STORAGE_DSN'],
+                    prefix='DEFAULT',
+                    storage=settings['DEFAULT_STORAGE'] or 'aldryn_django.storage.S3MediaStorage'
+                ),
+            )
+        if settings.get('MEDIA_URL') and not settings['MEDIA_URL'].endswith('/'):
+            # Django (or something else?) silently sets MEDIA_URL to an empty
+            # string if it does not end with a '/'
+            settings['MEDIA_URL'] = '{}/'.format(settings['MEDIA_URL'])
         media_host = yurl.URL(settings['MEDIA_URL']).host
         settings['MEDIA_URL_IS_ON_OTHER_DOMAIN'] = (
             media_host and media_host not in settings['ALLOWED_HOSTS']
@@ -432,6 +444,20 @@ class Form(forms.BaseForm):
         if os.path.exists('/usr/bin/gifsicle'):
             cmds['gif'] = '/usr/bin/gifsicle --batch --optimize=2 {filename}'
         settings['THUMBNAIL_OPTIMIZE_COMMAND'] = cmds
+
+    def storage_settings_for_private_media(self, settings, env):
+        from aldryn_django.storage import parse_storage_url
+        if env('PRIVATE_STORAGE_DSN'):
+            settings['PRIVATE_STORAGE_DSN'] = env('PRIVATE_STORAGE_DSN')
+            settings['PRIVATE_STORAGE'] = env('PRIVATE_STORAGE')
+        if 'PRIVATE_STORAGE_DSN' in settings:
+            settings.update(
+                parse_storage_url(
+                    settings['PRIVATE_STORAGE_DSN'],
+                    prefix='PRIVATE',
+                    storage=settings['PRIVATE_STORAGE'] or 'aldryn_django.storage.PrivateS3MediaStorage'
+                )
+            )
 
     def storage_settings_for_static(self, data, settings, env):
         import yurl
