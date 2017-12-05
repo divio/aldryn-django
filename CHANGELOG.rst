@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+Next release
+------------
+
+* Remove unsupported and deprecated Nginx/Pagespeed settings
+
 
 1.11.5.2 (2017-10-10)
 ---------------------
