@@ -2,6 +2,14 @@ CHANGELOG
 =========
 
 
+1.11.10.1 (2018-02-02)
+---------------------
+
+* Update to Django 1.11.10
+  see https://docs.djangoproject.com/en/1.11/releases/1.11.10/
+  for details
+
+
 1.11.9.1 (2018-01-19)
 ---------------------
 
