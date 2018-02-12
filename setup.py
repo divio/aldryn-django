@@ -30,15 +30,12 @@ setup(
         'dj-email-url',
         'dj-redis-url',
         'django-cache-url',
-        'django-appconf',
         'django-getenv',
         'aldryn-client',
-        'webservices',
         'yurl',
 
         # error reporting
         'raven',
-        'opbeat',
 
         # wsgi server related
         'uwsgi',
@@ -46,8 +43,6 @@ setup(
 
         # database
         'psycopg2',
-        'structlog',
-        'click',
 
         # storage
         'django-storages',
@@ -61,6 +56,7 @@ setup(
         'pyOpenSSL',
 
         # helpers
+        'click',
         'aldryn-sites>=0.5.6',
 
         'easy-thumbnails>=2.2.1.1',
