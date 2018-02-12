@@ -49,12 +49,6 @@ setup(
         'boto>=2.40.0',
         'djeese-fs',
 
-        # security: avoid python insecure platform warnings
-        'cryptography',
-        'ndg-httpsclient',
-        'certifi',
-        'pyOpenSSL',
-
         # helpers
         'click',
         'aldryn-sites>=0.5.6',
