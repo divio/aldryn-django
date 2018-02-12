@@ -1,6 +1,12 @@
 CHANGELOG
 =========
 
+Next release
+------------
+
+* Remove unsupported and deprecated Nginx/Pagespeed settings
+* Send release and environment tracking info along with Sentry events.
+
 
 1.11.10.1 (2018-02-02)
 ----------------------
