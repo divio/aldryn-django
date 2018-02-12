@@ -378,7 +378,11 @@ class Form(forms.BaseForm):
 
         if sentry_dsn:
             settings['INSTALLED_APPS'].append('raven.contrib.django')
-            settings['RAVEN_CONFIG'] = {'dsn': sentry_dsn}
+            settings['RAVEN_CONFIG'] = {
+                'dsn': sentry_dsn,
+                'release': env('GIT_COMMIT', 'develop'),
+                'environment': env('STAGE', 'local'),
+            }
             settings['LOGGING']['handlers']['sentry'] = {
                 'level': 'ERROR',
                 'class': 'raven.contrib.django.raven_compat.handlers.SentryHandler',

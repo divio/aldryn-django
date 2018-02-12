@@ -2,6 +2,12 @@ CHANGELOG
 =========
 
 
+Next release
+------------
+
+* Send release and environment tracking info along with Sentry events.
+
+
 1.11.10.1 (2018-02-02)
 ---------------------
 
