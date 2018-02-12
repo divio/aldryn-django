@@ -299,27 +299,8 @@ class Form(forms.BaseForm):
     def server_settings(self, settings, env):
         settings['PORT'] = env('PORT', 80)
         settings['BACKEND_PORT'] = env('BACKEND_PORT', 8000)
-        settings['ENABLE_NGINX'] = env('ENABLE_NGINX', False)
-        settings['ENABLE_PAGESPEED'] = env(
-            'ENABLE_PAGESPEED',
-            env('PAGESPEED', False),
-        )
         settings['STATICFILES_DEFAULT_MAX_AGE'] = env(
-            'STATICFILES_DEFAULT_MAX_AGE',
-            # Keep BROWSERCACHE_MAX_AGE for backwards compatibility
-            env('BROWSERCACHE_MAX_AGE', 300),
-        )
-        settings['NGINX_CONF_PATH'] = env('NGINX_CONF_PATH')
-        settings['NGINX_PROCFILE_PATH'] = env('NGINX_PROCFILE_PATH')
-        settings['PAGESPEED_ADMIN_HTPASSWD_PATH'] = env(
-            'PAGESPEED_ADMIN_HTPASSWD_PATH',
-            os.path.join(
-                os.path.dirname(settings['NGINX_CONF_PATH']),
-                'pagespeed_admin.htpasswd',
-            )
-        )
-        settings['PAGESPEED_ADMIN_USER'] = env('PAGESPEED_ADMIN_USER')
-        settings['PAGESPEED_ADMIN_PASSWORD'] = env('PAGESPEED_ADMIN_PASSWORD')
+            'STATICFILES_DEFAULT_MAX_AGE', 300)
         settings['DJANGO_WEB_WORKERS'] = env('DJANGO_WEB_WORKERS', 3)
         settings['DJANGO_WEB_MAX_REQUESTS'] = env('DJANGO_WEB_MAX_REQUESTS', 500)
         settings['DJANGO_WEB_TIMEOUT'] = env('DJANGO_WEB_TIMEOUT', 120)

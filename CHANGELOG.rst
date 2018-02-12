@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+Next release
+------------
+
+* Remove unsupported and deprecated Nginx/Pagespeed settings
+
 
 Next release
 ------------
