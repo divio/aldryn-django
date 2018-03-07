@@ -1,9 +1,12 @@
 CHANGELOG
 =========
 
-Next release
-------------
+1.11.11.1 (2018-03-07)
+----------------------
 
+* Upgrade Django to 1.11.11 (fixes CVE-2018-7536 and CVE-2018-7537)
+  see https://www.djangoproject.com/weblog/2018/mar/06/security-releases/
+  for details
 * Remove unsupported and deprecated Nginx/Pagespeed settings.
 * Send release and environment tracking info along with Sentry events.
 * Remove unused dependencies.
