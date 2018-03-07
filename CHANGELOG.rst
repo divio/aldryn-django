@@ -1,6 +1,15 @@
 CHANGELOG
 =========
 
+
+1.9.13.5 (2018-03-07)
+---------------------
+
+* Upgrade Django to 1.9.13.post1 (fixes CVE-2018-7536 and CVE-2018-7537)
+  see https://www.djangoproject.com/weblog/2018/mar/06/security-releases/
+  for details
+
+
 1.9.13.4 (2017-10-10)
 ---------------------
 
