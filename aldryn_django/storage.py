@@ -24,10 +24,12 @@ import yurl
 SCHEMES = {
     's3': 'aldryn_django.storage.S3MediaStorage',
     'djfs': 'fs.django_storage.DjeeseFSStorage',
+    'azure': 'storages.backends.azure_storage.AzureStorage',
 }
 
 parse.uses_netloc.append('s3')
 parse.uses_netloc.append('djfs')
+parse.uses_netloc.append('azure')
 
 
 class S3MediaStorage(s3boto.S3BotoStorage):
@@ -190,6 +192,23 @@ def parse_storage_url(url):
             port=url.port or '',
         )
         config['MEDIA_URL'] = media_url.as_string()
+
+    elif scheme[0] == 'azure':
+        hostname = ('{}:{}'.format(url.hostname, url.port)
+                    if url.port else url.hostname)
+        config.update({
+            'AZURE_ACCOUNT_NAME': url.username or '',
+            'AZURE_ACCOUNT_KEY': url.password or '',
+            'AZURE_CONTAINER': url.path,
+        })
+        media_url = yurl.URL(
+            scheme=scheme[1],
+            host=url.hostname,
+            path=url.path,
+            port=url.port or '',
+        )
+        config['MEDIA_URL'] = media_url.as_string()
+
     if config['MEDIA_URL'] and not config['MEDIA_URL'].endswith('/'):
         # Django (or something else?) silently sets MEDIA_URL to an empty
         # string if it does not end with a '/'
