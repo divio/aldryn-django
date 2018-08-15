@@ -1,9 +1,7 @@
-
-from django.conf.urls import url
-from django.core.urlresolvers import reverse_lazy
+from django.urls import re_path, reverse_lazy
 from django.views.generic import RedirectView
 
 
 urlpatterns = [
-    url(r'^$', RedirectView.as_view(url=reverse_lazy('admin:index'))),
+    re_path(r'^$', RedirectView.as_view(url=reverse_lazy('admin:index'))),
 ]

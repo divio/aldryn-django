@@ -178,18 +178,16 @@ class Form(forms.BaseForm):
                     'loaders': loader_list_class([
                         'django.template.loaders.filesystem.Loader',
                         'django.template.loaders.app_directories.Loader',
-                        'django.template.loaders.eggs.Loader',
                     ]),
                 },
             },
         ]
 
-        settings['MIDDLEWARE_CLASSES'] = [
+        settings['MIDDLEWARE'] = [
             'django.contrib.sessions.middleware.SessionMiddleware',
             # 'django.middleware.common.CommonMiddleware',
             'django.middleware.csrf.CsrfViewMiddleware',
             'django.contrib.auth.middleware.AuthenticationMiddleware',
-            # 'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
             'django.contrib.messages.middleware.MessageMiddleware',
             'django.middleware.locale.LocaleMiddleware',
             'django.contrib.sites.middleware.CurrentSiteMiddleware',
@@ -199,7 +197,7 @@ class Form(forms.BaseForm):
         ]
 
         if not env('DISABLE_GZIP'):
-            settings['MIDDLEWARE_CLASSES'].insert(
+            settings['MIDDLEWARE'].insert(
                 0, 'django.middleware.gzip.GZipMiddleware')
 
         settings['SITE_ID'] = env('SITE_ID', 1)
@@ -264,8 +262,8 @@ class Form(forms.BaseForm):
 
         settings['INSTALLED_APPS'].append('aldryn_sites')
 
-        settings['MIDDLEWARE_CLASSES'].insert(
-            settings['MIDDLEWARE_CLASSES'].index('django.middleware.common.CommonMiddleware'),
+        settings['MIDDLEWARE'].insert(
+            settings['MIDDLEWARE'].index('django.middleware.common.CommonMiddleware'),
             'aldryn_sites.middleware.SiteMiddleware',
         )
 
@@ -291,35 +289,16 @@ class Form(forms.BaseForm):
         s['SECURE_CONTENT_TYPE_NOSNIFF'] = env('SECURE_CONTENT_TYPE_NOSNIFF', False)
         s['SECURE_BROWSER_XSS_FILTER'] = env('SECURE_BROWSER_XSS_FILTER', False)
 
-        s['MIDDLEWARE_CLASSES'].insert(
-            s['MIDDLEWARE_CLASSES'].index('aldryn_sites.middleware.SiteMiddleware') + 1,
+        s['MIDDLEWARE'].insert(
+            s['MIDDLEWARE'].index('aldryn_sites.middleware.SiteMiddleware') + 1,
             'django.middleware.security.SecurityMiddleware',
         )
 
     def server_settings(self, settings, env):
         settings['PORT'] = env('PORT', 80)
         settings['BACKEND_PORT'] = env('BACKEND_PORT', 8000)
-        settings['ENABLE_NGINX'] = env('ENABLE_NGINX', False)
-        settings['ENABLE_PAGESPEED'] = env(
-            'ENABLE_PAGESPEED',
-            env('PAGESPEED', False),
-        )
         settings['STATICFILES_DEFAULT_MAX_AGE'] = env(
-            'STATICFILES_DEFAULT_MAX_AGE',
-            # Keep BROWSERCACHE_MAX_AGE for backwards compatibility
-            env('BROWSERCACHE_MAX_AGE', 300),
-        )
-        settings['NGINX_CONF_PATH'] = env('NGINX_CONF_PATH')
-        settings['NGINX_PROCFILE_PATH'] = env('NGINX_PROCFILE_PATH')
-        settings['PAGESPEED_ADMIN_HTPASSWD_PATH'] = env(
-            'PAGESPEED_ADMIN_HTPASSWD_PATH',
-            os.path.join(
-                os.path.dirname(settings['NGINX_CONF_PATH']),
-                'pagespeed_admin.htpasswd',
-            )
-        )
-        settings['PAGESPEED_ADMIN_USER'] = env('PAGESPEED_ADMIN_USER')
-        settings['PAGESPEED_ADMIN_PASSWORD'] = env('PAGESPEED_ADMIN_PASSWORD')
+            'STATICFILES_DEFAULT_MAX_AGE', 300)
         settings['DJANGO_WEB_WORKERS'] = env('DJANGO_WEB_WORKERS', 3)
         settings['DJANGO_WEB_MAX_REQUESTS'] = env('DJANGO_WEB_MAX_REQUESTS', 500)
         settings['DJANGO_WEB_TIMEOUT'] = env('DJANGO_WEB_TIMEOUT', 120)
@@ -378,7 +357,11 @@ class Form(forms.BaseForm):
 
         if sentry_dsn:
             settings['INSTALLED_APPS'].append('raven.contrib.django')
-            settings['RAVEN_CONFIG'] = {'dsn': sentry_dsn}
+            settings['RAVEN_CONFIG'] = {
+                'dsn': sentry_dsn,
+                'release': env('GIT_COMMIT', 'develop'),
+                'environment': env('STAGE', 'local'),
+            }
             settings['LOGGING']['handlers']['sentry'] = {
                 'level': 'ERROR',
                 'class': 'raven.contrib.django.raven_compat.handlers.SentryHandler',
@@ -514,8 +497,8 @@ class Form(forms.BaseForm):
         settings['PREFIX_DEFAULT_LANGUAGE'] = not data['disable_default_language_prefix']
 
         if not settings['PREFIX_DEFAULT_LANGUAGE']:
-            settings['MIDDLEWARE_CLASSES'].insert(
-                settings['MIDDLEWARE_CLASSES'].index('django.middleware.locale.LocaleMiddleware'),
+            settings['MIDDLEWARE'].insert(
+                settings['MIDDLEWARE'].index('django.middleware.locale.LocaleMiddleware'),
                 'aldryn_django.middleware.LanguagePrefixFallbackMiddleware',
             )
 

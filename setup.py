@@ -23,22 +23,19 @@ setup(
     packages=find_packages(),
     install_requires=(
         'aldryn-addons',
-        'Django==1.11.5',
+        'Django==2.0.8',
 
         # setup utils
         'dj-database-url',
         'dj-email-url',
         'dj-redis-url',
         'django-cache-url',
-        'django-appconf',
         'django-getenv',
         'aldryn-client',
-        'webservices',
         'yurl',
 
         # error reporting
         'raven',
-        'opbeat',
 
         # wsgi server related
         'uwsgi',
@@ -46,21 +43,14 @@ setup(
 
         # database
         'psycopg2',
-        'structlog',
-        'click',
 
         # storage
         'django-storages',
         'boto>=2.40.0',
         'djeese-fs',
 
-        # security: avoid python insecure platform warnings
-        'cryptography',
-        'ndg-httpsclient',
-        'certifi',
-        'pyOpenSSL',
-
         # helpers
+        'click',
         'aldryn-sites>=0.5.6',
 
         'easy-thumbnails>=2.2.1.1',

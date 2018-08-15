@@ -35,7 +35,7 @@ Manual Installation
 Add ``aldryn-django`` to your projects ``requirements.txt`` or pip install it.
 ::
 
-    pip install aldryn-django>=1.8,<1.9
+    pip install aldryn-django>=2.0,<2.1
 
 
 The version is made up of the Django release with an added digit for the
