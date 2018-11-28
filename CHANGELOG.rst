@@ -1,6 +1,13 @@
 CHANGELOG
 =========
 
+1.8.19.2 (2018-11-28)
+---------------------
+
+* Added dependency fixes to ``setup.py`` for better compatibility on
+  legacy projects
+
+
 1.8.19.1 (2018-03-07)
 ---------------------
 

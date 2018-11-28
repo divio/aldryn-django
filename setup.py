@@ -50,7 +50,7 @@ setup(
         'click',
 
         # storage
-        'django-storages',
+        'django-storages<=1.6.6',
         'boto>=2.40.0',
         'djeese-fs',
 
@@ -62,11 +62,18 @@ setup(
         # required until https://code.djangoproject.com/ticket/20869 lands
         'django-debreach',
 
-        # helpers
+        # helpersdivi
         'aldryn-sites>=0.5.4',
 
         # TODO: should be in (aldryn-)django-cms
         'django-reversion<1.9',
+
+        # pinning addons for Django 1.8 compatibility
+        'aldryn-apphooks-config<=0.3.3',
+        'django-phonenumber-field<2.0.0',
+        'django-polymorphic<=1.3.1',
+        'django-taggit<=0.22.2',
+        'djangocms-attributes-field<0.4.0',
     ) + extra_dependencies,
     entry_points='''
         [console_scripts]
