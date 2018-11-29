@@ -62,7 +62,7 @@ setup(
         # required until https://code.djangoproject.com/ticket/20869 lands
         'django-debreach',
 
-        # helpersdivi
+        # helpers
         'aldryn-sites>=0.5.4',
 
         # TODO: should be in (aldryn-)django-cms
