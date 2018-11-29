@@ -72,6 +72,7 @@ setup(
         'aldryn-apphooks-config<=0.3.3',
         'django-phonenumber-field<2.0.0',
         'django-polymorphic<=1.3.1',
+        'django-simple-sso<0.14.0',
         'django-taggit<=0.22.2',
         'djangocms-attributes-field<0.4.0',
     ) + extra_dependencies,
