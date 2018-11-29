@@ -70,6 +70,8 @@ setup(
 
         # pinning addons for Django 1.8 compatibility
         'aldryn-apphooks-config<=0.3.3',
+        'aldryn-boilerplates<0.8.0',
+        'aldryn-sites<0.6.0',
         'django-phonenumber-field<2.0.0',
         'django-polymorphic<=1.3.1',
         'django-simple-sso<0.14.0',
