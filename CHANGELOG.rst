@@ -1,10 +1,17 @@
 CHANGELOG
 =========
 
+1.11.15.2 (unreleased)
+----------------------
+
+* Changed MIDDLEWARE_CLASSES to MIDDLEWARE
+
+
 1.11.15.1 (2018-08-01)
 ----------------------
 
 * Upgrade Django to 1.11.15 (fixes CVE-2018-14574)
+
 
 1.11.11.1 (2018-03-07)
 ----------------------
