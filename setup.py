@@ -23,7 +23,7 @@ setup(
     packages=find_packages(),
     install_requires=(
         'aldryn-addons',
-        'Django==2.1.2',
+        'Django==2.1.4',
 
         # setup utils
         'dj-database-url',
