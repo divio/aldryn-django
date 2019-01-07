@@ -14,7 +14,7 @@ else:
 
 
 setup(
-    name="aldryn-django",
+    name='aldryn-django',
     version=__version__,
     description='An opinionated Django setup bundled as an Aldryn Addon',
     author='Divio AG',
@@ -23,7 +23,7 @@ setup(
     packages=find_packages(),
     install_requires=(
         'aldryn-addons',
-        'Django==1.11.17',
+        'Django==1.11.18',
 
         # setup utils
         'dj-database-url',
