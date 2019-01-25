@@ -1,6 +1,6 @@
 [run]
 branch = True
-source = aldryn_sso
+source = aldryn_django
 omit =
     migrations/*
     tests/*
