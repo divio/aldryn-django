@@ -158,5 +158,5 @@ You can run tests by executing::
 
 .. |python| image:: https://img.shields.io/badge/python-2.7%20%7C%203.4+-blue.svg
     :target: https://pypi.org/project/aldryn-django/
-.. |django| image:: https://img.shields.io/badge/django-2.0-blue.svg
+.. |django| image:: https://img.shields.io/badge/django-2.1-blue.svg
     :target: https://www.djangoproject.com/
