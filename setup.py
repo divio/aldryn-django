@@ -3,6 +3,7 @@
 import sys
 
 from aldryn_django import __version__
+
 from setuptools import find_packages, setup
 
 
