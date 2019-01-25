@@ -1,12 +1,13 @@
-import shutil
+# -*- coding: utf-8 -*-
 import mimetypes
+import shutil
 import subprocess
 
-from django.contrib.staticfiles.finders import get_finders
-from django.core.management.base import BaseCommand
 from django.conf import settings
-from django.core.files.temp import NamedTemporaryFile
+from django.contrib.staticfiles.finders import get_finders
 from django.core.files import File
+from django.core.files.temp import NamedTemporaryFile
+from django.core.management.base import BaseCommand
 
 
 class Command(BaseCommand):
