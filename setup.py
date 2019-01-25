@@ -1,7 +1,9 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import sys
-from setuptools import setup, find_packages
+
 from aldryn_django import __version__
+from setuptools import find_packages, setup
 
 
 if sys.version_info[0] == 2:
@@ -13,52 +15,79 @@ else:
     extra_dependencies = ()
 
 
+REQUIREMENTS = [
+    'aldryn-addons',
+    'Django==2.0.10',
+
+    # setup utils
+    'dj-database-url',
+    'dj-email-url',
+    'dj-redis-url',
+    'django-cache-url',
+    'django-getenv',
+    'aldryn-client',
+    'yurl',
+
+    # error reporting
+    'raven',
+
+    # wsgi server related
+    'uwsgi',
+    'dj-static',
+
+    # database
+    'psycopg2',
+
+    # storage
+    'django-storages',
+    'boto>=2.40.0',
+    'djeese-fs',
+
+    # helpers
+    'click',
+    'aldryn-sites>=0.5.6',
+
+    'easy-thumbnails>=2.2.1.1',
+] + extra_dependencies
+
+
+CLASSIFIERS = [
+    'Development Status :: 5 - Production/Stable',
+    'Environment :: Web Environment',
+    'Intended Audience :: Developers',
+    'License :: OSI Approved :: BSD License',
+    'Operating System :: OS Independent',
+    'Framework :: Django',
+    'Framework :: Django :: 1.11',
+    'Framework :: Django :: 2.0',
+    'Framework :: Django :: 2.1',
+    'Programming Language :: Python',
+    'Programming Language :: Python :: 2',
+    'Programming Language :: Python :: 2.7',
+    'Programming Language :: Python :: 3',
+    'Programming Language :: Python :: 3.4',
+    'Programming Language :: Python :: 3.5',
+    'Programming Language :: Python :: 3.6',
+    'Topic :: Internet :: WWW/HTTP',
+    'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
+    'Topic :: Software Development',
+    'Topic :: Software Development :: Libraries',
+]
+
+
 setup(
-    name="aldryn-django",
+    name='aldryn-django',
     version=__version__,
-    description='An opinionated Django setup bundled as an Aldryn Addon',
     author='Divio AG',
     author_email='info@divio.ch',
-    url='https://github.com/aldryn/aldryn-django',
-    packages=find_packages(),
-    install_requires=(
-        'aldryn-addons',
-        'Django==2.0.10',
-
-        # setup utils
-        'dj-database-url',
-        'dj-email-url',
-        'dj-redis-url',
-        'django-cache-url',
-        'django-getenv',
-        'aldryn-client',
-        'yurl',
-
-        # error reporting
-        'raven',
-
-        # wsgi server related
-        'uwsgi',
-        'dj-static',
-
-        # database
-        'psycopg2',
-
-        # storage
-        'django-storages',
-        'boto>=2.40.0',
-        'djeese-fs',
-
-        # helpers
-        'click',
-        'aldryn-sites>=0.5.6',
-
-        'easy-thumbnails>=2.2.1.1',
-    ) + extra_dependencies,
-    entry_points='''
-        [console_scripts]
-        aldryn-django=aldryn_django.cli:main
-    ''',
+    url='https://github.com/divio/aldryn-django',
+    license='BSD',
+    description='An opinionated Django setup bundled as an Aldryn Addon',
+    long_description=open('README.rst').read(),
+    packages=find_packages(exclude=['tests']),
     include_package_data=True,
     zip_safe=False,
+    install_requires=REQUIREMENTS,
+    classifiers=CLASSIFIERS,
+    test_suite='tests.settings.run',
 )
