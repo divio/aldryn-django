@@ -8,11 +8,11 @@ from setuptools import find_packages, setup
 
 if sys.version_info[0] == 2:
     # on python2 the backport of subprocess32 is needed
-    extra_dependencies = (
+    extra_dependencies = [
         'subprocess32',
-    )
+    ]
 else:
-    extra_dependencies = ()
+    extra_dependencies = []
 
 
 REQUIREMENTS = [
