@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.conf import settings
-from django.core.urlresolvers import is_valid_path, get_script_prefix
+from django.core.urlresolvers import get_script_prefix, is_valid_path
 from django.http import HttpResponseRedirect
 from django.utils.deprecation import MiddlewareMixin
 from django.utils.translation import get_language_from_path

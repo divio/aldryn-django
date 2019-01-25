@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
-import os
 import gzip
+import os
 import shutil
 import warnings
 
-from django.core.management.base import BaseCommand
-from django.core.management import call_command
 from django.conf import settings
 from django.contrib.staticfiles.storage import staticfiles_storage
+from django.core.management import call_command
+from django.core.management.base import BaseCommand
 
 from aldryn_django.storage import GZippedStaticFilesMixin
 
