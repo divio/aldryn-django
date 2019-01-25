@@ -2,7 +2,7 @@
 Aldryn Django
 =============
 
-|pypi| |build| |coverage|
+|build| |coverage|
 
 An opinionated Django setup bundled as a Divio Cloud addon.
 
@@ -53,10 +53,7 @@ For a manual install:
     ``aldryn-addons`` first!
 
 
-Add ``aldryn-django`` to your projects ``requirements.txt`` or pip install it::
-
-    pip install aldryn-django>=2.1,<2.2
-
+Add ``aldryn-django`` to your projects ``requirements.txt`` or pip install it.
 
 The version is made up of the Django release with an added digit for the
 release version of this package itself.
@@ -149,8 +146,6 @@ You can run tests by executing::
     python setup.py test
 
 
-.. |pypi| image:: https://badge.fury.io/py/aldryn-django.svg
-    :target: http://badge.fury.io/py/aldryn-django
 .. |build| image:: https://travis-ci.org/divio/aldryn-django.svg?branch=master
     :target: https://travis-ci.org/divio/aldryn-django
 .. |coverage| image:: https://codecov.io/gh/divio/aldryn-django/branch/master/graph/badge.svg
