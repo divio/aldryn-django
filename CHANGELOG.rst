@@ -3,6 +3,13 @@ Changelog
 =========
 
 
+2.0.10.2 (unreleased)
+=====================
+
+* Added test matrix
+* Adapted code base to align with other supported addons
+
+
 2.0.10.1 (2019-01-07)
 =====================
 
