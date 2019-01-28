@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.conf import settings
 from django.conf.urls.i18n import i18n_patterns as django_i18n_patterns
 

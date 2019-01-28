@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.urls import re_path, reverse_lazy
 from django.views.generic import RedirectView
 
