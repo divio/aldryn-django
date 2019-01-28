@@ -151,7 +151,7 @@ You can run tests by executing::
 .. |coverage| image:: https://codecov.io/gh/divio/aldryn-django/branch/master/graph/badge.svg
     :target: https://codecov.io/gh/divio/aldryn-django
 
-.. |python| image:: https://img.shields.io/badge/python-2.7%20%7C%203.4+-blue.svg
+.. |python| image:: https://img.shields.io/badge/python-3.4%20%7C%203.5%20%7C%203.6%20%7C%203.7-blue.svg
     :target: https://pypi.org/project/aldryn-django/
 .. |django| image:: https://img.shields.io/badge/django-2.0-blue.svg
     :target: https://www.djangoproject.com/

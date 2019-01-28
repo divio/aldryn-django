@@ -8,6 +8,7 @@ Changelog
 
 * Added test matrix
 * Adapted code base to align with other supported addons
+* Allow users to configure aldryn sites redirect type via env variable
 
 
 2.0.10.1 (2019-01-07)
