@@ -12,8 +12,14 @@ matrix:
     - python: 2.7
       env: DJANGO='dj111' CMS='cms34'
     - python: 3.4
-      env: DJANGO='dj111' CMS='cms35'
+      env: DJANGO='dj111' CMS='cms34'
     - python: 3.5
+      env: DJANGO='dj111' CMS='cms34'
+    - python: 3.6
+      env: DJANGO='dj111' CMS='cms36'
+    - python: 3.7
+      dist: xenial
+      sudo: required
       env: DJANGO='dj111' CMS='cms36'
 
 install:
@@ -22,6 +28,7 @@ install:
   - "if [[ $TRAVIS_PYTHON_VERSION == '3.4' ]]; then export PY_VER=py34; fi"
   - "if [[ $TRAVIS_PYTHON_VERSION == '3.5' ]]; then export PY_VER=py35; fi"
   - "if [[ $TRAVIS_PYTHON_VERSION == '3.6' ]]; then export PY_VER=py36; fi"
+  - "if [[ $TRAVIS_PYTHON_VERSION == '3.7' ]]; then export PY_VER=py37; fi"
   - "if [[ ${DJANGO}z != 'z' ]]; then export TOX_ENV=$PY_VER-$DJANGO-$CMS; fi"
 
 script:
