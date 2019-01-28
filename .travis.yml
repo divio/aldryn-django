@@ -18,7 +18,7 @@ matrix:
     - python: 3.6
       env: DJANGO='dj111' CMS='cms36'
     - python: 3.7
-      env: DJANGO='dj111' CMS='cms36'
+      env: DJANGO='dj111' CMS='cms37'
 
 install:
   - pip install coverage isort tox
