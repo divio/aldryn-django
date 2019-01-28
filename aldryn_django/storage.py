@@ -1,24 +1,20 @@
+# -*- coding: utf-8 -*-
+import gzip
 import os
 import re
 import shutil
-import gzip
 
 from django.conf import settings
 from django.contrib.staticfiles.storage import (
-    StaticFilesStorage,
-    ManifestStaticFilesStorage,
+    ManifestStaticFilesStorage, StaticFilesStorage,
 )
-from django.core.files.storage import FileSystemStorage
 from django.core.exceptions import ImproperlyConfigured
+from django.core.files.storage import FileSystemStorage
 
-from boto.s3.connection import (
-    SubdomainCallingFormat,
-    OrdinaryCallingFormat,
-)
-
+import yurl
+from boto.s3.connection import OrdinaryCallingFormat, SubdomainCallingFormat
 from six.moves.urllib import parse
 from storages.backends import s3boto
-import yurl
 
 
 SCHEMES = {
