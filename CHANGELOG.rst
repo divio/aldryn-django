@@ -3,7 +3,7 @@ Changelog
 =========
 
 
-2.0.10.2 (unreleased)
+2.0.10.2 (2019-01-29)
 =====================
 
 * Added test matrix
