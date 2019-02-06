@@ -10,13 +10,13 @@ matrix:
       env: TOX_ENV='isort'
     # Django 2.1
     - python: 3.5
-      env: DJANGO='dj21' CMS='cms36'
+      env: DJANGO='dj22' CMS='cms36'
     - python: 3.6
-      env: DJANGO='dj21' CMS='cms36'
+      env: DJANGO='dj22' CMS='cms36'
     - python: 3.7
       dist: xenial
       sudo: required
-      env: DJANGO='dj21' CMS='cms36'
+      env: DJANGO='dj22' CMS='cms36'
 
 install:
   - pip install coverage isort tox

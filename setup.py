@@ -18,7 +18,7 @@ else:
 
 REQUIREMENTS = [
     'aldryn-addons',
-    'Django==2.1.5',
+    'Django==2.2a1',
 
     # setup utils
     'dj-database-url',
@@ -59,9 +59,7 @@ CLASSIFIERS = [
     'License :: OSI Approved :: BSD License',
     'Operating System :: OS Independent',
     'Framework :: Django',
-    'Framework :: Django :: 1.11',
-    'Framework :: Django :: 2.0',
-    'Framework :: Django :: 2.1',
+    'Framework :: Django :: 2.2',
     'Programming Language :: Python',
     'Programming Language :: Python :: 3',
     'Programming Language :: Python :: 3.5',
@@ -89,4 +87,8 @@ setup(
     install_requires=REQUIREMENTS,
     classifiers=CLASSIFIERS,
     test_suite='tests.settings.run',
+    entry_points='''
+        [console_scripts]
+        aldryn-django=aldryn_django.cli:main
+    ''',
 )
