@@ -3,7 +3,13 @@ Changelog
 =========
 
 
-2.2.0.0 (unreleased)
+2.2.0.2 (2019-02-11)
 ====================
 
-* Initial release
+* Added beta 1 release
+
+
+2.2.0.1 (2019-02-06)
+====================
+
+* Added alpha 1 release
