@@ -3,12 +3,14 @@ Changelog
 =========
 
 
-2.0.11.1 (2019-02-11)
+2.0.12.1 (2019-02-11)
 =====================
 
-* Upgrade Django to 2.0.11 (fixes CVE-2019-6975)
+* Upgrade Django to 2.0.12 (fixes CVE-2019-6975)
   see https://www.djangoproject.com/weblog/2019/feb/11/security-releases/
   for details
+* Django 2.0.11 was faulty and skipped, see
+  https://code.djangoproject.com/ticket/30175 for details
 
 
 2.0.10.3 (2019-01-29)
