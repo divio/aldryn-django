@@ -146,9 +146,9 @@ You can run tests by executing::
     python setup.py test
 
 
-.. |build| image:: https://travis-ci.org/divio/aldryn-django.svg?branch=master
+.. |build| image:: https://travis-ci.org/divio/aldryn-django.svg?branch=support/2.0.x
     :target: https://travis-ci.org/divio/aldryn-django
-.. |coverage| image:: https://codecov.io/gh/divio/aldryn-django/branch/master/graph/badge.svg
+.. |coverage| image:: https://codecov.io/gh/divio/aldryn-django/branch/support/2.0.x/graph/badge.svg
     :target: https://codecov.io/gh/divio/aldryn-django
 
 .. |python| image:: https://img.shields.io/badge/python-3.4%20%7C%203.5%20%7C%203.6%20%7C%203.7-blue.svg
