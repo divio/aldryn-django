@@ -11,7 +11,7 @@ import click
 
 import yurl
 
-from aldryn_addons.utils import openfile, boolean_ish
+from aldryn_addons.utils import boolean_ish
 
 if six.PY2:
     # backport of python3 subprocess with timeout support
