@@ -2,6 +2,12 @@ CHANGELOG
 =========
 
 
+1.9.13.6 (2018-03-07)
+---------------------
+
+* Remove unsupported and deprecated Nginx/Pagespeed settings
+
+
 1.9.13.5 (2018-03-07)
 ---------------------
 
