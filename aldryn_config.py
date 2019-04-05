@@ -369,7 +369,7 @@ class Form(forms.BaseForm):
 
             sentry_sdk.init(
                 dsn=sentry_dsn,
-                integrations=[ sentry_sdk.integrations.django import DjangoIntegration()],
+                integrations=[ sentry_sdk.integrations.django.DjangoIntegration()],
                 debug=settings['DEBUG'],
                 release=env('GIT_COMMIT', 'develop'),
                 environment=env('STAGE', 'local'),
