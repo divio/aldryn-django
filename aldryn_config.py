@@ -366,11 +366,10 @@ class Form(forms.BaseForm):
 
         if sentry_dsn:
             import sentry_sdk
-            from sentry_sdk.integrations.django import DjangoIntegration
 
             sentry_sdk.init(
                 dsn=sentry_dsn,
-                integrations=[DjangoIntegration()],
+                integrations=[ sentry_sdk.integrations.django import DjangoIntegration()],
                 debug=settings['DEBUG'],
                 release=env('GIT_COMMIT', 'develop'),
                 environment=env('STAGE', 'local'),
