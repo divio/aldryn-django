@@ -3,7 +3,7 @@ Changelog
 =========
 
 
-1.11.20.2 (unreleased)
+1.11.20.2 (2019-04-09)
 ======================
 
 * Replaced raven with sentry-sdk
