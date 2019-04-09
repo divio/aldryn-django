@@ -30,7 +30,7 @@ REQUIREMENTS = [
     'yurl',
 
     # error reporting
-    'raven',
+    'sentry-sdk',
 
     # wsgi server related
     'uwsgi',
