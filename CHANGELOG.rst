@@ -3,6 +3,13 @@ Changelog
 =========
 
 
+2.1.8.1 (2019-04-09)
+====================
+
+* Add Django 2.1.8 support
+* Replaced raven with sentry-sdk
+
+
 2.1.7.1 (2019-02-11)
 ====================
 

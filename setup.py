@@ -18,7 +18,7 @@ else:
 
 REQUIREMENTS = [
     'aldryn-addons',
-    'Django==2.1.7',
+    'Django==2.1.8',
 
     # setup utils
     'dj-database-url',
@@ -30,7 +30,7 @@ REQUIREMENTS = [
     'yurl',
 
     # error reporting
-    'raven',
+    'sentry-sdk',
 
     # wsgi server related
     'uwsgi',
