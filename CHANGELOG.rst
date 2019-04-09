@@ -3,6 +3,13 @@ Changelog
 =========
 
 
+2.2.0.4 (2019-04-09)
+====================
+
+* Added final release
+* Replaced raven with sentry-sdk
+
+
 2.2.0.3 (2019-03-21)
 ====================
 
