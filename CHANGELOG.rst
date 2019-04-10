@@ -3,6 +3,12 @@ Changelog
 =========
 
 
+1.11.20.3 (2019-04-10)
+======================
+
+* Pinned django-select due to compatibility issues with Django 1.11
+
+
 1.11.20.2 (2019-04-09)
 ======================
 

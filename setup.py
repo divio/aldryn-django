@@ -49,6 +49,9 @@ REQUIREMENTS = [
     'aldryn-sites>=0.5.6',
 
     'easy-thumbnails>=2.2.1.1',
+
+    # pin not supported versions
+    'django-select2<7.0',
 ] + extra_dependencies
 
 
