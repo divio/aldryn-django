@@ -8,9 +8,11 @@ from aldryn_django import __version__
 
 
 if sys.version_info[0] == 2:
-    # on python2 the backport of subprocess32 is needed
     extra_dependencies = [
+        # on python2 the backport of subprocess32 is needed
         'subprocess32',
+        # django-mptt >=0.9 does not support python2 anymore
+        'django-mptt<=0.8.7',
     ]
 else:
     extra_dependencies = []
