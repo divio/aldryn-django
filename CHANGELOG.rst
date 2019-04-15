@@ -3,6 +3,12 @@ Changelog
 =========
 
 
+1.11.20.4 (2019-04-15)
+======================
+
+* Pinned django-mptt due to compatibility issues with Python 2
+
+
 1.11.20.3 (2019-04-10)
 ======================
 
