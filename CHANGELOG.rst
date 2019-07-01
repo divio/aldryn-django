@@ -3,6 +3,14 @@ Changelog
 =========
 
 
+2.1.10.1 (2019-07-01)
+=====================
+
+* Upgrade Django to 2.1.10 (fixes CVE-2019-12781)
+  see https://www.djangoproject.com/weblog/2019/jul/01/security-releases/
+  for details
+
+
 2.1.9.1 (2019-06-03)
 ====================
 
