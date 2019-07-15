@@ -6,7 +6,6 @@ import sys
 from aldryn_client import forms
 
 
-
 class CachedLoader(list):
     """
     A list subclass to be used for the template loaders option
