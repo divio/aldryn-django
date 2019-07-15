@@ -6,7 +6,6 @@ import sys
 from aldryn_client import forms
 
 
-
 class CachedLoader(list):
     """
     A list subclass to be used for the template loaders option
@@ -41,7 +40,7 @@ class Form(forms.BaseForm):
     languages = forms.CharField(
         'Languages',
         required=True,
-        initial='["en", "de"]',
+        initial='["en", "de"]'
     )
     use_manifeststaticfilesstorage = forms.CheckboxField(
         'Hash static file names',
