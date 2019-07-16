@@ -1,6 +1,7 @@
 language: python
 
 sudo: false
+dist: xenial
 
 matrix:
   include:
@@ -18,8 +19,6 @@ matrix:
     - python: 3.6
       env: DJANGO='dj111' CMS='cms36'
     - python: 3.7
-      dist: xenial
-      sudo: required
       env: DJANGO='dj111' CMS='cms36'
 
 install:
