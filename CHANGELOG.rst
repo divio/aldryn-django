@@ -2,6 +2,11 @@
 Changelog
 =========
 
+2.2.3.2 (unreleased)
+====================
+
+ * Removed faulty help text for languages settings
+
 
 2.2.3.1 (2019-07-01)
 ====================
