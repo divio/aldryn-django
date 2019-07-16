@@ -6,9 +6,6 @@ import sys
 from aldryn_client import forms
 
 
-SYSTEM_FIELD_WARNING = 'WARNING: this field is auto-written. Please do not change it here.'
-
-
 class CachedLoader(list):
     """
     A list subclass to be used for the template loaders option
@@ -43,8 +40,7 @@ class Form(forms.BaseForm):
     languages = forms.CharField(
         'Languages',
         required=True,
-        initial='["en", "de"]',
-        help_text=SYSTEM_FIELD_WARNING,
+        initial='["en", "de"]'
     )
     use_manifeststaticfilesstorage = forms.CheckboxField(
         'Hash static file names',
