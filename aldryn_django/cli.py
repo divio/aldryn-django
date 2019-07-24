@@ -134,36 +134,35 @@ def start_uwsgi_command(settings, port=None):
 
     serve_static = False
 
-    if not settings['ENABLE_SYNCING']:
-        if not settings['STATIC_URL_IS_ON_OTHER_DOMAIN']:
-            serve_static = True
-            cmd.extend(get_static_serving_args(
-                settings['STATIC_URL'],
-                settings['STATIC_ROOT'],
-                settings['STATIC_HEADERS'],
-            ))
+    if not settings['STATIC_URL_IS_ON_OTHER_DOMAIN']:
+        serve_static = True
+        cmd.extend(get_static_serving_args(
+            settings['STATIC_URL'],
+            settings['STATIC_ROOT'],
+            settings['STATIC_HEADERS'],
+        ))
 
-        if not settings['MEDIA_URL_IS_ON_OTHER_DOMAIN']:
-            serve_static = True
-            cmd.extend(get_static_serving_args(
-                settings['MEDIA_URL'],
-                settings['MEDIA_ROOT'],
-                settings['MEDIA_HEADERS'],
-            ))
+    if not settings['MEDIA_URL_IS_ON_OTHER_DOMAIN']:
+        serve_static = True
+        cmd.extend(get_static_serving_args(
+            settings['MEDIA_URL'],
+            settings['MEDIA_ROOT'],
+            settings['MEDIA_HEADERS'],
+        ))
 
-        if serve_static:
-            cmd.extend([
-                # Start 2 offloading threads for each worker
-                '--offload-threads=2',
+    if serve_static:
+        cmd.extend([
+            # Start 2 offloading threads for each worker
+            '--offload-threads=2',
 
-                # Cache resolved paths for up to 1 day (limited to 5k entries
-                # of max 1kB size each)
-                '--static-cache-paths=86400',
-                '--static-cache-paths-name=staticpaths',
-                '--cache2=name=staticpaths,items=5000,blocksize=1k,purge_lru,ignore_full',
+            # Cache resolved paths for up to 1 day (limited to 5k entries
+            # of max 1kB size each)
+            '--static-cache-paths=86400',
+            '--static-cache-paths-name=staticpaths',
+            '--cache2=name=staticpaths,items=5000,blocksize=1k,purge_lru,ignore_full',
 
-                # Serve .gz files if that version is available
-                '--static-gzip-all',
-            ])
+            # Serve .gz files if that version is available
+            '--static-gzip-all',
+        ])
 
     return cmd

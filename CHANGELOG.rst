@@ -2,6 +2,13 @@
 Changelog
 =========
 
+
+2.2.3.3 (2019-07-24)
+====================
+
+* Removed ``ENABLE_SYNCING`` and thus serving files always from uwsgi
+
+
 2.2.3.2 (2019-07-16)
 ====================
 
