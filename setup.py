@@ -36,7 +36,6 @@ REQUIREMENTS = [
 
     # wsgi server related
     'uwsgi',
-    'dj-static',
 
     # database
     'psycopg2',

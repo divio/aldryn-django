@@ -3,6 +3,13 @@ Changelog
 =========
 
 
+1.11.22.3 (2019-07-24)
+======================
+
+* Removed ``ENABLE_SYNCING`` and thus serving files always from uwsgi
+* Removed dj-static requirement and relevant code
+
+
 1.11.22.2 (2019-07-16)
 ======================
 
