@@ -15,7 +15,6 @@ def manage(path):
 def wsgi(path):
     _setup(path=path)
     from django.core.wsgi import get_wsgi_application
-    from django.conf import settings
     app = get_wsgi_application()
     return app
 
