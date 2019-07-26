@@ -16,4 +16,8 @@ admin.autodiscover()
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-] + (static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) if 'runserver' in sys.argv else [])
+]
+
+# serve static files differently on local development
+if 'runserver' in sys.argv:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
