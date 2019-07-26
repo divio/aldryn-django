@@ -3,6 +3,12 @@ Changelog
 =========
 
 
+1.11.22.4 (2019-07-26)
+======================
+
+* Make sure static files are server different locally
+
+
 1.11.22.3 (2019-07-24)
 ======================
 
