@@ -210,6 +210,8 @@ class Form(forms.BaseForm):
         self.sentry_settings(settings, env=env)
         self.storage_settings_for_media(settings, env=env)
         self.storage_settings_for_static(data, settings, env=env)
+        # Order matters, dev server settings rely on storage settings.
+        self.dev_server_settings(settings, env=env)
         self.email_settings(data, settings, env=env)
         self.i18n_settings(data, settings, env=env)
         self.migration_settings(settings, env=env)
@@ -308,6 +310,11 @@ class Form(forms.BaseForm):
 
         # https://docs.djangoproject.com/en/1.8/ref/settings/#use-x-forwarded-host
         settings['USE_X_FORWARDED_HOST'] = env('USE_X_FORWARDED_HOST', False)
+
+    def dev_server_settings(self, settings, env):
+        settings['IS_RUNNING_DEVSERVER'] = False
+        if 'runserver' in sys.argv and not settings['MEDIA_URL_IS_ON_OTHER_DOMAIN']:
+            settings['IS_RUNNING_DEVSERVER'] = True
 
     def logging_settings(self, settings, env):
         settings['LOGGING'] = {
