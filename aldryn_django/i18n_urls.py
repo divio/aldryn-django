@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.conf import settings
-from django.urls import re_path
 from django.conf.urls.static import static
+from django.urls import re_path
 
 
 if settings.ALDRYN_DJANGO_ENABLE_GIS:
