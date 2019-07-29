@@ -3,6 +3,12 @@ Changelog
 =========
 
 
+1.11.22.4 (2019-07-29)
+======================
+
+* Serve static files from ``django.conf.urls.static`` during local development
+
+
 1.11.22.3 (2019-07-24)
 ======================
 

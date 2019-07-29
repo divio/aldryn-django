@@ -305,6 +305,7 @@ class Form(forms.BaseForm):
         settings['DJANGO_WEB_WORKERS'] = env('DJANGO_WEB_WORKERS', 3)
         settings['DJANGO_WEB_MAX_REQUESTS'] = env('DJANGO_WEB_MAX_REQUESTS', 500)
         settings['DJANGO_WEB_TIMEOUT'] = env('DJANGO_WEB_TIMEOUT', 120)
+        settings['IS_RUNNING_DEVSERVER'] = 'runserver' in sys.argv
 
         # https://docs.djangoproject.com/en/1.8/ref/settings/#use-x-forwarded-host
         settings['USE_X_FORWARDED_HOST'] = env('USE_X_FORWARDED_HOST', False)
