@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.conf import settings
 from django.urls import re_path
+from django.conf.urls.static import static
 
 
 if settings.ALDRYN_DJANGO_ENABLE_GIS:
@@ -14,3 +15,7 @@ admin.autodiscover()
 urlpatterns = [
     re_path(r'^admin/', admin.site.urls),
 ]
+
+# serve static files differently on local development
+if settings.IS_RUNNING_DEVSERVER and not settings.MEDIA_URL_IS_ON_OTHER_DOMAIN:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
