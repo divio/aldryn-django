@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-import sys
-
 from django.conf import settings
 from django.conf.urls import include, url
 from django.conf.urls.static import static
@@ -19,5 +17,5 @@ urlpatterns = [
 ]
 
 # serve static files differently on local development
-if setting.IS_RUNNING_DEVSERVER and not settings.MEDIA_URL_IS_ON_OTHER_DOMAIN:
+if settings.IS_RUNNING_DEVSERVER and not settings.MEDIA_URL_IS_ON_OTHER_DOMAIN:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
