@@ -19,5 +19,5 @@ urlpatterns = [
 ]
 
 # serve static files differently on local development
-if 'runserver' in sys.argv:
+if 'runserver' in sys.argv and not settings.MEDIA_URL_IS_ON_OTHER_DOMAIN:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
