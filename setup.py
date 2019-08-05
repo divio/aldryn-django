@@ -18,7 +18,7 @@ else:
 
 REQUIREMENTS = [
     'aldryn-addons',
-    'Django==2.2.3',
+    'Django==2.2.4',
 
     # setup utils
     'dj-database-url',
