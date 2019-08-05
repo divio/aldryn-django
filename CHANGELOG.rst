@@ -3,6 +3,15 @@ Changelog
 =========
 
 
+2.1.11.1 (2019-08-05)
+=====================
+
+* Upgrade Django to 2.1.11
+  (fixes CVE-2019-14232, CVE-2019-14233, CVE-2019-14234, CVE-2019-14235)
+  see https://www.djangoproject.com/weblog/2019/aug/01/security-releases/
+  for details
+
+
 2.1.10.4 (2019-07-29)
 =====================
 
