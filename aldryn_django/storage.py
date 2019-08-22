@@ -12,9 +12,9 @@ from django.core.exceptions import ImproperlyConfigured
 from django.core.files.storage import FileSystemStorage
 
 import yurl
-from boto.s3.connection import OrdinaryCallingFormat, SubdomainCallingFormat
+
 from six.moves.urllib import parse
-from storages.backends import s3boto
+from storages.backends import s3boto3
 
 
 SCHEMES = {
@@ -26,14 +26,9 @@ parse.uses_netloc.append('s3')
 parse.uses_netloc.append('djfs')
 
 
-class S3MediaStorage(s3boto.S3BotoStorage):
+class S3MediaStorage(s3boto3.S3Boto3Storage):
     def __init__(self):
         bucket_name = settings.AWS_MEDIA_STORAGE_BUCKET_NAME
-
-        if '.' in bucket_name:
-            calling_format = OrdinaryCallingFormat()
-        else:
-            calling_format = SubdomainCallingFormat()
 
         # We cannot use a function call or a partial here. Instead, we have to
         # create a subclass because django tries to recreate a new object by
@@ -45,7 +40,6 @@ class S3MediaStorage(s3boto.S3BotoStorage):
             location=settings.AWS_MEDIA_BUCKET_PREFIX,
             host=settings.AWS_MEDIA_STORAGE_HOST,
             custom_domain=settings.AWS_MEDIA_DOMAIN,
-            calling_format=calling_format,
             # Setting an ACL requires us to grant the user the PutObjectAcl
             # permission as well, even if it matches the default bucket ACL.
             # XXX: Ideally we would thus set it to `None`, but due to how

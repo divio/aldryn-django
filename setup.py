@@ -40,7 +40,7 @@ REQUIREMENTS = [
 
     # storage
     'django-storages',
-    'boto>=2.40.0',
+    'boto3>=1.9',
     'djeese-fs',
 
     # helpers
