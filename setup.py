@@ -3,22 +3,12 @@
 import sys
 
 from setuptools import find_packages, setup
-
 from aldryn_django import __version__
-
-
-if sys.version_info[0] == 2:
-    # on python2 the backport of subprocess32 is needed
-    extra_dependencies = [
-        'subprocess32',
-    ]
-else:
-    extra_dependencies = []
 
 
 REQUIREMENTS = [
     'aldryn-addons',
-    'Django==2.2.5',
+    'Django==3.0a1',
 
     # setup utils
     'dj-database-url',
@@ -48,7 +38,7 @@ REQUIREMENTS = [
     'aldryn-sites>=0.5.6',
 
     'easy-thumbnails>=2.2.1.1',
-] + extra_dependencies
+]
 
 
 CLASSIFIERS = [
@@ -58,12 +48,12 @@ CLASSIFIERS = [
     'License :: OSI Approved :: BSD License',
     'Operating System :: OS Independent',
     'Framework :: Django',
-    'Framework :: Django :: 2.2',
+    'Framework :: Django :: 3.0',
     'Programming Language :: Python',
     'Programming Language :: Python :: 3',
-    'Programming Language :: Python :: 3.5',
     'Programming Language :: Python :: 3.6',
     'Programming Language :: Python :: 3.7',
+    'Programming Language :: Python :: 3.8',
     'Topic :: Internet :: WWW/HTTP',
     'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
     'Topic :: Software Development',
