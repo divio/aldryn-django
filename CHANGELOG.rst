@@ -3,6 +3,12 @@ Changelog
 =========
 
 
+1.11.26.2 (2019-11-12)
+======================
+
+* Added the ``--need-app`` command line flag to the uwsgi startup options
+
+
 1.11.26.1 (2019-11-04)
 ======================
 
