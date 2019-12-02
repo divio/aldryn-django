@@ -6,7 +6,7 @@ Changelog
 3.0.0.1 (2019-12-03)
 ====================
 
-* Add Django 3.0  support
+* Add Django 3.0 support
 
 
 3.0.0.1.rc1 (2019-11-21)
