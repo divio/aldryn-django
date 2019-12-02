@@ -3,6 +3,15 @@ Changelog
 =========
 
 
+2.1.15.1 (2019-12-03)
+=====================
+
+* Upgrade Django to 2.2.8
+  (fixes CVE-2019-19118)
+  see https://www.djangoproject.com/weblog/2019/dec/02/security-releases/
+  for details
+
+
 2.2.7.2 (2019-11-12)
 ====================
 
