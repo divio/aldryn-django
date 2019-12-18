@@ -3,6 +3,14 @@ Changelog
 =========
 
 
+1.11.27.1 (2019-12-18)
+======================
+
+* Upgrade Django to 1.11.27 (fixes CVE-2019-19844)
+  see https://www.djangoproject.com/weblog/2019/dec/18/security-releases/
+  for details
+
+
 1.11.26.2 (2019-11-12)
 ======================
 
