@@ -3,6 +3,14 @@ Changelog
 =========
 
 
+3.0.1.1 (2019-12-03)
+====================
+
+* Upgrade Django to 3.0.1 (fixes CVE-2019-19844)
+  see https://www.djangoproject.com/weblog/2019/dec/18/security-releases/
+  for details
+
+
 3.0.0.1 (2019-12-03)
 ====================
 
