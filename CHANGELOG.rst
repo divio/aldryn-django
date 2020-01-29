@@ -3,7 +3,7 @@ Changelog
 =========
 
 
-3.0.2.2 (unreleased)
+3.0.2.2 (2020-01-29)
 ====================
 
 * Set Django ``X_FRAME_OPTIONS`` default to ``SAMEORIGIN``
