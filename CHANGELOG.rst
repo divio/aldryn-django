@@ -2,6 +2,13 @@
 Changelog
 =========
 
+2.2.9.1 (2019-12-03)
+====================
+
+* Upgrade Django to 2.2.10 (fixes CVE-2020-7471)
+  see https://www.djangoproject.com/weblog/2020/feb/03/security-releases/
+  for details
+
 
 2.2.9.1 (2019-12-03)
 ====================
