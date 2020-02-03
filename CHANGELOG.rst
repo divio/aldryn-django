@@ -3,6 +3,14 @@ Changelog
 =========
 
 
+1.11.28.1 (2020-02-03)
+======================
+
+* Upgrade Django to 1.11.28 (fixes CVE-2020-7471)
+  see https://www.djangoproject.com/weblog/2020/feb/03/security-releases/
+  for details
+
+
 1.11.27.1 (2019-12-18)
 ======================
 
