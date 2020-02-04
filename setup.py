@@ -20,7 +20,7 @@ else:
 
 REQUIREMENTS = [
     'aldryn-addons',
-    'Django==1.11.27',
+    'Django==1.11.28',
 
     # setup utils
     'dj-database-url',
@@ -41,7 +41,7 @@ REQUIREMENTS = [
     'psycopg2',
 
     # storage
-    'django-storages',
+    'django-storages<1.9',
     'boto>=2.40.0',
     'djeese-fs',
 

@@ -9,6 +9,8 @@ Changelog
 * Upgrade Django to 1.11.28 (fixes CVE-2020-7471)
   see https://www.djangoproject.com/weblog/2020/feb/03/security-releases/
   for details
+* Limit django-storages to < 1.9 until we switch to the new Boto3 S3 storage
+  backend
 
 
 1.11.27.1 (2019-12-18)
