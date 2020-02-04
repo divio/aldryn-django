@@ -14,7 +14,7 @@ matrix:
     - python: 3.7
       env: DJANGO='dj30'
     - python: 3.8
-      env: DJANGO='dj30
+      env: DJANGO='dj30'
 
 install:
   - pip install coverage isort tox
