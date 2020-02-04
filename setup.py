@@ -6,7 +6,7 @@ from aldryn_django import __version__
 
 REQUIREMENTS = [
     'aldryn-addons',
-    'Django==3.0.2',
+    'Django==3.0.3',
 
     # setup utils
     'dj-database-url',
@@ -27,7 +27,7 @@ REQUIREMENTS = [
     'psycopg2',
 
     # storage
-    'django-storages',
+    'django-storages<1.9',
     'boto>=2.40.0',
     'djeese-fs',
 
