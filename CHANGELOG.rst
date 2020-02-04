@@ -3,6 +3,13 @@ Changelog
 =========
 
 
+2.2.9.2 (2020-02-04)
+====================
+
+* Limit django-storages to < 1.9 until we switch to the new Boto3 S3 storage
+  backend
+
+
 2.2.9.1 (2019-12-03)
 ====================
 

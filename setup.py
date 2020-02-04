@@ -39,7 +39,7 @@ REQUIREMENTS = [
     'psycopg2',
 
     # storage
-    'django-storages',
+    'django-storages<1.9',
     'boto>=2.40.0',
     'djeese-fs',
 
