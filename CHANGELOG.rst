@@ -3,6 +3,16 @@ Changelog
 =========
 
 
+3.0.3.1 (2020-02-03)
+====================
+
+* Upgrade Django to 3.0.3 (fixes CVE-2020-7471)
+  see https://www.djangoproject.com/weblog/2020/feb/03/security-releases/
+  for details
+* Limit django-storages to < 1.9 until we switch to the new Boto3 S3 storage
+  backend
+
+
 3.0.2.2 (2020-01-29)
 ====================
 
