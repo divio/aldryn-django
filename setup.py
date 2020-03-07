@@ -27,7 +27,7 @@ REQUIREMENTS = [
     'django-cache-url',
     'django-getenv',
     'aldryn-client',
-    'yurl',
+    'furl',
 
     # error reporting
     'sentry-sdk',
@@ -39,9 +39,9 @@ REQUIREMENTS = [
     'psycopg2',
 
     # storage
-    'django-storages<1.9',
-    'boto>=2.40.0',
-    'djeese-fs',
+    'django-storage-url',
+    'boto3',
+    'azure-storage-blob',
 
     # helpers
     'click',

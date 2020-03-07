@@ -2,15 +2,16 @@
 from __future__ import absolute_import
 
 import os
+import six
 import sys
 
 from django.conf import settings as django_settings
 
 import click
-import six
-import yurl
-from aldryn_addons.utils import boolean_ish
 
+import furl
+
+from aldryn_addons.utils import boolean_ish
 
 if six.PY2:
     # backport of python3 subprocess with timeout support
@@ -102,7 +103,7 @@ def execute(args, script=None):
 
 
 def get_static_serving_args(base_url, root, header_patterns):
-    base_path = yurl.URL(base_url).path.lstrip('/')
+    base_path = six.text_type(furl.furl(base_url).path).lstrip('/')
 
     args = [
         '--static-map=/{}={}'.format(base_path, root),
