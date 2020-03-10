@@ -244,7 +244,7 @@ class Form(forms.BaseForm):
                 if d.strip()
             ]
             domains = {
-                1: {
+                env("SITE_ID", 1): {
                     'name': env('SITE_NAME', ''),
                     'domain': domain,
                     'aliases': domain_aliases,
