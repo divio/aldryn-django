@@ -3,7 +3,7 @@ Changelog
 =========
 
 
-2.2.11.2 (unreleased)
+2.2.11.2 (2020-03-13)
 =====================
 
 * Allow ``SITE_ID`` to be set through an environment variable
