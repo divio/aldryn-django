@@ -3,6 +3,12 @@ Changelog
 =========
 
 
+1.11.29.2 (2020-03-13)
+======================
+
+* Allow ``SITE_ID`` to be set through an environment variable
+
+
 1.11.29.1 (2020-03-09)
 ======================
 
