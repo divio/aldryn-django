@@ -2,16 +2,15 @@
 from __future__ import absolute_import
 
 import os
-import six
 import sys
 
 from django.conf import settings as django_settings
 
 import click
-
 import furl
-
+import six
 from aldryn_addons.utils import boolean_ish
+
 
 if six.PY2:
     # backport of python3 subprocess with timeout support

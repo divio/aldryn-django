@@ -40,8 +40,8 @@ REQUIREMENTS = [
 
     # storage
     'django-storage-url',
-    'boto3',
-    'azure-storage-blob',
+    'django-storages[boto3]',
+    'django-storages[azure]',
 
     # helpers
     'click',

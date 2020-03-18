@@ -376,8 +376,6 @@ class Form(forms.BaseForm):
         import furl
         import six
 
-        from aldryn_django.storage import parse_storage_url
-
         from aldryn_django.storage import (
             DEFAULT_STORAGE_KEY,
             get_default_storage_url,
@@ -401,7 +399,7 @@ class Form(forms.BaseForm):
         settings['DEFAULT_FILE_STORAGE'] = 'aldryn_django.storage.DefaultStorage'
 
         # Handle MEDIA_URL
-        settings['MEDIA_URL'] = env('MEDIA_URL', '')
+        settings['MEDIA_URL'] = env('MEDIA_URL', '/media/')
         if not settings['MEDIA_URL']:
             media_url = lazy_setting(
                 'MEDIA_URL',
@@ -424,8 +422,7 @@ class Form(forms.BaseForm):
                 bool,
             )
 
-        # TODO: Not sure if this line is still required.
-        # settings['MEDIA_ROOT'] = env('MEDIA_ROOT', os.path.join(settings['DATA_ROOT'], 'media'))
+        settings['MEDIA_ROOT'] = env('MEDIA_ROOT', os.path.join(settings['DATA_ROOT'], 'media'))
 
         settings['MEDIA_HEADERS'] = []
 

@@ -2,7 +2,6 @@
 import gzip
 import os
 import shutil
-import furl
 
 from django.conf import settings
 from django.contrib.staticfiles.storage import (
@@ -11,6 +10,7 @@ from django.contrib.staticfiles.storage import (
 from django.core.files.storage import FileSystemStorage
 from django.utils.functional import lazy
 
+import furl
 from django_storage_url import dsn_configured_storage_class
 
 
@@ -41,7 +41,7 @@ def is_default_storage_on_other_domain():
     return media_host not in settings.ALLOWED_HOSTS if media_host else False
 
 
-class GZippedStaticFilesMixin:
+class GZippedStaticFilesMixin(object):
     """
     Static files storage mixin to create a gzipped version of each static
     file, so that web servers (e.g. uWSGI) can take advantage of it and
