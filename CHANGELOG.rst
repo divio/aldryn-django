@@ -3,7 +3,7 @@ Changelog
 =========
 
 
-3.0.6.1 (unreleased)
+3.0.6.1 (2020-05-04)
 ====================
 
 * Add Django 3.0.6 support
