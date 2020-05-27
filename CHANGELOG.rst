@@ -2,8 +2,29 @@
 Changelog
 =========
 
+
+2.2.12.1 (2020-04-06)
+=====================
+
+* Add Django 2.2.12 support
+
+
+2.2.11.2 (2020-03-13)
+=====================
+
+* Allow ``SITE_ID`` to be set through an environment variable
+
+
+2.2.11.1 (2020-03-09)
+=====================
+
+* Upgrade Django to 2.2.11 (fixes CVE-2020-9402)
+  see https://www.djangoproject.com/weblog/2020/mar/04/security-releases/
+  for details
+
+
 2.2.10.1 (2020-02-03)
-====================
+=====================
 
 * Upgrade Django to 2.2.10 (fixes CVE-2020-7471)
   see https://www.djangoproject.com/weblog/2020/feb/03/security-releases/
