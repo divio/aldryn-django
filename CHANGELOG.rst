@@ -3,6 +3,14 @@ Changelog
 =========
 
 
+2.2.13.1 (2020-06-04)
+=====================
+
+* Upgrade Django to 2.2.13 (fixes CVE-2020-13254, CVE-2020-13596)
+  see https://www.djangoproject.com/weblog/2020/jun/03/security-releases/
+  for details
+
+
 2.2.12.1 (2020-04-06)
 =====================
 
