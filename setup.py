@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 from setuptools import find_packages, setup
+
 from aldryn_django import __version__
 
 

@@ -9,7 +9,6 @@ import yurl
 from aldryn_addons.utils import boolean_ish
 
 
-
 # add the current directory to pythonpath. So the project files can be read.
 BASE_DIR = os.getcwd()
 sys.path.insert(0, BASE_DIR)

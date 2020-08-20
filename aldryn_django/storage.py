@@ -2,7 +2,6 @@ import gzip
 import os
 import re
 import shutil
-
 from urllib import parse
 
 from django.conf import settings

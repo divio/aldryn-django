@@ -85,10 +85,11 @@ class Form(forms.BaseForm):
     )
 
     def to_settings(self, data, settings):
-        import django_cache_url
-        import dj_database_url
         import warnings
         from functools import partial
+
+        import dj_database_url
+        import django_cache_url
         from aldryn_addons.utils import boolean_ish, djsenv
         env = partial(djsenv, settings=settings)
 
@@ -372,6 +373,7 @@ class Form(forms.BaseForm):
 
     def storage_settings_for_media(self, settings, env):
         import yurl
+
         from aldryn_django.storage import parse_storage_url
         if env('DEFAULT_STORAGE_DSN'):
             settings['DEFAULT_STORAGE_DSN'] = env('DEFAULT_STORAGE_DSN')
@@ -510,8 +512,9 @@ class Form(forms.BaseForm):
             settings['TIME_ZONE'] = env('TIME_ZONE')
 
     def migration_settings(self, settings, env):
-        from aldryn_django import storage
         from aldryn_addons.utils import boolean_ish
+
+        from aldryn_django import storage
 
         settings.setdefault('MIGRATION_COMMANDS', [])
         mcmds = settings['MIGRATION_COMMANDS']
