@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import json
 import os
 import sys
@@ -21,7 +20,7 @@ class CachedLoader(list):
 
     def __init__(self, loaders):
         self._cached_loaders = list(loaders)
-        super(CachedLoader, self).__init__([
+        super().__init__([
             (self.loader, self._cached_loaders),
         ])
 

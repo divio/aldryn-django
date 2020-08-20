@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from django.conf import settings
 from django.http import HttpResponseRedirect
 from django.urls import get_script_prefix, is_valid_path

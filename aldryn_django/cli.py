@@ -1,22 +1,13 @@
-# -*- coding: utf-8 -*-
-from __future__ import absolute_import
-
 import os
+import subprocess
 import sys
 
 from django.conf import settings as django_settings
 
 import click
-import six
 import yurl
 from aldryn_addons.utils import boolean_ish
 
-
-if six.PY2:
-    # backport of python3 subprocess with timeout support
-    import subprocess32 as subprocess
-else:
-    import subprocess
 
 
 # add the current directory to pythonpath. So the project files can be read.

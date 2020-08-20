@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import mimetypes
 import shutil
 import subprocess

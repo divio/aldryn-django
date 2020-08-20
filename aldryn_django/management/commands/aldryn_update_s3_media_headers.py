@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from django.core.files.storage import default_storage
 from django.core.management.base import BaseCommand, CommandError
 

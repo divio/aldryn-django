@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from .monkeypatches import hide_secrets_in_debug_mode
 
 

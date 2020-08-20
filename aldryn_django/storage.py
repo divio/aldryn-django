@@ -1,8 +1,9 @@
-# -*- coding: utf-8 -*-
 import gzip
 import os
 import re
 import shutil
+
+from urllib import parse
 
 from django.conf import settings
 from django.contrib.staticfiles.storage import (
@@ -13,7 +14,6 @@ from django.core.files.storage import FileSystemStorage
 
 import yurl
 from boto.s3.connection import OrdinaryCallingFormat, SubdomainCallingFormat
-from six.moves.urllib import parse
 from storages.backends import s3boto
 
 
@@ -38,7 +38,7 @@ class S3MediaStorage(s3boto.S3BotoStorage):
         # We cannot use a function call or a partial here. Instead, we have to
         # create a subclass because django tries to recreate a new object by
         # calling the __init__ of the returned object (with no arguments).
-        super(S3MediaStorage, self).__init__(
+        super().__init__(
             access_key=settings.AWS_MEDIA_ACCESS_KEY_ID,
             secret_key=settings.AWS_MEDIA_SECRET_ACCESS_KEY,
             bucket_name=bucket_name,
@@ -82,7 +82,7 @@ class S3MediaStorage(s3boto.S3BotoStorage):
 
     def _save_content(self, key, content, headers):
         headers = self._headers_for_path(self._key_path(key), headers)
-        return super(S3MediaStorage, self)._save_content(key, content, headers)
+        return super()._save_content(key, content, headers)
 
     def _key_path(self, key):
         return self._decode_name(key.key)[len(self.location):].lstrip('/')
@@ -193,7 +193,7 @@ def parse_storage_url(url):
     return config
 
 
-class GZippedStaticFilesMixin(object):
+class GZippedStaticFilesMixin:
     """
     Static files storage mixin to create a gzipped version of each static
     file, so that web servers (e.g. uWSGI) can take advantage of it and
@@ -225,7 +225,7 @@ class GZippedStaticFilesMixin(object):
             yield os.path.join(path, file)
 
     def post_process(self, paths, dry_run=False, **options):
-        superclass = super(GZippedStaticFilesMixin, self)
+        superclass = super()
         if hasattr(superclass, 'post_process'):
             post_processed = (
                 superclass.post_process(paths, dry_run=dry_run, **options)

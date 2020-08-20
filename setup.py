@@ -1,12 +1,11 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 from setuptools import find_packages, setup
 from aldryn_django import __version__
 
 
 REQUIREMENTS = [
     'aldryn-addons',
-    'Django==3.0.9',
+    'Django==3.1.0',
 
     # setup utils
     'dj-database-url',
@@ -27,7 +26,7 @@ REQUIREMENTS = [
     'psycopg2',
 
     # storage
-    'django-storages<1.9',
+    'django-storages',
     'boto>=2.40.0',
     'djeese-fs',
 
@@ -35,7 +34,7 @@ REQUIREMENTS = [
     'click',
     'aldryn-sites>=0.5.6',
 
-    'easy-thumbnails>=2.2.1.1',
+    'easy-thumbnails>=2.2',
 ]
 
 
@@ -46,7 +45,7 @@ CLASSIFIERS = [
     'License :: OSI Approved :: BSD License',
     'Operating System :: OS Independent',
     'Framework :: Django',
-    'Framework :: Django :: 3.0',
+    'Framework :: Django :: 3.1',
     'Programming Language :: Python',
     'Programming Language :: Python :: 3',
     'Programming Language :: Python :: 3.6',
@@ -65,10 +64,10 @@ setup(
     author='Divio AG',
     author_email='info@divio.ch',
     url='https://github.com/divio/aldryn-django',
-    license='BSD',
+    license='BSD-3-Clause',
     description='An opinionated Django setup bundled as an Aldryn Addon',
     long_description=open('README.rst').read(),
-    packages=find_packages(exclude=['tests']),
+    packages=find_packages(),
     include_package_data=True,
     zip_safe=False,
     install_requires=REQUIREMENTS,

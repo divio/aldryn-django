@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 hides some more secret variables in the debug error view of django
 """
