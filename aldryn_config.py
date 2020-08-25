@@ -20,7 +20,7 @@ class CachedLoader(list):
 
     def __init__(self, loaders):
         self._cached_loaders = list(loaders)
-        super().__init__([
+        super(CachedLoader, self).__init__([
             (self.loader, self._cached_loaders),
         ])
 
@@ -91,6 +91,7 @@ class Form(forms.BaseForm):
         import dj_database_url
         import django_cache_url
         from aldryn_addons.utils import boolean_ish, djsenv
+
         env = partial(djsenv, settings=settings)
 
         # BASE_DIR should already be set by aldryn-addons
