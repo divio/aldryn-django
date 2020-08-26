@@ -16,7 +16,7 @@ from django_storage_url import dsn_configured_storage_class
 # Required for backwards compatibility with django-filer
 SCHEMES = {
     "default": "aldryn_django.storage.DefaultStorage",
-    "s3": "aldryn_django.storage.S3MediaStorage",  # legacy check
+    "s3": "aldryn_django.storage.S3MediaStorage",  #  legacy check
 }
 
 DEFAULT_STORAGE_KEY = "DEFAULT_STORAGE_DSN"
