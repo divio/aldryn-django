@@ -5,7 +5,7 @@ import sys
 from django.conf import settings as django_settings
 
 import click
-import yurl
+import furl
 from aldryn_addons.utils import boolean_ish
 
 
@@ -92,7 +92,7 @@ def execute(args, script=None):
 
 
 def get_static_serving_args(base_url, root, header_patterns):
-    base_path = yurl.URL(base_url).path.lstrip('/')
+    base_path = str(furl.furl(base_url).path).lstrip('/')
 
     args = [
         '--static-map=/{}={}'.format(base_path, root),
