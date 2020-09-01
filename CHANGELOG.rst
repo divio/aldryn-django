@@ -3,6 +3,14 @@ Changelog
 =========
 
 
+3.0.10.1 (2020-09-01)
+=====================
+
+* Upgrade Django to 3.0.10 (fixes CVE-2020-24583, CVE-2020-24584)
+  see https://www.djangoproject.com/weblog/2020/sep/01/security-releases/
+  for details
+
+
 3.0.9.1 (2020-08-10)
 ====================
 
