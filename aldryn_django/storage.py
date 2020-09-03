@@ -11,6 +11,8 @@ from django.utils.functional import lazy
 
 import furl
 from django_storage_url import dsn_configured_storage_class
+from django_storage_url.backends import register_storage_class, s3
+
 
 
 # Required for backwards compatibility with django-filer
@@ -18,6 +20,10 @@ SCHEMES = {
     "default": "aldryn_django.storage.DefaultStorage",
     "s3": "aldryn_django.storage.S3MediaStorage",  #  legacy check
 }
+
+
+register_storage_class("s3", "aldryn_django.storage.S3MediaStorage")
+
 
 DEFAULT_STORAGE_KEY = "DEFAULT_STORAGE_DSN"
 
@@ -94,10 +100,75 @@ class GZippedStaticFilesMixin(object):
             if os.path.splitext(path)[1] in self.gzip_ext:
                 self.gzip_path(path)
 
+import re
+class S3MediaStorage(s3.S3Storage):
+    def __init__(self, dsn):
+        super().__init__(dsn)
+        # MEDIA_HEADERS is a list of tuples containing a regular expression
+        # to match against a path, and a dictionary of HTTP headers to be
+        # returned with the resource identified by the path when it is
+        # requested.
+        # The headers are applied in the order they where declared, and
+        # processing stops at the first match.
+        # E.g.:
+        #
+        #    MEDIA_HEADERS = [
+        #        (r'media/cache/.*', {
+        #            'Cache-Control': 'max-age={}'.format(3600 * 24 * 365),
+        #        })
+        #    ]
+        #
+        media_headers = getattr(settings, 'MEDIA_HEADERS', [])
+        self.media_headers = [
+            (re.compile(r), headers) for r, headers in media_headers
+        ]
 
-class S3MediaStorage:
-    pass
+    def _headers_for_path(self, path, headers):
+        for pattern, headers_override in self.media_headers:
+            if pattern.match(path) is not None:
+                headers.update(headers_override)
+                break
+        return headers
 
+    def _save_content(self, key, content, headers):
+        headers = self._headers_for_path(self._key_path(key), headers)
+        return super()._save_content(key, content, headers)
+
+    def _key_path(self, key):
+        #TODO: unsure about the _normalize_name and _clean_name
+        return self._normalize_name(self._clean_name(key.key))[len(self.location):].lstrip('/')
+
+    def update_headers(self):
+        updated, total = 0, 0
+
+        for object_summary in self.bucket.objects.filter(Prefix=self.location):
+            obj = object_summary.Object()
+            old_headers = {
+                "CacheControl":obj.cache_control,
+                "ContentDisposition":obj.content_disposition,
+                "ContentEncoding":obj.content_encoding,
+                "ContentLanguage":obj.content_language,
+                "ContentType":obj.content_type,
+            }
+
+            # Prepare new headers
+            new_headers = old_headers.copy()
+            new_headers = self._headers_for_path(obj.key, new_headers)
+
+            # Cleanup and only allow a specific set of headers
+            new_headers = {k.strip("-"): v for k, v in new_headers.items() if k in old_headers}
+
+            total += 1
+            if new_headers != old_headers:
+                obj.copy_from(
+                    CopySource={'Bucket': obj.bucket_name, 'Key': obj.key},
+                    **new_headers,
+                    MetadataDirective="REPLACE",
+                    ACL=obj.Acl()
+                )
+                updated += 1
+
+        return updated, total
 
 class GZippedStaticFilesStorage(GZippedStaticFilesMixin, StaticFilesStorage):
     pass
