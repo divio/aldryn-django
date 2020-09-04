@@ -141,6 +141,14 @@ class S3MediaStorage(s3.S3Storage):
         ].lstrip("/")
 
     def update_headers(self):
+        """
+        Updates the headers for files in the s3 bucket according to the
+        `MEDIA_HEADERS` setting.
+
+        A header change is done, when the new headers differ from the existing
+        headers of the file and the file has `public-read` access. Files with
+        other perimissions like `private` will not be updated.
+        """
         updated, total = 0, 0
 
         for object_summary in self.bucket.objects.filter(Prefix=self.location):
@@ -174,7 +182,8 @@ class S3MediaStorage(s3.S3Storage):
             if new_headers != old_headers:
                 # Another cleanup to only use relevant data
                 new_headers = {k: v for k, v in new_headers.items() if not v is None}
-                # Using `copy_from` to copy the file on itself updates the headers
+                # Using `copy_from` to copy the file on itself updates the
+                # headers
                 obj.copy_from(
                     CopySource={"Bucket": obj.bucket_name, "Key": obj.key},
                     **new_headers,
