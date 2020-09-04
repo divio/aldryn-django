@@ -4,7 +4,6 @@ import os
 import re
 import shutil
 
-
 from django.conf import settings
 from django.contrib.staticfiles.storage import (
     ManifestStaticFilesStorage,
