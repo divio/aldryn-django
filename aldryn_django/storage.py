@@ -1,19 +1,29 @@
+import furl
 import gzip
 import os
+import re
 import shutil
+
 
 from django.conf import settings
 from django.contrib.staticfiles.storage import (
-    ManifestStaticFilesStorage, StaticFilesStorage,
+    ManifestStaticFilesStorage,
+    StaticFilesStorage,
 )
 from django.core.files.storage import FileSystemStorage
-from django.utils.functional import lazy
-
-import furl
 from django_storage_url import dsn_configured_storage_class
 from django_storage_url.backends import register_storage_class, s3
+from django.utils.functional import lazy
+from django.utils.text import capfirst
 
 
+AWS_S3_ACL_PUBLIC_READ = {
+    "Grantee": {
+        "Type": "Group",
+        "URI": "http://acs.amazonaws.com/groups/global/AllUsers",
+    },
+    "Permission": "READ",
+}
 
 # Required for backwards compatibility with django-filer
 SCHEMES = {
@@ -21,9 +31,7 @@ SCHEMES = {
     "s3": "aldryn_django.storage.S3MediaStorage",  #  legacy check
 }
 
-
 register_storage_class("s3", "aldryn_django.storage.S3MediaStorage")
-
 
 DEFAULT_STORAGE_KEY = "DEFAULT_STORAGE_DSN"
 
@@ -35,6 +43,7 @@ def lazy_setting(name, func, type):
         value = func()
         setattr(settings, name, value)
         return value
+
     return lazy(setter, type)()
 
 
@@ -53,24 +62,18 @@ class GZippedStaticFilesMixin(object):
     file, so that web servers (e.g. uWSGI) can take advantage of it and
     serve the optimized version.
     """
-    gzip_ext = frozenset([
-        '.html',
-        '.css',
-        '.js',
-        '.json',
-        '.svg',
-        '.txt',
-    ])
+
+    gzip_ext = frozenset([".html", ".css", ".js", ".json", ".svg", ".txt"])
 
     def gzip_path(self, path):
-        gz_path = path + '.gz'
+        gz_path = path + ".gz"
         with self.open(path) as f_in:
-            with self.open(gz_path, 'wb') as f_out:
+            with self.open(gz_path, "wb") as f_out:
                 with gzip.GzipFile(fileobj=f_out) as gz_out:
                     shutil.copyfileobj(f_in, gz_out)
         return gz_path
 
-    def iterfiles(self, path=''):
+    def iterfiles(self, path=""):
         dirs, files = self.listdir(path)
         for dir in dirs:
             for file in self.iterfiles(os.path.join(path, dir)):
@@ -80,10 +83,8 @@ class GZippedStaticFilesMixin(object):
 
     def post_process(self, paths, dry_run=False, **options):
         superclass = super(GZippedStaticFilesMixin, self)
-        if hasattr(superclass, 'post_process'):
-            post_processed = (
-                superclass.post_process(paths, dry_run=dry_run, **options)
-            )
+        if hasattr(superclass, "post_process"):
+            post_processed = superclass.post_process(paths, dry_run=dry_run, **options)
         else:
             post_processed = []
 
@@ -100,10 +101,11 @@ class GZippedStaticFilesMixin(object):
             if os.path.splitext(path)[1] in self.gzip_ext:
                 self.gzip_path(path)
 
-import re
+
 class S3MediaStorage(s3.S3Storage):
     def __init__(self, dsn):
         super().__init__(dsn)
+
         # MEDIA_HEADERS is a list of tuples containing a regular expression
         # to match against a path, and a dictionary of HTTP headers to be
         # returned with the resource identified by the path when it is
@@ -118,10 +120,8 @@ class S3MediaStorage(s3.S3Storage):
         #        })
         #    ]
         #
-        media_headers = getattr(settings, 'MEDIA_HEADERS', [])
-        self.media_headers = [
-            (re.compile(r), headers) for r, headers in media_headers
-        ]
+        media_headers = getattr(settings, "MEDIA_HEADERS", [])
+        self.media_headers = [(re.compile(r), headers) for r, headers in media_headers]
 
     def _headers_for_path(self, path, headers):
         for pattern, headers_override in self.media_headers:
@@ -135,44 +135,64 @@ class S3MediaStorage(s3.S3Storage):
         return super()._save_content(key, content, headers)
 
     def _key_path(self, key):
-        #TODO: unsure about the _normalize_name and _clean_name
-        return self._normalize_name(self._clean_name(key.key))[len(self.location):].lstrip('/')
+        # FIXME: unsure about the use of _normalize_name and _clean_name
+        return self._normalize_name(self._clean_name(key.key))[
+            len(self.location) :
+        ].lstrip("/")
 
     def update_headers(self):
         updated, total = 0, 0
 
         for object_summary in self.bucket.objects.filter(Prefix=self.location):
+            total += 1
+
             obj = object_summary.Object()
+
+            # Only change headers for files with a `public-read` access.
+            if AWS_S3_ACL_PUBLIC_READ not in obj.Acl().grants:
+                continue
+
             old_headers = {
-                "CacheControl":obj.cache_control,
-                "ContentDisposition":obj.content_disposition,
-                "ContentEncoding":obj.content_encoding,
-                "ContentLanguage":obj.content_language,
-                "ContentType":obj.content_type,
+                "CacheControl": obj.cache_control,
+                "ContentDisposition": obj.content_disposition,
+                "ContentEncoding": obj.content_encoding,
+                "ContentLanguage": obj.content_language,
+                "ContentType": obj.content_type,
             }
 
             # Prepare new headers
             new_headers = old_headers.copy()
             new_headers = self._headers_for_path(obj.key, new_headers)
 
-            # Cleanup and only allow a specific set of headers
-            new_headers = {k.strip("-"): v for k, v in new_headers.items() if k in old_headers}
+            # Cleanup key format and only use valid headers
+            new_headers = {
+                "".join(map(capfirst, k.split("-"))): v
+                for k, v in new_headers.items()
+                if k in old_headers
+            }
 
-            total += 1
             if new_headers != old_headers:
+                # Another cleanup to only use relevant data
+                new_headers = {k: v for k, v in new_headers.items() if not v is None}
+                # Using `copy_from` to copy the file on itself updates the headers
                 obj.copy_from(
-                    CopySource={'Bucket': obj.bucket_name, 'Key': obj.key},
+                    CopySource={"Bucket": obj.bucket_name, "Key": obj.key},
                     **new_headers,
                     MetadataDirective="REPLACE",
-                    ACL=obj.Acl()
+                    # This is valid because we check the permission to be
+                    # `public-read` earlier
+                    ACL="public-read"
                 )
                 updated += 1
 
         return updated, total
 
+
 class GZippedStaticFilesStorage(GZippedStaticFilesMixin, StaticFilesStorage):
     pass
 
 
-class ManifestGZippedStaticFilesStorage(GZippedStaticFilesMixin, ManifestStaticFilesStorage):
+class ManifestGZippedStaticFilesStorage(
+    GZippedStaticFilesMixin, ManifestStaticFilesStorage
+):
     pass
