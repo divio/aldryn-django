@@ -168,15 +168,15 @@ class S3MediaStorage(s3.S3Storage):
             }
 
             # Prepare new headers
-            new_headers = old_headers.copy()
-            new_headers = self._headers_for_path(obj.key, new_headers)
+            tmp_headers = old_headers.copy()
+            tmp_headers = self._headers_for_path(obj.key, tmp_headers)
 
             # Cleanup key format and only use valid headers
-            new_headers = {
-                "".join(map(capfirst, k.split("-"))): v
-                for k, v in new_headers.items()
-                if k in old_headers
-            }
+            new_headers = {}
+            for k, v in tmp_headers.items():
+                clean_key = "".join(map(capfirst, k.split("-")))
+                if clean_key in old_headers:
+                    new_headers[clean_key] = v
 
             if new_headers != old_headers:
                 # Another cleanup to only use relevant data
