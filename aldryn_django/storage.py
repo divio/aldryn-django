@@ -102,6 +102,14 @@ class GZippedStaticFilesMixin(object):
 
 
 class S3MediaStorage(s3.S3Storage):
+    ALLOWED_PARAMETERS = [
+        "CacheControl",
+        "ContentDisposition",
+        "ContentEncoding",
+        "ContentLanguage",
+        "ContentType",
+    ]
+
     def __init__(self, dsn):
         super().__init__(dsn)
 
@@ -129,15 +137,34 @@ class S3MediaStorage(s3.S3Storage):
                 break
         return headers
 
-    def _save_content(self, key, content, headers):
-        headers = self._headers_for_path(self._key_path(key), headers)
-        return super()._save_content(key, content, headers)
+    def _get_write_parameters(self, name, content=None):
+        """
+        Overwrite of the S3Storage function
+        """
+        params = super()._get_write_parameters(name, content)
+        # Calling _prepare_headers in a separate call because params could have
+        # more values than the allowed ones from `_prepare_headers`.
+        new_headers = self._prepare_headers(name, {})
+        params.update(new_headers)
+        return params
 
-    def _key_path(self, key):
-        # FIXME: unsure about the use of _normalize_name and _clean_name
-        return self._normalize_name(self._clean_name(key.key))[
-            len(self.location) :
-        ].lstrip("/")
+    def _prepare_headers(self, path, headers):
+        """
+        Actually does the header update but only returns allowed headers which
+        are not `None`.
+        """
+        tmp_headers = self._headers_for_path(path, headers)
+        # Cleanup key format and only use valid headers
+        new_headers = {}
+        for k, v in tmp_headers.items():
+            clean_key = "".join(map(capfirst, k.split("-")))
+            if clean_key in self.ALLOWED_PARAMETERS:
+                new_headers[clean_key] = v
+
+        # Another cleanup to only use relevant data
+        new_headers = {k: v for k, v in new_headers.items() if not v is None}
+
+        return new_headers
 
     def update_headers(self):
         """
@@ -166,21 +193,13 @@ class S3MediaStorage(s3.S3Storage):
                 "ContentLanguage": obj.content_language,
                 "ContentType": obj.content_type,
             }
+            old_headers = {k: v for k, v in old_headers.items() if not v is None}
 
             # Prepare new headers
-            tmp_headers = old_headers.copy()
-            tmp_headers = self._headers_for_path(obj.key, tmp_headers)
-
-            # Cleanup key format and only use valid headers
-            new_headers = {}
-            for k, v in tmp_headers.items():
-                clean_key = "".join(map(capfirst, k.split("-")))
-                if clean_key in old_headers:
-                    new_headers[clean_key] = v
-
+            new_headers = self._prepare_headers(obj.key, old_headers.copy())
             if new_headers != old_headers:
+
                 # Another cleanup to only use relevant data
-                new_headers = {k: v for k, v in new_headers.items() if not v is None}
                 # Using `copy_from` to copy the file on itself updates the
                 # headers
                 obj.copy_from(
