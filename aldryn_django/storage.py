@@ -1,4 +1,3 @@
-import furl
 import gzip
 import os
 import re
@@ -6,14 +5,15 @@ import shutil
 
 from django.conf import settings
 from django.contrib.staticfiles.storage import (
-    ManifestStaticFilesStorage,
-    StaticFilesStorage,
+    ManifestStaticFilesStorage, StaticFilesStorage,
 )
 from django.core.files.storage import FileSystemStorage
-from django_storage_url import dsn_configured_storage_class
-from django_storage_url.backends import register_storage_class, s3
 from django.utils.functional import lazy
 from django.utils.text import capfirst
+
+import furl
+from django_storage_url import dsn_configured_storage_class
+from django_storage_url.backends import register_storage_class, s3
 
 
 AWS_S3_ACL_PUBLIC_READ = {
@@ -162,7 +162,7 @@ class S3MediaStorage(s3.S3Storage):
                 new_headers[clean_key] = v
 
         # Another cleanup to only use relevant data
-        new_headers = {k: v for k, v in new_headers.items() if not v is None}
+        new_headers = {k: v for k, v in new_headers.items() if v is not None}
 
         return new_headers
 
@@ -193,7 +193,7 @@ class S3MediaStorage(s3.S3Storage):
                 "ContentLanguage": obj.content_language,
                 "ContentType": obj.content_type,
             }
-            old_headers = {k: v for k, v in old_headers.items() if not v is None}
+            old_headers = {k: v for k, v in old_headers.items() if v is not None}
 
             # Prepare new headers
             new_headers = self._prepare_headers(obj.key, old_headers.copy())
