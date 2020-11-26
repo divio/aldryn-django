@@ -564,10 +564,6 @@ class Form(forms.BaseForm):
         mcmds.append('CACHE_URL="locmem://" python manage.py createcachetable django_dbcache; exit 0')
         mcmds.append('python manage.py migrate --noinput')
 
-        if not boolean_ish(env('DISABLE_S3_MEDIA_HEADERS_UPDATE')):
-            if settings['DEFAULT_FILE_STORAGE'] == storage.SCHEMES['s3']:
-                mcmds.append('python manage.py aldryn_update_s3_media_headers')
-
     def gis_settings(self, settings, env):
         settings['DATABASES']['default']['ENGINE'] = 'django.contrib.gis.db.backends.postgis'
         settings['INSTALLED_APPS'].append('django.contrib.gis')
