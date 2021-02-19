@@ -2,4 +2,5 @@
 django-app-helper
 tox
 coverage
-setuptools-rust
+# currently breaks ci because it wants rust now
+cryptography<3.4
