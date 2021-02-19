@@ -3,6 +3,14 @@ Changelog
 =========
 
 
+2.2.19.0 (2021-02-19)
+=====================
+
+* Upgrade Django to 2.2.19 (fixes CVE-2021-23336)
+  see https://www.djangoproject.com/weblog/2021/feb/19/security-releases/
+  for details
+
+
 2.2.18.0 (2021-02-01)
 =====================
 
