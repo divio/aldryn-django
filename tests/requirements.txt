@@ -2,3 +2,5 @@
 django-app-helper
 tox
 coverage
+# currently breaks CI
+cryptography<3.4
