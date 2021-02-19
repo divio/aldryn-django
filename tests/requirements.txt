@@ -2,3 +2,4 @@
 django-app-helper
 tox
 coverage
+cryptography==3.3.2
