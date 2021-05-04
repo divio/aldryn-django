@@ -3,6 +3,14 @@ Changelog
 =========
 
 
+3.1.9.0 (2021-05-04)
+====================
+
+* Upgrade Django to 3.1.9 (fixes CVE-2021-31542)
+  see https://www.djangoproject.com/weblog/2021/may/04/security-releases/
+  for details
+
+
 3.1.8.0 (2021-03-06)
 ====================
 
