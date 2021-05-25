@@ -146,12 +146,12 @@ You can run tests by executing::
     python setup.py test
 
 
-.. |build| image:: https://travis-ci.org/divio/aldryn-django.svg?branch=support/3.1.x
+.. |build| image:: https://travis-ci.org/divio/aldryn-django.svg?branch=support/3.2.x
     :target: https://travis-ci.org/divio/aldryn-django
-.. |coverage| image:: https://codecov.io/gh/divio/aldryn-django/branch/support/3.1.x/graph/badge.svg
+.. |coverage| image:: https://codecov.io/gh/divio/aldryn-django/branch/support/3.2.x/graph/badge.svg
     :target: https://codecov.io/gh/divio/aldryn-django
 
-.. |python| image:: https://img.shields.io/badge/python-3.6%20%7C%203.7%20%7C%C2%A03.8-blue.svg
+.. |python| image:: https://img.shields.io/badge/python-3.6%20%7C%203.7%20%7C%C2%A03.9-blue.svg
     :target: https://pypi.org/project/aldryn-django/
-.. |django| image:: https://img.shields.io/badge/django-3.1-blue.svg
+.. |django| image:: https://img.shields.io/badge/django-3.2-blue.svg
     :target: https://www.djangoproject.com/
