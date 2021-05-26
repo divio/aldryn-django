@@ -18,6 +18,7 @@ REQUIREMENTS = [
     'furl',
 
     # error reporting
+    'aiocontextvars',
     'sentry-sdk',
 
     # wsgi server related

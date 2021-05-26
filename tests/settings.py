@@ -3,6 +3,7 @@ HELPER_SETTINGS = {
     'INSTALLED_APPS': [],
     'LANGUAGE_CODE': 'en',
     'ALLOWED_HOSTS': ['localhost'],
+    'SECRET_KEY': 'some-secret-key',
 }
 
 
