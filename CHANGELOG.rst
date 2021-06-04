@@ -3,6 +3,94 @@ Changelog
 =========
 
 
+2.2.24.0 (2021-06-02)
+=====================
+
+* Upgrade Django to 2.2.24 (fixes CVE-2021-33203 and CVE-2021-33571)
+  see https://www.djangoproject.com/weblog/2021/jun/02/security-releases/
+  for details
+
+
+2.2.23.0 (2021-05-25)
+=====================
+
+* Added support for Django 2.2.23
+
+
+2.2.22.0 (2021-05-06)
+=====================
+
+* Upgrade Django to 2.2.22 (fixes CVE-2021-32052)
+  see https://www.djangoproject.com/weblog/2021/may/06/security-releases/
+  for details
+
+
+2.2.21.0 (2021-05-04)
+=====================
+
+* Upgrade Django to 2.2.21 (fixes CVE-2021-31542)
+  see https://www.djangoproject.com/weblog/2021/may/04/security-releases/
+  for details
+
+
+2.2.20.0 (2021-03-06)
+=====================
+
+* Upgrade Django to 2.2.20 (fixes CVE-2021-28658)
+  see https://www.djangoproject.com/weblog/2021/apr/06/security-releases/
+  for details
+
+
+2.2.19.0 (2021-02-19)
+=====================
+
+* Upgrade Django to 2.2.19 (fixes CVE-2021-23336)
+  see https://www.djangoproject.com/weblog/2021/feb/19/security-releases/
+  for details
+
+
+2.2.18.0 (2021-02-01)
+=====================
+
+* Upgrade Django to 2.2.18 (fixes CVE-2021-3281)
+  see https://www.djangoproject.com/weblog/2021/feb/01/security-releases/
+  for details
+
+
+2.2.17.1 (2020-11-03)
+=====================
+
+* Add Django 2.2.17 support
+
+
+2.2.16.1 (2020-09-01)
+=====================
+
+* Upgrade Django to 2.2.16 (fixes CVE-2020-24583, CVE-2020-24584)
+  see https://www.djangoproject.com/weblog/2020/sep/01/security-releases/
+  for details
+
+
+2.2.15.1 (2020-08-10)
+=====================
+
+* Add Django 2.2.15 support
+
+
+2.2.14.1 (2020-07-06)
+=====================
+
+* Add Django 2.2.14 support
+
+
+2.2.13.1 (2020-06-04)
+=====================
+
+* Upgrade Django to 2.2.13 (fixes CVE-2020-13254, CVE-2020-13596)
+  see https://www.djangoproject.com/weblog/2020/jun/03/security-releases/
+  for details
+
+
 2.2.12.1 (2020-04-06)
 =====================
 
