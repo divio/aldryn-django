@@ -388,6 +388,8 @@ class Form(forms.BaseForm):
         # ACLs to bucket ACLs
         settings.setdefault('AWS_DEFAULT_ACL', None)
 
+        settings['MEDIA_ROOT'] = env('MEDIA_ROOT', os.path.join(settings['DATA_ROOT'], 'media'))
+
         storage_dsn = env(DEFAULT_STORAGE_KEY, )
         if not storage_dsn:
             dsn = furl.furl()
@@ -422,8 +424,6 @@ class Form(forms.BaseForm):
                 is_default_storage_on_other_domain,
                 bool,
             )
-
-        settings['MEDIA_ROOT'] = env('MEDIA_ROOT', os.path.join(settings['DATA_ROOT'], 'media'))
 
         settings['MEDIA_HEADERS'] = []
 
