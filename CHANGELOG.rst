@@ -3,6 +3,14 @@ Changelog
 =========
 
 
+3.2.10.0 (2021-12-07)
+=====================
+
+* Upgrade Django to 3.2.10 (fixes CVE-2021-44420)
+  see https://www.djangoproject.com/weblog/2021/dec/07/security-releases/
+  for details
+
+
 3.2.9.0 (2021-11-02)
 ====================
 
