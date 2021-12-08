@@ -1,5 +1,7 @@
 # other requirements
+setuptools
 django-app-helper
 coverage
 isort
 flake8
+uwsgi
