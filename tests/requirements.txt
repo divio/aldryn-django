@@ -1,6 +1,5 @@
 # other requirements
 django-app-helper
-tox
 coverage
-# currently breaks ci because it wants rust now
-cryptography<3.4
+isort
+flake8
