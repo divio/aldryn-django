@@ -35,7 +35,7 @@ REQUIREMENTS = [
     # helpers
     'click',
     'aldryn-sites>=0.5.6',
-    'easy-thumbnails>=2.2',
+    # 'easy-thumbnails>=2.2',
 ]
 
 
