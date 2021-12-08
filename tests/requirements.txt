@@ -1,8 +1,9 @@
 # other requirements
-setuptools
 django-app-helper
 coverage
 isort
 flake8
+# needed for the build to work
+uwsgi
 # currently breaks ci because it wants rust now
 cryptography<3.4
