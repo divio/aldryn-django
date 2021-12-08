@@ -22,7 +22,7 @@ REQUIREMENTS = [
     'sentry-sdk',
 
     # wsgi server related
-    'uwsgi',
+    # 'uwsgi',
 
     # database
     'psycopg2',
