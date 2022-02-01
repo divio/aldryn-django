@@ -3,6 +3,14 @@ Changelog
 =========
 
 
+2.2.27.0 (2022-02-01)
+=====================
+
+* Upgrade Django to 2.2.27 (fixes CVE-2022-22818 and CVE-2022-23833)
+  see https://www.djangoproject.com/weblog/2022/feb/01/security-releases/
+  for details
+
+
 2.2.26.0 (2022-01-12)
 =====================
 
