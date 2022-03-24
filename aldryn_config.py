@@ -402,15 +402,13 @@ class Form(forms.BaseForm):
         settings['DEFAULT_FILE_STORAGE'] = 'aldryn_django.storage.DefaultStorage'
 
         # Handle MEDIA_URL
-        settings['MEDIA_URL'] = env('MEDIA_URL', '/media/')
+        settings['MEDIA_URL'] = env('MEDIA_URL', None)
         if not settings['MEDIA_URL']:
-            media_url = lazy_setting(
+            settings['MEDIA_URL'] = lazy_setting(
                 'MEDIA_URL',
                 get_default_storage_url,
                 str,
             )
-
-            settings['MEDIA_URL'] = media_url
         elif not settings['MEDIA_URL'].endswith('/'):
             # Django (or something else?) silently sets MEDIA_URL to an empty
             # string if it does not end with a '/'
