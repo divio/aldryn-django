@@ -1,7 +1,6 @@
 # other requirements
-# django-app-helper
+# django-app-helper is not yet ready for Django 4
 https://github.com/FinalAngel/django-app-helper/archive/refs/heads/develop.zip#egg=django-app-helper
-
 coverage
 isort
 flake8
@@ -9,3 +8,7 @@ flake8
 uwsgi
 # currently breaks ci because it wants rust now
 cryptography<3.4
+# for python 3.10
+libxml2-dev
+libxslt-dev
+python-dev
