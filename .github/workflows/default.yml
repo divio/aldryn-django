@@ -46,7 +46,7 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: Install dependencies
-        run: sudp apt-get install -y libxml2-dev libxslt-dev python-dev
+        run: sudo apt-get install -y libxml2-dev libxslt-dev python-dev
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v2
         with:
