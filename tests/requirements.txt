@@ -1,5 +1,7 @@
 # other requirements
-django-app-helper
+# django-app-helper
+https://github.com/FinalAngel/django-app-helper/archive/refs/heads/master.zip#egg=django-app-helper
+
 coverage
 isort
 flake8
