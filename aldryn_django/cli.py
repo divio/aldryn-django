@@ -32,7 +32,7 @@ def migrate(ctx_obj):
     cmds = ctx_obj['settings']['MIGRATION_COMMANDS']
     click.echo('aldryn-django: running migration commands')
     for cmd in cmds:
-        click.echo('    ----> {}'.format(cmd))
+        click.echo(f'    ----> {cmd}')
         try:
             subprocess.check_call(cmd, shell=True)
         except subprocess.CalledProcessError as exc:
@@ -95,7 +95,7 @@ def get_static_serving_args(base_url, root, header_patterns):
     base_path = str(furl.furl(base_url).path).lstrip('/')
 
     args = [
-        '--static-map=/{}={}'.format(base_path, root),
+        f'--static-map=/{base_path}={root}',
         '--route={} addheader:Vary: Accept-Encoding'.format(
             os.path.join('^', base_path, '.*'),
         ),
@@ -104,8 +104,8 @@ def get_static_serving_args(base_url, root, header_patterns):
     for pattern, headers in header_patterns:
         pattern = os.path.join('^', base_path, pattern)
         for k, v in headers.items():
-            args.append('--route={} addheader:{}: {}'.format(pattern, k, v))
-        args.append('--route={} last:'.format(pattern))
+            args.append(f'--route={pattern} addheader:{k}: {v}')
+        args.append(f'--route={pattern} last:')
 
     return args
 

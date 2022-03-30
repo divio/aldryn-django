@@ -62,7 +62,7 @@ class Command(BaseCommand):
 
             # Optimize the image
             optimize_command = command.format(filename=temp_image.name)
-            self.stdout.write('>>> {}'.format(optimize_command))
+            self.stdout.write(f'>>> {optimize_command}')
             subprocess.check_call(optimize_command, shell=True)
             self.stdout.write('')
 

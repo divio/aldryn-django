@@ -10,4 +10,4 @@ class Command(BaseCommand):
             raise CommandError('The default media files storage does not '
                                'support updating headers')
         updated, total = default_storage.update_headers()
-        self.stdout.write('{}/{} files updated'.format(updated, total))
+        self.stdout.write(f'{updated}/{total} files updated')
