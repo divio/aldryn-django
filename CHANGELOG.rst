@@ -2,6 +2,13 @@
 Changelog
 =========
 
+n.n.n / 2022-03-30
+==================
+
+* related to #266, warnings for future versions of Python
+* Update Python syntax for the codebase using pyupgrade tool
+
+
 
 3.2.12.0 (2022-02-01)
 =====================

@@ -55,7 +55,7 @@ def is_default_storage_on_other_domain():
     return media_host not in settings.ALLOWED_HOSTS if media_host else False
 
 
-class GZippedStaticFilesMixin(object):
+class GZippedStaticFilesMixin:
     """
     Static files storage mixin to create a gzipped version of each static
     file, so that web servers (e.g. uWSGI) can take advantage of it and
@@ -68,7 +68,7 @@ class GZippedStaticFilesMixin(object):
         gz_path = path + ".gz"
         with self.open(path) as f_in:
             with self.open(gz_path, "wb") as f_out:
-                with gzip.GzipFile(fileobj=f_out) as gz_out:
+                with gzip.GzipFile(fileobj=f_out, mode="w") as gz_out:
                     shutil.copyfileobj(f_in, gz_out)
         return gz_path
 
@@ -81,14 +81,13 @@ class GZippedStaticFilesMixin(object):
             yield os.path.join(path, file)
 
     def post_process(self, paths, dry_run=False, **options):
-        superclass = super(GZippedStaticFilesMixin, self)
+        superclass = super()
         if hasattr(superclass, "post_process"):
             post_processed = superclass.post_process(paths, dry_run=dry_run, **options)
         else:
             post_processed = []
 
-        for processed in post_processed:
-            yield processed
+        yield from post_processed
 
         if dry_run:
             return
