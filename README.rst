@@ -2,7 +2,7 @@
 Aldryn Django
 =============
 
-|build| |coverage|
+|pypi| |build| |coverage|
 
 An opinionated Django setup bundled as a Divio Cloud addon.
 
@@ -146,6 +146,8 @@ You can run tests by executing::
     python setup.py test
 
 
+.. |pypi| image:: https://badge.fury.io/py/aldryn-django.svg
+    :target: http://badge.fury.io/py/aldryn-django
 .. |build| image:: https://github.com/divio/aldryn-django/actions/workflows/default.yml/badge.svg?branch=support/4.0.x
     :target: https://github.com/divio/aldryn-django/actions
 .. |coverage| image:: https://codecov.io/gh/divio/aldryn-django/branch/support/4.0.x/graph/badge.svg

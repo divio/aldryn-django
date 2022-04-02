@@ -35,7 +35,7 @@ class LanguagePrefixFallbackMiddleware(MiddlewareMixin):
             if path_valid:
                 script_prefix = get_script_prefix()
                 old_path = get_script_prefix() + language_from_path + '/'
-                language_url = "%s://%s%s" % (
+                language_url = "{}://{}{}".format(
                     request.scheme,
                     request.get_host(),
                     # replace the old path which contains language code

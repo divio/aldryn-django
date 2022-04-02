@@ -53,6 +53,6 @@ class Command(BaseCommand):
             if os.path.splitext(path_in)[1] in self.gzip_ext:
                 path_out = path_in + '.gz'
                 with open(path_in, 'rb') as f_in:
-                    self.stdout.write('Compressing {}...'.format(path_in))
+                    self.stdout.write(f'Compressing {path_in}...')
                     with gzip.open(path_out, 'wb') as f_out:
                         shutil.copyfileobj(f_in, f_out)
