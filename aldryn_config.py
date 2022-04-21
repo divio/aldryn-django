@@ -397,8 +397,6 @@ class Form(forms.BaseForm):
                 # Django (or something else?) silently sets MEDIA_URL to an empty
                 # string if it does not end with a '/'
                 settings['MEDIA_URL'] = '{}/'.format(settings['MEDIA_URL'])
-
-
             dsn = furl.furl()
             dsn.scheme = 'file'
             dsn.path = settings['MEDIA_ROOT']
@@ -411,9 +409,7 @@ class Form(forms.BaseForm):
                 str,
             )
 
-
         settings[DEFAULT_STORAGE_KEY] = storage_dsn
-
         settings['DEFAULT_FILE_STORAGE'] = 'aldryn_django.storage.DefaultStorage'
 
         # Handle media domain for built-in serving
