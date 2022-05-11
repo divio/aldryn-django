@@ -394,21 +394,21 @@ class Form(forms.BaseForm):
         if not storage_dsn:
             settings['MEDIA_URL'] = env('MEDIA_URL', '/media/')
             if not settings['MEDIA_URL'].endswith('/'):
-￼                # Django (or something else?) silently sets MEDIA_URL to an empty
-￼                # string if it does not end with a '/'
-￼                settings['MEDIA_URL'] = '{}/'.format(settings['MEDIA_URL'])
+                # Django (or something else?) silently sets MEDIA_URL to an empty
+                # string if it does not end with a '/'
+                settings['MEDIA_URL'] = '{}/'.format(settings['MEDIA_URL'])
             dsn = furl.furl()
             dsn.scheme = 'file'
             dsn.path = settings['MEDIA_ROOT']
             dsn.args.set("url", settings['MEDIA_URL'])
             storage_dsn = str(dsn)
         else:
-￼￼          settings['MEDIA_URL'] = lazy_setting(
+            settings['MEDIA_URL'] = lazy_setting(
                 'MEDIA_URL',
-￼               get_default_storage_url, 
-￼               str,
+                get_default_storage_url,
+                str,
             )
-￼
+
         settings['DEFAULT_FILE_STORAGE'] = 'aldryn_django.storage.DefaultStorage'
 
 
