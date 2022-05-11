@@ -405,9 +405,9 @@ class Form(forms.BaseForm):
         else:
 ￼￼          settings['MEDIA_URL'] = lazy_setting(
                 'MEDIA_URL',
-￼               get_default_storage_url,		￼                
+￼               get_default_storage_url, 
 ￼               str,
-            )￼
+            )
 ￼
         settings['DEFAULT_FILE_STORAGE'] = 'aldryn_django.storage.DefaultStorage'
 
