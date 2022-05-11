@@ -409,6 +409,7 @@ class Form(forms.BaseForm):
                 str,
             )
 
+        settings[DEFAULT_STORAGE_KEY] = storage_dsn
         settings['DEFAULT_FILE_STORAGE'] = 'aldryn_django.storage.DefaultStorage'
 
 
