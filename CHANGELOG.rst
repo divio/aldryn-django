@@ -2,10 +2,18 @@
 Changelog
 =========
 
+
+3.2.14.0 (2022-07-04)
+=====================
+
+* Upgrade Django to 3.2.14 (fixes CVE-2022-34265)
+  see https://www.djangoproject.com/weblog/2022/jul/04/security-releases/ for details
+
+
 3.2.13.0 (2022-04-11)
 =====================
 
-* Upgrade Django to 4.0.4 (fixes CVE-2022-28346 and CVE-2022-28347)
+* Upgrade Django to 3.2.13 (fixes CVE-2022-28346 and CVE-2022-28347)
   see https://www.djangoproject.com/weblog/2022/apr/11/security-releases/ for details
 * Related to #266, warnings for future versions of Python
 * Update Python syntax for the codebase using pyupgrade tool
