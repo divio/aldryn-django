@@ -408,11 +408,6 @@ class Form(forms.BaseForm):
         else:
             # lazy_setting is incompatible with django-cms and causes error on first load
             settings["MEDIA_URL"] = get_default_storage_url()
-            # settings['MEDIA_URL'] = lazy_setting(
-            #     'MEDIA_URL',
-            #     get_default_storage_url,
-            #     str,
-            # )
 
         settings[DEFAULT_STORAGE_KEY] = storage_dsn
         settings["DEFAULT_FILE_STORAGE"] = "aldryn_django.storage.DefaultStorage"
