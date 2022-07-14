@@ -391,6 +391,7 @@ class Form(forms.BaseForm):
         settings['MEDIA_ROOT'] = env('MEDIA_ROOT', os.path.join(settings['DATA_ROOT'], 'media'))
 
         storage_dsn = env(DEFAULT_STORAGE_KEY, )
+        settings['DEFAULT_FILE_STORAGE'] = 'aldryn_django.storage.DefaultStorage'
         if not storage_dsn:
             settings['MEDIA_URL'] = env('MEDIA_URL', '/media/')
             if not settings['MEDIA_URL'].endswith('/'):
@@ -402,16 +403,11 @@ class Form(forms.BaseForm):
             dsn.path = settings['MEDIA_ROOT']
             dsn.args.set("url", settings['MEDIA_URL'])
             storage_dsn = str(dsn)
+            settings[DEFAULT_STORAGE_KEY] = storage_dsn
         else:
-            settings['MEDIA_URL'] = lazy_setting(
-                'MEDIA_URL',
-                get_default_storage_url,
-                str,
-            )
-
-        settings[DEFAULT_STORAGE_KEY] = storage_dsn
-        settings['DEFAULT_FILE_STORAGE'] = 'aldryn_django.storage.DefaultStorage'
-
+            # lazy_setting is incompatible with django-cms and causes error on first load
+            settings[DEFAULT_STORAGE_KEY] = storage_dsn
+            settings['MEDIA_URL'] = get_default_storage_url()      
 
         # Handle media domain for built-in serving
         settings['MEDIA_URL_IS_ON_OTHER_DOMAIN'] = env('MEDIA_URL_IS_ON_OTHER_DOMAIN', None)
