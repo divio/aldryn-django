@@ -2,6 +2,12 @@
 Changelog
 =========
 
+3.2.14.2 (2022-07-13)
+=====================
+
+* Bugfix: Ensure storage DSN is configured prior to setting MEDIA_URL
+
+
 3.2.14.1 (2022-07-13)
 =====================
 
