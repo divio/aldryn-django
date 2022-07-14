@@ -407,7 +407,7 @@ class Form(forms.BaseForm):
         else:
             # lazy_setting is incompatible with django-cms and causes error on first load
             settings[DEFAULT_STORAGE_KEY] = storage_dsn
-            settings['MEDIA_URL'] = get_default_storage_url()      
+            settings['MEDIA_URL'] = get_default_storage_url()
 
         # Handle media domain for built-in serving
         settings['MEDIA_URL_IS_ON_OTHER_DOMAIN'] = env('MEDIA_URL_IS_ON_OTHER_DOMAIN', None)
