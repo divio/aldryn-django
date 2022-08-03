@@ -2,6 +2,14 @@
 Changelog
 =========
 
+
+3.2.15.0 (2022-08-03)
+=====================
+
+* Upgrade Django to 3.2.15 (fixes CVE-2022-36359)
+  see https://www.djangoproject.com/weblog/2022/aug/03/security-releases/ for details
+
+
 3.2.14.2 (2022-07-13)
 =====================
 
@@ -12,7 +20,7 @@ Changelog
 =====================
 
 * Bugfix: MEDIA_URL load error on first site visit
- 
+
 
 3.2.14.0 (2022-07-04)
 =====================
