@@ -3,6 +3,13 @@ Changelog
 =========
 
 
+4.0.7.0 (2022-08-03)
+====================
+
+* Upgrade Django to 4.0.7 (fixes CVE-2022-36359)
+  see https://www.djangoproject.com/weblog/2022/aug/03/security-releases/ for details
+
+
 4.0.6.0 (2022-07-04)
 ====================
 
