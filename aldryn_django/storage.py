@@ -27,7 +27,7 @@ AWS_S3_ACL_PUBLIC_READ = {
 # Required for backwards compatibility with django-filer
 SCHEMES = {
     "default": "aldryn_django.storage.DefaultStorage",
-    "s3": "aldryn_django.storage.S3MediaStorage",  #  legacy check
+    "s3": "aldryn_django.storage.S3MediaStorage",  # legacy check
 }
 
 register_storage_class("s3", "aldryn_django.storage.S3MediaStorage")
