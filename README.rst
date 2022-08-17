@@ -148,12 +148,12 @@ You can run tests by executing::
 
 .. |pypi| image:: https://badge.fury.io/py/aldryn-django.svg
     :target: http://badge.fury.io/py/aldryn-django
-.. |build| image:: https://github.com/divio/aldryn-django/actions/workflows/default.yml/badge.svg?branch=support/4.0.x
+.. |build| image:: https://github.com/divio/aldryn-django/actions/workflows/default.yml/badge.svg?branch=support/4.1.x
     :target: https://github.com/divio/aldryn-django/actions
-.. |coverage| image:: https://codecov.io/gh/divio/aldryn-django/branch/support/4.0.x/graph/badge.svg
+.. |coverage| image:: https://codecov.io/gh/divio/aldryn-django/branch/support/4.1.x/graph/badge.svg
     :target: https://codecov.io/gh/divio/aldryn-django
 
 .. |python| image:: https://img.shields.io/badge/python-3.6%20%7C%203.7%20%7C%C2%A03.9-blue.svg
     :target: https://pypi.org/project/aldryn-django/
-.. |django| image:: https://img.shields.io/badge/django-4.0-blue.svg
+.. |django| image:: https://img.shields.io/badge/django-4.1-blue.svg
     :target: https://www.djangoproject.com/
