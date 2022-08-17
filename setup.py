@@ -28,7 +28,7 @@ REQUIREMENTS = [
     'psycopg2',
 
     # storage
-    'django-storage-url',
+    'django-storage-url>=0.9.0',
     'django-storages[boto3]',
     'django-storages[azure]',
 
