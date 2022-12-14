@@ -8,3 +8,4 @@ flake8
 uwsgi
 # currently breaks ci because it wants rust now
 cryptography<3.4
+urllib3<1.27
