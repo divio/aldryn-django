@@ -6,7 +6,7 @@ from aldryn_django import __version__
 
 REQUIREMENTS = [
     'aldryn-addons',
-    'Django==3.2.17',
+    'Django==3.2.18',
 
     # setup utils
     'dj-database-url',
