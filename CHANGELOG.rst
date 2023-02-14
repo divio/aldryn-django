@@ -3,7 +3,14 @@ Changelog
 =========
 
 
-4.1.6.0 (2023-01-03)
+4.1.7.0 (2023-02-14)
+====================
+
+* Upgrade Django to 4.1.7 (fixes CVE-2023-24580)
+  see https://www.djangoproject.com/weblog/2023/feb/14/security-releases/ for details
+
+
+4.1.6.0 (2023-02-01)
 ====================
 
 * Upgrade Django to 4.1.6 (fixes CVE-2023-23969)
