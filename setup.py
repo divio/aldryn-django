@@ -6,7 +6,7 @@ from aldryn_django import __version__
 
 REQUIREMENTS = [
     'aldryn-addons',
-    'Django==4.1.7',
+    'Django==4.2',
 
     # setup utils
     'dj-database-url',
@@ -46,7 +46,7 @@ CLASSIFIERS = [
     'License :: OSI Approved :: BSD License',
     'Operating System :: OS Independent',
     'Framework :: Django',
-    'Framework :: Django :: 4.1',
+    'Framework :: Django :: 4.2',
     'Programming Language :: Python',
     'Programming Language :: Python :: 3',
     'Programming Language :: Python :: 3.8',
