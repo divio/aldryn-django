@@ -399,7 +399,7 @@ class Form(forms.BaseForm):
             storage_dsn = str(dsn)
         settings[DEFAULT_STORAGE_KEY] = storage_dsn
 
-        settings['DEFAULT_FILE_STORAGE'] = 'aldryn_django.storage.DefaultStorage'
+        settings['STORAGES']['default'] = "aldryn_django.storage.DefaultStorage"
 
         # Handle MEDIA_URL
         settings['MEDIA_URL'] = env('MEDIA_URL', '/media/')
@@ -452,7 +452,8 @@ class Form(forms.BaseForm):
                 storage = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
             else:
                 storage = 'django.contrib.staticfiles.storage.StaticFilesStorage'
-        settings['STATICFILES_STORAGE'] = storage
+
+        settings['STORAGES']['staticfiles'] = storage
 
         settings['STATIC_URL'] = env('STATIC_URL', '/static/')
         static_host = furl.furl(settings['STATIC_URL']).host
@@ -565,7 +566,7 @@ class Form(forms.BaseForm):
         mcmds.append('python manage.py migrate --noinput')
 
         if not boolean_ish(env('DISABLE_S3_MEDIA_HEADERS_UPDATE')):
-            if settings['DEFAULT_FILE_STORAGE'] == storage.SCHEMES['s3']:
+            if settings['STORAGES']['default'] == storage.SCHEMES['s3']:
                 mcmds.append('python manage.py aldryn_update_s3_media_headers')
 
     def gis_settings(self, settings, env):
