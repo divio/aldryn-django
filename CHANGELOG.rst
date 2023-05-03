@@ -3,6 +3,13 @@ Changelog
 =========
 
 
+3.2.19.0 (2023-05-03)
+=====================
+
+* Upgrade Django to 3.2.19 (fixes CVE-2023-31047)
+  see https://www.djangoproject.com/weblog/2023/may/03/security-releases/ for details
+
+
 3.2.18.0 (2023-02-14)
 =====================
 
