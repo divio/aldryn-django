@@ -399,7 +399,9 @@ class Form(forms.BaseForm):
             storage_dsn = str(dsn)
         settings[DEFAULT_STORAGE_KEY] = storage_dsn
 
-        settings['STORAGES']['default'] = "aldryn_django.storage.DefaultStorage"
+        settings['STORAGES']['default'] = {
+            "BACKEND": "aldryn_django.storage.DefaultStorage"
+        }
 
         # Handle MEDIA_URL
         settings['MEDIA_URL'] = env('MEDIA_URL', '/media/')
@@ -453,7 +455,7 @@ class Form(forms.BaseForm):
             else:
                 storage = 'django.contrib.staticfiles.storage.StaticFilesStorage'
 
-        settings['STORAGES']['staticfiles'] = storage
+        settings['STORAGES']['staticfiles'] = {"BACKEND": storage}
 
         settings['STATIC_URL'] = env('STATIC_URL', '/static/')
         static_host = furl.furl(settings['STATIC_URL']).host
