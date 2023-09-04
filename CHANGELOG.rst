@@ -10,6 +10,12 @@ Changelog
   see https://www.djangoproject.com/weblog/2023/sep/04/security-releases/ for details
 
 
+4.2.4.0 (2023-08-09)
+====================
+
+* Added support for Django 4.2.4
+
+
 4.2.3.0 (2023-07-03)
 ====================
 
