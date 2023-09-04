@@ -3,6 +3,13 @@ Changelog
 =========
 
 
+4.1.11.0 (2023-09-04)
+=====================
+
+* Upgrade Django to 4.1.11 (fixes CVE-2023-41164)
+  see https://www.djangoproject.com/weblog/2023/sep/04/security-releases/ for details
+
+
 4.1.10.0 (2023-07-03)
 =====================
 
