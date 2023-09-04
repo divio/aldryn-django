@@ -9,3 +9,4 @@ uwsgi
 asgiref==3.4.1
 # currently breaks ci because it wants rust now
 cryptography<3.4
+urllib3<1.27
