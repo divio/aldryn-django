@@ -245,7 +245,7 @@ class Form(forms.BaseForm):
                 if d.strip()
             ]
             domains = {
-                env("SITE_ID", 1): {
+                env('SITE_ID', 1): {
                     'name': env('SITE_NAME', ''),
                     'domain': domain,
                     'aliases': domain_aliases,
@@ -392,31 +392,25 @@ class Form(forms.BaseForm):
 
         storage_dsn = env(DEFAULT_STORAGE_KEY, )
         if not storage_dsn:
+            settings['MEDIA_URL'] = env('MEDIA_URL', '/media/')
+            if not settings['MEDIA_URL'].endswith('/'):
+                # Django (or something else?) silently sets MEDIA_URL to an empty
+                # string if it does not end with a '/'
+                settings['MEDIA_URL'] = '{}/'.format(settings['MEDIA_URL'])
             dsn = furl.furl()
             dsn.scheme = 'file'
             dsn.path = settings['MEDIA_ROOT']
-            dsn.args.set("url", env('MEDIA_URL', '/media/'))
+            dsn.args.set('url', settings['MEDIA_URL'])
             storage_dsn = str(dsn)
-        settings[DEFAULT_STORAGE_KEY] = storage_dsn
+            settings[DEFAULT_STORAGE_KEY] = storage_dsn
+        else:
+            # lazy_setting is incompatible with django-cms and causes error on first load
+            settings[DEFAULT_STORAGE_KEY] = storage_dsn
+            settings['MEDIA_URL'] = get_default_storage_url()
 
         settings['STORAGES']['default'] = {
-            "BACKEND": "aldryn_django.storage.DefaultStorage"
+            'BACKEND': 'aldryn_django.storage.DefaultStorage'
         }
-
-        # Handle MEDIA_URL
-        settings['MEDIA_URL'] = env('MEDIA_URL', '/media/')
-        if not settings['MEDIA_URL']:
-            media_url = lazy_setting(
-                'MEDIA_URL',
-                get_default_storage_url,
-                str,
-            )
-
-            settings['MEDIA_URL'] = media_url
-        elif not settings['MEDIA_URL'].endswith('/'):
-            # Django (or something else?) silently sets MEDIA_URL to an empty
-            # string if it does not end with a '/'
-            settings['MEDIA_URL'] = '{}/'.format(settings['MEDIA_URL'])
 
         # Handle media domain for built-in serving
         settings['MEDIA_URL_IS_ON_OTHER_DOMAIN'] = env('MEDIA_URL_IS_ON_OTHER_DOMAIN', None)
@@ -455,7 +449,7 @@ class Form(forms.BaseForm):
             else:
                 storage = 'django.contrib.staticfiles.storage.StaticFilesStorage'
 
-        settings['STORAGES']['staticfiles'] = {"BACKEND": storage}
+        settings['STORAGES']['staticfiles'] = {'BACKEND': storage}
 
         settings['STATIC_URL'] = env('STATIC_URL', '/static/')
         static_host = furl.furl(settings['STATIC_URL']).host
