@@ -369,6 +369,7 @@ class Form(forms.BaseForm):
                 debug=settings['DEBUG'],
                 release=env('GIT_COMMIT', 'develop'),
                 environment=env('STAGE', 'local'),
+                enable_tracing=True,
             )
 
     def storage_settings_for_media(self, settings, env):
