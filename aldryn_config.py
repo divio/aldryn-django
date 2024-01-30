@@ -285,11 +285,6 @@ class Form(forms.BaseForm):
         )
         s['SESSION_COOKIE_AGE'] = env('SESSION_COOKIE_AGE', data.get('session_timeout') or 60 * 60 * 24 * 7 * 2)
 
-        # SESSION_COOKIE_HTTPONLY and SECURE_FRAME_DENY must be False for CMS
-        # SESSION_COOKIE_HTTPONLY is handled by
-        # django.contrib.sessions.middleware.SessionMiddleware
-        s['SESSION_COOKIE_HTTPONLY'] = env('SESSION_COOKIE_HTTPONLY', False)
-
         s['SECURE_CONTENT_TYPE_NOSNIFF'] = env('SECURE_CONTENT_TYPE_NOSNIFF', False)
         s['SECURE_BROWSER_XSS_FILTER'] = env('SECURE_BROWSER_XSS_FILTER', False)
 
