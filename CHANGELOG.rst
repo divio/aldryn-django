@@ -3,6 +3,14 @@ Changelog
 =========
 
 
+4.2.9.1 (2024-01-30)
+====================
+
+* Fixed MEDIA_URL configuration
+* Removed not required SESSION_COOKIE_HTTPONLY setting
+* Added Sentry Configurations
+
+
 4.2.9.0 (2024-01-02)
 ====================
 
