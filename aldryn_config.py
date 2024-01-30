@@ -245,7 +245,7 @@ class Form(forms.BaseForm):
                 if d.strip()
             ]
             domains = {
-                env("SITE_ID", 1): {
+                env('SITE_ID', 1): {
                     'name': env('SITE_NAME', ''),
                     'domain': domain,
                     'aliases': domain_aliases,
@@ -284,11 +284,6 @@ class Form(forms.BaseForm):
             ('HTTP_X_FORWARDED_PROTO', 'https')
         )
         s['SESSION_COOKIE_AGE'] = env('SESSION_COOKIE_AGE', data.get('session_timeout') or 60 * 60 * 24 * 7 * 2)
-
-        # SESSION_COOKIE_HTTPONLY and SECURE_FRAME_DENY must be False for CMS
-        # SESSION_COOKIE_HTTPONLY is handled by
-        # django.contrib.sessions.middleware.SessionMiddleware
-        s['SESSION_COOKIE_HTTPONLY'] = env('SESSION_COOKIE_HTTPONLY', False)
 
         s['SECURE_CONTENT_TYPE_NOSNIFF'] = env('SECURE_CONTENT_TYPE_NOSNIFF', False)
         s['SECURE_BROWSER_XSS_FILTER'] = env('SECURE_BROWSER_XSS_FILTER', False)
@@ -374,6 +369,7 @@ class Form(forms.BaseForm):
                 debug=settings['DEBUG'],
                 release=env('GIT_COMMIT', 'develop'),
                 environment=env('STAGE', 'local'),
+                enable_tracing=True,
             )
 
     def storage_settings_for_media(self, settings, env):
@@ -392,31 +388,25 @@ class Form(forms.BaseForm):
 
         storage_dsn = env(DEFAULT_STORAGE_KEY, )
         if not storage_dsn:
+            settings['MEDIA_URL'] = env('MEDIA_URL', '/media/')
+            if not settings['MEDIA_URL'].endswith('/'):
+                # Django (or something else?) silently sets MEDIA_URL to an empty
+                # string if it does not end with a '/'
+                settings['MEDIA_URL'] = '{}/'.format(settings['MEDIA_URL'])
             dsn = furl.furl()
             dsn.scheme = 'file'
             dsn.path = settings['MEDIA_ROOT']
-            dsn.args.set("url", env('MEDIA_URL', '/media/'))
+            dsn.args.set('url', settings['MEDIA_URL'])
             storage_dsn = str(dsn)
-        settings[DEFAULT_STORAGE_KEY] = storage_dsn
+            settings[DEFAULT_STORAGE_KEY] = storage_dsn
+        else:
+            # lazy_setting is incompatible with django-cms and causes error on first load
+            settings[DEFAULT_STORAGE_KEY] = storage_dsn
+            settings['MEDIA_URL'] = get_default_storage_url()
 
         settings['STORAGES']['default'] = {
-            "BACKEND": "aldryn_django.storage.DefaultStorage"
+            'BACKEND': 'aldryn_django.storage.DefaultStorage'
         }
-
-        # Handle MEDIA_URL
-        settings['MEDIA_URL'] = env('MEDIA_URL', '/media/')
-        if not settings['MEDIA_URL']:
-            media_url = lazy_setting(
-                'MEDIA_URL',
-                get_default_storage_url,
-                str,
-            )
-
-            settings['MEDIA_URL'] = media_url
-        elif not settings['MEDIA_URL'].endswith('/'):
-            # Django (or something else?) silently sets MEDIA_URL to an empty
-            # string if it does not end with a '/'
-            settings['MEDIA_URL'] = '{}/'.format(settings['MEDIA_URL'])
 
         # Handle media domain for built-in serving
         settings['MEDIA_URL_IS_ON_OTHER_DOMAIN'] = env('MEDIA_URL_IS_ON_OTHER_DOMAIN', None)
@@ -455,7 +445,7 @@ class Form(forms.BaseForm):
             else:
                 storage = 'django.contrib.staticfiles.storage.StaticFilesStorage'
 
-        settings['STORAGES']['staticfiles'] = {"BACKEND": storage}
+        settings['STORAGES']['staticfiles'] = {'BACKEND': storage}
 
         settings['STATIC_URL'] = env('STATIC_URL', '/static/')
         static_host = furl.furl(settings['STATIC_URL']).host
