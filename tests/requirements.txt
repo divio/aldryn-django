@@ -5,6 +5,8 @@ isort
 flake8
 # needed for the build to work
 uwsgi
+pillow
+packaging
 # support for python 3.6
 asgiref==3.4.1
 # currently breaks ci because it wants rust now
