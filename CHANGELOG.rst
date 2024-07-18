@@ -3,6 +3,13 @@ Changelog
 =========
 
 
+5.0.7.0 (2024-07-18)
+====================
+
+* Upgrade Django to 5.0.7
+  see https://www.djangoproject.com/weblog/2024/jul/09/security-releases/ for details
+
+
 5.0.6.0 (2024-05-22)
 ====================
 
