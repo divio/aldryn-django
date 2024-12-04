@@ -3,6 +3,13 @@ Changelog
 =========
 
 
+4.2.16.0 (2024-12-04)
+=====================
+
+* Upgrade Django to 4.2.17
+  see https://docs.djangoproject.com/en/4.2/releases/4.2.17/ for details
+
+
 4.2.16.0 (2024-09-17)
 =====================
 
