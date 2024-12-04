@@ -2,6 +2,12 @@
 Changelog
 =========
 
+5.1.4.0 (2024-12-04)
+====================
+
+* Added support for Django 5.1.4
+  see https://docs.djangoproject.com/en/5.1/releases/5.1.4/ for details
+
 
 5.1.3.0 (2024-11-27)
 ====================
