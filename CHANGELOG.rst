@@ -3,6 +3,13 @@ Changelog
 =========
 
 
+5.1.7.0 (2025-03-10)
+====================
+
+* Added support for Django 5.1.7
+  see https://www.djangoproject.com/weblog/2025/mar/06/security-releases/ for details
+
+
 5.1.6.0 (2025-02-12)
 ====================
 
