@@ -3,6 +3,13 @@ Changelog
 =========
 
 
+5.0.14.0 (2025-04-03)
+=====================
+
+* Upgrade Django to 5.0.14
+  see https://www.djangoproject.com/weblog/2025/apr/02/security-releases/ for details
+
+
 5.0.13.0 (2025-03-10)
 =====================
 
