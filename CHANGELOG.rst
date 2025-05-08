@@ -3,6 +3,13 @@ Changelog
 =========
 
 
+5.1.9.0 (2025-05-08)
+====================
+
+* Upgrade Django to 5.1.9
+  see https://www.djangoproject.com/weblog/2025/may/07/security-releases/ for details
+
+
 5.1.8.0 (2025-04-03)
 ====================
 
