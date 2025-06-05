@@ -5,7 +5,7 @@ on: [push, pull_request]
 jobs:
   flake8:
     name: flake8
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-lts
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -22,7 +22,7 @@ jobs:
           run: flake8
 
   isort:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-lts
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -38,7 +38,7 @@ jobs:
           run: isort -c -rc -df aldryn_django
 
   unit-tests:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-lts
     strategy:
       fail-fast: false
       matrix:
