@@ -6,7 +6,7 @@ from aldryn_django import __version__
 
 REQUIREMENTS = [
     'aldryn-addons',
-    'Django==5.2.2',
+    'Django==5.2.6',
 
     # setup utils
     'dj-database-url',
@@ -61,7 +61,7 @@ CLASSIFIERS = [
 
 
 setup(
-    name='aldryn_django',
+    name='aldryn-django',
     version=__version__,
     author='Divio AG',
     author_email='info@divio.ch',
