@@ -3,6 +3,13 @@ Changelog
 =========
 
 
+4.2.24.0 (2025-09-03)
+=====================
+
+* Upgrade Django to 4.2.24
+  see https://www.djangoproject.com/weblog/2025/sep/03/security-releases/ for details
+
+
 4.2.22.0 (2025-06-05)
 =====================
 
