@@ -2,6 +2,13 @@
 Changelog
 =========
 
+5.2.7.0 (2025-10-01)
+====================
+
+* Upgrade Django to 5.2.7
+  see https://docs.djangoproject.com/en/5.2/releases/5.2.7/ for details
+
+
 5.2.6.0 (2025-09-03)
 ====================
 
