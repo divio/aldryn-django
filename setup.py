@@ -3,79 +3,72 @@ from setuptools import find_packages, setup
 
 from aldryn_django import __version__
 
-
 REQUIREMENTS = [
-    'aldryn-addons',
-    'Django==5.1.13',
-
+    "aldryn-addons",
+    "Django==5.1.14",
     # setup utils
-    'dj-database-url',
-    'dj-email-url',
-    'dj-redis-url',
-    'django-cache-url',
-    'django-getenv',
-    'aldryn-client',
-    'furl',
-
+    "dj-database-url",
+    "dj-email-url",
+    "dj-redis-url",
+    "django-cache-url",
+    "django-getenv",
+    "aldryn-client",
+    "furl",
     # error reporting
-    'aiocontextvars',
-    'sentry-sdk',
-
+    "aiocontextvars",
+    "sentry-sdk",
     # wsgi server related
-    'uwsgi',
-
+    "uwsgi",
     # database
-    'psycopg2',
-
+    "psycopg2",
     # storage
-    'django-storage-url',
-    'django-storages[boto3]',
-    'django-storages[azure]',
-
+    "django-storage-url",
+    "django-storages[boto3]",
+    "django-storages[azure]",
     # helpers
-    'click',
-    'aldryn-sites>=0.5.6',
-    'easy-thumbnails>=2.2',
+    "click",
+    "aldryn-sites>=0.5.6",
+    "easy-thumbnails>=2.2",
 ]
 
 
 CLASSIFIERS = [
-    'Development Status :: 5 - Production/Stable',
-    'Environment :: Web Environment',
-    'Intended Audience :: Developers',
-    'License :: OSI Approved :: BSD License',
-    'Operating System :: OS Independent',
-    'Framework :: Django',
-    'Framework :: Django :: 5.1',
-    'Programming Language :: Python',
-    'Programming Language :: Python :: 3',
-    'Programming Language :: Python :: 3.10',
-    'Programming Language :: Python :: 3.11',
-    'Programming Language :: Python :: 3.12',
-    'Topic :: Internet :: WWW/HTTP',
-    'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
-    'Topic :: Software Development',
-    'Topic :: Software Development :: Libraries',
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Web Environment",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: BSD License",
+    "Operating System :: OS Independent",
+    "Framework :: Django",
+    "Framework :: Django :: 5.1",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Internet :: WWW/HTTP",
+    "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
+    "Topic :: Software Development",
+    "Topic :: Software Development :: Libraries",
 ]
 
 
 setup(
-    name='aldryn_django',
+    name="aldryn_django",
     version=__version__,
-    author='Divio AG',
-    author_email='info@divio.ch',
-    url='https://github.com/divio/aldryn-django',
-    license='BSD-3-Clause',
-    description='An opinionated Django setup bundled as an Aldryn Addon',
-    long_description=open('README.rst').read(),
+    author="Divio AG",
+    author_email="info@divio.ch",
+    url="https://github.com/divio/aldryn-django",
+    license="BSD-3-Clause",
+    description="An opinionated Django setup bundled as an Aldryn Addon",
+    long_description=open("README.rst").read(),
     packages=find_packages(),
     include_package_data=True,
     zip_safe=False,
     install_requires=REQUIREMENTS,
     classifiers=CLASSIFIERS,
-    test_suite='tests.settings.run',
-    entry_points='''
+    test_suite="tests.settings.run",
+    entry_points="""
         [console_scripts]
         aldryn-django=aldryn_django.cli:main
-    ''',
+    """,
 )
