@@ -53,7 +53,7 @@ CLASSIFIERS = [
 
 
 setup(
-    name="aldryn_django",
+    name="aldryn-django",
     version=__version__,
     author="Divio AG",
     author_email="info@divio.ch",
