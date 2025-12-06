@@ -4,6 +4,8 @@ Aldryn Django
 
 |pypi| |build| |coverage|
 
+**This package will not support Django 6 moving forward, please update to our more [modern stack](https://github.com/divio/getting-started-with-django).**
+
 An opinionated Django setup bundled as a Divio Cloud addon.
 
 This package will auto configure Django, including admin and some other basic
