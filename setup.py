@@ -66,7 +66,6 @@ setup(
     zip_safe=False,
     install_requires=REQUIREMENTS,
     classifiers=CLASSIFIERS,
-    test_suite="tests.settings.run",
     entry_points="""
         [console_scripts]
         aldryn-django=aldryn_django.cli:main
