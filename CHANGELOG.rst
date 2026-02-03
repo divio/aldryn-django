@@ -2,6 +2,12 @@
 Changelog
 =========
 
+5.2.11.0 (2026-02-03)
+=====================
+
+* Upgrade Django to 5.2.11
+  see https://www.djangoproject.com/weblog/2026/feb/03/security-releases/ for details
+
 
 5.2.10.0 (2026-01-08)
 =====================
