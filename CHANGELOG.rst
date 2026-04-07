@@ -2,6 +2,13 @@
 Changelog
 =========
 
+5.2.13.0 (2026-04-07)
+=====================
+
+* Upgrade Django to 5.2.13
+  see https://www.djangoproject.com/weblog/2026/apr/07/security-releases/ for details
+
+
 5.2.12.0 (2026-03-03)
 =====================
 
