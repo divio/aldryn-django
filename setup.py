@@ -5,7 +5,7 @@ from aldryn_django import __version__
 
 REQUIREMENTS = [
     "aldryn-addons",
-    "Django==5.2.15",
+    "Django==5.2.16",
     # setup utils
     "dj-database-url",
     "dj-email-url",
